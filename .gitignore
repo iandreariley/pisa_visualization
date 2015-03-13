@@ -1,0 +1,7 @@
+# data files
+*.csv
+
+# R junk
+.Rhistory
+# other stuff
+*.jar
