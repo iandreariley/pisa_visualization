@@ -61,7 +61,32 @@ The variables I chose are:
 - "PV4SCIE","Plausible value 4 in science"
 - "PV5SCIE","Plausible value 5 in science"
 
-Note: The predicted values were aggregated in means over subject.
+### Shaping
+
+I renamed the predictor variables to make them more reader friendly and aggregated
+the 'PV' variables into three averaged (arithmetic mean) scores. The new shape of the
+data was then:
+
+#### predictor values
+
+- country
+- region
+- gender
+- tardy
+- absent_day
+- absent_class
+- birth_country
+- immegration_age
+- socio_economic_index
+- math_anxiety
+- home_possessions
+- wealth
+
+#### predicted values
+
+-math_score
+-science_score
+-reading_score
 
 ## References
 
