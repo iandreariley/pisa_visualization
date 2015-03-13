@@ -63,6 +63,15 @@ The variables I chose are:
 
 Note: The predicted values were aggregated in means over subject.
 
+## References
 
+### http://stackoverflow.com
+1. [Getting row means in R][rowMeans]
+2. [Dropping columns by pattern matching in R][dropColumnsPattern]
+3. [Finding non-numeric data in a column R][findNonNumeric]
 
 [1]:https://haigen.wordpress.com/sample-sas-code-for-timss-data/
+[rowMeans]:http://stackoverflow.com/questions/9490485/how-can-i-get-the-average-mean-of-selected-columns]
+[dropColumnsPattern]:http://stackoverflow.com/questions/15666226/how-to-drop-columns-by-name-pattern-in-r
+[findNonNumeric]:http://stackoverflow.com/questions/21196106/finding-non-numeric-data-in-an-r-data-frame-or-vector
+
