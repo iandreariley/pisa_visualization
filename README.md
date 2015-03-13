@@ -35,6 +35,7 @@ The variables I chose are:
 - "ST04Q01": Gender
 - "ST08Q01": Late for school
 - "ST09Q01": Skipped School
+- "ST115Q01": Skipped Class during school day
 - "ST20Q01": Country of Birth (note: ~9,000 NAs)
 - "ST21Q01": Age of arrival in <country of test> (note: ~45,000 NAs)
 - "ESCS": Index of economic, social and cultural status (note: ~ 12,000 NAs)
