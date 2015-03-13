@@ -30,7 +30,8 @@ The variables I chose are:
 
 #### Potential Predictor Values
 
-- "CNT": Country code
+- "CNT": Country code (3 character)
+- "SUBNATIO": sub-region 7 digit code (3 digit country code + region id + stratum id)
 - "ST04Q01": Gender
 - "ST08Q01": Late for school
 - "ST09Q01": Skipped School
