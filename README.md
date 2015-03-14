@@ -67,7 +67,7 @@ I renamed the predictor variables to make them more reader friendly and aggregat
 the 'PV' variables into three averaged (arithmetic mean) scores. The new shape of the
 data was then:
 
-##### predictor values
+##### Predictor values
 
 - country
 - region
@@ -82,12 +82,24 @@ data was then:
 - home_possessions
 - wealth
 
-##### predicted values
+##### Predicted values
 
 - math_score
 - science_score
 - reading_score
 
+### Cleaning
+
+Some issues arose during univariate analysis of the smaller dataset:
+- In the 'country' variable, Massachusetts, Connecticut and Florida are listed as
+  separate from the United States of America.
+- I was curious about how immigration age affects the scores of all tests, however
+  I found that about 98% of the values for this variable are NAs. I was not
+  immediately sure whether to impute values, use only non NA values, or dump the
+  variable entirely
+- The region code was read in by R as a numeric variable, rather than a string. This
+  wasn't a huge problem; however it raised the question of whether it was adding any
+  value at all.
 ## References
 
 1. http://stackoverflow.com
