@@ -160,3 +160,13 @@ summary(df$birth_country)
 ```
 A good, low number of NAs (~1.9%). This may help make a case for imputing values
 for the immigration age variable.
+
+## UNIVARIATE ANALYSIS
+
+Many of the distributions are normal, which is nice. Consider a strategy for
+imputing values across the immigration_age variable. Also, is the region code
+actually necessary? It may not be unless I'm going to compare regions, which
+may be very difficult if they're not in the US. Check whether the States that
+have a different country value than the United States of America (Florida,
+Connecticut and Massachusetts) are already included in the US value and can be
+dropped, or if they should be aggregated into the US.
