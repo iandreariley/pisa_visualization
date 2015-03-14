@@ -99,8 +99,31 @@ qplot(math_score, data = df, binwidth = 20)
 qplot(reading_score, data = df, binwidth = 20)
 qplot(science_score, data = df, binwidth = 20)
 ```
-
+Distributions for scores are normal
 ```{r, echo=FALSE}
-
+qplot(country, data = df) +
+  coord_flip()
 ```
-.
+Mass., Conn., FLA all listed as separate from United States. These should be
+aggregated.
+```{r, echo=FALSE}
+qplot(tardy, data = df)
+qplot(absent_day, data = df)
+qplot(absent_class, data = df)
+```
+The absent_class variable is confusing - this seems to say that every student
+missed at least one class, which seems wrong.
+```{r, echo=FALSE}
+qplot(wealth, data = df)
+```
+A strangely normal distribution for wealth. I'd expect it to be more right
+skewed. I'm assuming this is a logarithmic scale.
+```{r, echo=FALSE}
+qplot(socio_economic_index, data = df)
+```
+Normalish, left skew. Range similar to wealth
+```{r, echo=FALSE}
+qplot(math_anxiety, data = df, binwidth = .25)
+summary(df$math_anxiety)
+```
+Normal distribution with some hiccups.
