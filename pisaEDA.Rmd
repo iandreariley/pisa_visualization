@@ -170,3 +170,83 @@ may be very difficult if they're not in the US. Check whether the States that
 have a different country value than the United States of America (Florida,
 Connecticut and Massachusetts) are already included in the US value and can be
 dropped, or if they should be aggregated into the US.
+
+```{r, echo=FALSE}
+### BIVARIATE ANALYSIS ###
+
+qplot(math_score, reading_score, data = df, alpha = I(0.1))
+qplot(math_score, science_score, data = df, alpha = I(0.1))
+```
+The scores from the tests have strong linear correlation. The variance for
+science scores given a math score appears smaller than the variance for
+reading scores given a math score. Given that Science is more math-based, this
+is not surprising.
+```{r, echo=FALSE}
+qplot(wealth, math_score, data = df, alpha = I(0.01))
+with(df, cor.test(wealth, math_score, data = df))
+```
+Interestingly, there does not seem to be a very strong correlation between
+wealth and math scores.
+```{r, echo=FALSE}
+qplot(immegration_age, reading_score, data = df, alpha = I(0.1),
+      geom = 'jitter')
+qplot(immegration_age, science_score, data = df, alpha = I(0.1),
+      geom = 'jitter')
+qplot(immegration_age, math_score, data = df, alpha = I(0.1),
+      geom = 'jitter')
+with(df, cor.test(immegration_age, reading_score, data = df))
+with(df, cor.test(immegration_age, math_score, data = df))
+with(df, cor.test(immegration_age, science_score, data = df))
+```
+Immigration age seems to have no affect on scores
+```{r, echo=FALSE}
+qplot(birth_country, math_score, data = df, geom = "boxplot")
+```
+Country of birth appears to have no affect on math score, however the median
+score for students who did not respond (NAs) is significantly lower than for
+students who did. There is some non-response bias at work.
+```{r, echo=FALSE}
+qplot(math_anxiety, math_score, data = df, geom = "jitter", alpha = I(0.1))
+with(df, cor.test(math_anxiety, math_score))
+```
+While the graph is certainly ugly, there is some correlation between math
+anxiety and math score
+```{r, echo=FALSE}
+qplot(math_anxiety, reading_score, data = df, geom = "jitter", alpha = I(0.1))
+with(df, cor.test(math_anxiety, reading_score))
+```
+There is also some correlation between math anxiety and reading score, however,
+it is less than with math score.
+```{r, echo=FALSE}
+qplot(country, math_score, data = df, geom = "boxplot") +
+  coord_flip()
+```
+Notable difference amongst countries
+```{r, echo=FALSE}
+qplot(tardy, math_score, data = df, geom = "boxplot")
+qplot(absent_day, math_score, data = df, geom = "boxplot")
+qplot(absent_class, math_score, data = df, alpha = I(0.01))
+```
+Lateness does affect classes. Also note non-response bias: NA box is similar to
+Five or more times. The absent_class variable needs to be changed to an
+ordinal variable.
+```{r, echo=FALSE}
+qplot(gender, math_score, data = df, geom = "boxplot")
+qplot(gender, reading_score, data = df, geom = "boxplot")
+qplot(gender, science_score, data = df, geom = "boxplot")
+```
+Interestingly, women do better with reading comprehension, men do slightly
+better with math, and they are about the same with science.
+```{r, echo=FALSE}
+qplot(socio_economic_index, math_score, data = df, alpha = I(0.01))
+qplot(socio_economic_index, reading_score, data = df, alpha = I(0.01))
+qplot(socio_economic_index, science_score, data = df, alpha = I(0.01))
+with(df, cor.test(socio_economic_index, math_score))
+with(df, cor.test(socio_economic_index, reading_score))
+with(df, cor.test(socio_economic_index, science_score))
+```
+Certainly a strong correlation between socio-economic index and math_score
+```{r, echo=FALSE}
+qplot(home_possessions, math_score, data = df)
+```
+Similar shape to wealth v. math_score graph
