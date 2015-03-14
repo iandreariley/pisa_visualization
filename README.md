@@ -91,6 +91,7 @@ data was then:
 ### Cleaning
 
 Some issues arose during univariate analysis of the smaller dataset:
+
 - In the 'country' variable, Massachusetts, Connecticut and Florida are listed as
   separate from the United States of America.
 - I was curious about how immigration age affects the scores of all tests, however
@@ -100,6 +101,21 @@ Some issues arose during univariate analysis of the smaller dataset:
 - The region code was read in by R as a numeric variable, rather than a string. This
   wasn't a huge problem; however it raised the question of whether it was adding any
   value at all.
+  
+A cursory Google search yielded a [Washington Post][2] article which explained that
+the reason for separating the three states mentioned above were used as benchmarks
+for the US. The total observations from those three states is greater than the total
+number of observations for the rest of the US, so I decided to keep them separate
+from the US data, in order not to overrepresent those states in the US scores.
+
+Impution seemed like a bad way to handle the immegration_age variable. Looking at the
+birth_country variable, which is only about 1.8% NAs, its evident that most students
+were born in the country in which they were taking the test. Therefore I assumed that
+most of the NAs in the immegration_age variable are students who are not immigrants,
+and that the limited amount of data will be helpful anyway.
+
+The region variable I kept because I may have decided to use it later.
+
 ## References
 
 1. http://stackoverflow.com
@@ -109,6 +125,7 @@ Some issues arose during univariate analysis of the smaller dataset:
 2. [Quick-R][quickr]
 
 [1]:https://haigen.wordpress.com/sample-sas-code-for-timss-data/
+[2]:http://www.washingtonpost.com/blogs/answer-sheet/wp/2013/12/03/key-pisa-test-results-for-u-s-students/
 [rowMeans]:http://stackoverflow.com/questions/9490485/how-can-i-get-the-average-mean-of-selected-columns]
 [dropColumnsPattern]:http://stackoverflow.com/questions/15666226/how-to-drop-columns-by-name-pattern-in-r
 [findNonNumeric]:http://stackoverflow.com/questions/21196106/finding-non-numeric-data-in-an-r-data-frame-or-vector
