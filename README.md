@@ -90,10 +90,10 @@ data was then:
 
 ## References
 
-### http://stackoverflow.com
-1. [Getting row means in R][rowMeans]
-2. [Dropping columns by pattern matching in R][dropColumnsPattern]
-3. [Finding non-numeric data in a column R][findNonNumeric]
+1. http://stackoverflow.com
+  - [Getting row means in R][rowMeans]
+  - [Dropping columns by pattern matching in R][dropColumnsPattern]
+  - [Finding non-numeric data in a column R][findNonNumeric]
 
 [1]:https://haigen.wordpress.com/sample-sas-code-for-timss-data/
 [rowMeans]:http://stackoverflow.com/questions/9490485/how-can-i-get-the-average-mean-of-selected-columns]
