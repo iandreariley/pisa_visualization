@@ -67,7 +67,7 @@ I renamed the predictor variables to make them more reader friendly and aggregat
 the 'PV' variables into three averaged (arithmetic mean) scores. The new shape of the
 data was then:
 
-#### predictor values
+##### predictor values
 
 - country
 - region
@@ -82,11 +82,11 @@ data was then:
 - home_possessions
 - wealth
 
-#### predicted values
+##### predicted values
 
--math_score
--science_score
--reading_score
+- math_score
+- science_score
+- reading_score
 
 ## References
 
