@@ -127,3 +127,36 @@ qplot(math_anxiety, data = df, binwidth = .25)
 summary(df$math_anxiety)
 ```
 Normal distribution with some hiccups.
+```{r, echo=FALSE}
+qplot(home_possessions, data = df)
+```
+Curious about scale used here. distributino normal with slight left skew
+```{r, echo=FALSE}
+qplot(gender, data = df)
+```
+Roughly even split. Slightly more women than men
+```{r, echo=FALSE}
+qplot(region, data = df) +
+  coord_flip()
+```
+Will have to figure out how to translate these numbers into meaningful regions
+```{r, echo=FALSE}
+qplot(immegration_age, data = df, binwidth = 1)
+```
+Surprising that so few values are 0 - this would seem to suggest that the bulk
+of students are immigrants, which seems unlikely.
+```{r, echo=FALSE}
+summary(df$immegration_age)
+```
+This may be a useless value, as there are so many NAs (98%). It's possible that
+kids who were born in the country of the test simply did not fill this out
+because it seemed not applicable (that is, they never immigrated, so even 0
+is not a logical answer). That said, one can also immagine that there may be a
+non-response bias here, where kids who are immigrants are reluctant to say so,
+so imputing a '0' value for all NAs may be misguided.
+```{r, echo=FALSE}
+qplot(birth_country, data = df)
+summary(df$birth_country)
+```
+A good, low number of NAs (~1.9%). This may help make a case for imputing values
+for the immigration age variable.
