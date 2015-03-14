@@ -94,9 +94,11 @@ data was then:
   - [Getting row means in R][rowMeans]
   - [Dropping columns by pattern matching in R][dropColumnsPattern]
   - [Finding non-numeric data in a column R][findNonNumeric]
+2. [Quick-R][quickr]
 
 [1]:https://haigen.wordpress.com/sample-sas-code-for-timss-data/
 [rowMeans]:http://stackoverflow.com/questions/9490485/how-can-i-get-the-average-mean-of-selected-columns]
 [dropColumnsPattern]:http://stackoverflow.com/questions/15666226/how-to-drop-columns-by-name-pattern-in-r
 [findNonNumeric]:http://stackoverflow.com/questions/21196106/finding-non-numeric-data-in-an-r-data-frame-or-vector
+[quickr]:http://www.statmethods.net/
 
