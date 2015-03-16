@@ -141,6 +141,16 @@ The region variable I kept because I may have decided to use it later.
 - For immigration age values that exist, a surprising number of them are non-zero
   (>50%).
 
+#### Bivariate observations
+- Some countries perform much better than others on average
+- The strongest correlation I observered was between math/science scores and the
+  ESCS index (r = ~0.40).
+- There is also a strong correlation between math anxiety and math scores
+  (r = ~ -0.37).
+- Median math score goes down significantly with all measures of truancy
+- The median reading score for women appears to be about fifty points higher than
+  the score for men
+- The median math score is slightly higher for men than for women
 
 ## References
 
