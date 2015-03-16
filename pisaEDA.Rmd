@@ -277,10 +277,11 @@ bottom_performers <- c("Qatar", "Peru", "Indonesia", "Brazil",
 top_and_bottom <- subset(df, country %in% top_performers |
                            country %in% bottom_performers)
 
-ggplot(aes(x = round(wealth/.5) * .5, y = math_score, color = country),
+ggplot(aes(x = socio_economic_index, y = math_score, color = country),
        data = top_and_bottom) +
-  geom_line(stat = 'summary', fun.y = median)
+  geom_smooth(alpha = I(0.0))
 ```
+
 ```{r, echo=FALSE}
 ggplot(aes(x = wealth, y = math_score, color = gender),
        data = df) +
