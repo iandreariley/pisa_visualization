@@ -39,7 +39,7 @@ qplot(absent_class, data = df)
 The absent_class variable is confusing - this seems to say that every student
 missed at least one class, which seems wrong.
 ```{r, echo=FALSE}
-qplot(wealth, data = df)
+qplot(wealth, data = df, binwidth = .5)
 ```
 
 A strangely normal distribution for wealth. I'd expect it to be more right
@@ -195,3 +195,36 @@ qplot(home_possessions, math_score, data = df)
 ```
 
 Similar shape to wealth v. math_score graph
+```{r, echo=FALSE}
+qplot(wealth, data = df, binwidth = .5) +
+  facet_wrap(~ country, scales = "free_y")
+```
+
+Significant differences in wealth distributions across countries.
+
+### The following plots are using median values of country aggregates
+```{r, echo=FALSE}
+by_country_vars <- c("wealth", "socio_economic_index", "math_score",
+                     "reading_score", "science_score", "math_anxiety")
+
+#aggregate points by country and median value
+country_agg <- df[by_country_vars]
+country_agg <- aggregate(country_agg,
+                         by = list(df$country),
+                         FUN = median, na.rm = TRUE)
+country_agg <- rename(country_agg, c(Group.1="country", wealth="wealth",
+                                     math_score="math_score",
+                                     reading_score="reading_score",
+                                     science_score="science_score",
+                                     math_anxiety="math_anxiety",
+                                     socio_economic_index="escs"))
+
+qplot(escs, math_score, data = country_agg)
+qplot(wealth, math_score, data = country_agg)
+with(country_agg, cor.test(escs, math_score))
+with(country_agg, cor.test(wealth, math_score))
+```
+
+While wealth is a significantly worse predictor of performance than is the escs,
+its median value by country proves a good predictor of the countries average
+performance on math tests.
