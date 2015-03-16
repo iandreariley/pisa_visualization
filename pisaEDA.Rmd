@@ -201,7 +201,25 @@ qplot(wealth, data = df, binwidth = .5) +
 ```
 
 Significant differences in wealth distributions across countries.
+```{r, echo=FALSE}
+qplot(tardy, data = df) + facet_wrap(~country)
+```
 
+```{r, echo=FALSE}
+ggplot(aes(x = round(wealth / .25), y = math_score), data = df) +
+  geom_line(stat = 'summary', fun.y = median)
+
+ggplot(aes(x = wealth, y = math_score), data = df) +
+  geom_smooth()
+```
+
+```{r, echo=FALSE}
+ggplot(aes(x = round(socio_economic_index / .25), y = math_score), data = df) +
+  geom_line(stat = 'summary', fun.y = median)
+
+ggplot(aes(x = socio_economic_index, y = math_score), data = df) +
+  geom_smooth()
+```
 ### The following plots are using median values of country aggregates
 ```{r, echo=FALSE}
 by_country_vars <- c("wealth", "socio_economic_index", "math_score",
@@ -228,3 +246,44 @@ with(country_agg, cor.test(wealth, math_score))
 While wealth is a significantly worse predictor of performance than is the escs,
 its median value by country proves a good predictor of the countries average
 performance on math tests.
+```{r, echo=FALSE}
+qplot(country, math_anxiety, data = country_agg, geom = "bar", stat = "identity") +
+  coord_flip()
+```
+
+## MULTIVARIATE ANALYSIS
+
+```{r, echo=FALSE}
+qplot(wealth, math_score, data = country_agg, color = math_anxiety)
+qplot(socio_economic_index, math_score, data = df, color = tardy,
+      alpha = I(0.1))
+
+# make a discrete grouping of wealth
+df$wealth.bucket <- cut(df$wealth, breaks = seq(-6.5, 3, .5))
+ggplot(aes(x = wealth, y = math_score),
+       data = df) +
+  geom_line(stat = "summary", fun.y = median) +
+  facet_wrap(~country)
+```
+
+Obviously this is a bit too busy, so we'll plot the top performing countries
+```{r, echo=FALSE}
+top_performers <- c("Singapore", "Hong Kong-China", "China-Shanghai",
+                    "Chinese Tapai", "Korea")
+
+bottom_performers <- c("Qatar", "Peru", "Indonesia", "Brazil",
+                       "United States of America")
+
+top_and_bottom <- subset(df, country %in% top_performers |
+                           country %in% bottom_performers)
+
+ggplot(aes(x = round(wealth/.5) * .5, y = math_score, color = country),
+       data = top_and_bottom) +
+  geom_line(stat = 'summary', fun.y = median)
+```
+```{r, echo=FALSE}
+ggplot(aes(x = wealth, y = math_score, color = gender),
+       data = df) +
+  geom_smooth() +
+  facet_wrap(~country)
+```
