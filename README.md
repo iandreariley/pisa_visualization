@@ -116,6 +116,32 @@ and that the limited amount of data will be helpful anyway.
 
 The region variable I kept because I may have decided to use it later.
 
+### Exploratory Analysis
+
+#### Notes on Variables
+- According to [Statistics Canada][3] 'Wealth' is an index determined by whether the
+  student had the following at home:
+  1. His or her own room
+  2. A dishwasher
+  3. An internet connection
+  4. A DVD player
+  5. Three other country-specific items
+- According to the [Organization for Ecomonic Co-operation and Development][4]
+  (OECD), 'ESCS', the Economic, Social and Cultural status index is based on the
+  following variables:
+  1. The International Socio-Economic Index of Occupational Status (ISEI)
+  2. The highest level of education of the student's parents
+  3. The wealth index
+  4. The index of home educational resources
+  5. The index of possessions related to classic culture at home.
+
+#### Univariate Observations
+- Reading, math and science scores all have normal distributions.
+- Immigration age is mostly NA values.
+- For immigration age values that exist, a surprising number of them are non-zero
+  (>50%).
+
+
 ## References
 
 1. http://stackoverflow.com
@@ -126,7 +152,9 @@ The region variable I kept because I may have decided to use it later.
 
 [1]:https://haigen.wordpress.com/sample-sas-code-for-timss-data/
 [2]:http://www.washingtonpost.com/blogs/answer-sheet/wp/2013/12/03/key-pisa-test-results-for-u-s-students/
+[3]:http://www.statcan.gc.ca/pub/81-595-m/2011092/section/app-ann03-eng.htm
 [rowMeans]:http://stackoverflow.com/questions/9490485/how-can-i-get-the-average-mean-of-selected-columns]
+[4]:http://stats.oecd.org/glossary/detail.asp?ID=5401
 [dropColumnsPattern]:http://stackoverflow.com/questions/15666226/how-to-drop-columns-by-name-pattern-in-r
 [findNonNumeric]:http://stackoverflow.com/questions/21196106/finding-non-numeric-data-in-an-r-data-frame-or-vector
 [quickr]:http://www.statmethods.net/
