@@ -152,6 +152,20 @@ The region variable I kept because I may have decided to use it later.
   the score for men
 - The median math score is slightly higher for men than for women
 
+#### Multivariate observations
+
+### Visualization ideas
+
+After looking at various plots in R, what strikes me most is the relationship
+between wealth/escs and math_score. Plotting wealth against math score and
+facetting by country shows that some countries have relatiively equal opportunity
+for students with less family wealth and students with more, while other countries
+have dramatic differences in scores between their richer and poorer students.
+
+However, countries across the board show a generally positive correlation between
+the escs index and math score, suggesting that perhaps even the countries that
+seem to have equal opportunity are not as equal and they first appear.
+
 ## References
 
 1. http://stackoverflow.com
