@@ -1,5 +1,6 @@
 # data files
 *.csv
+*.tsv
 
 # R junk
 .Rhistory
