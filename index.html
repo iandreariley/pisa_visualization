@@ -10,6 +10,20 @@
         fill: red;
       }
 
+
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      li.step_buttons {
+        float: left;
+        display: inline;
+        padding: 5px;
+        width: 60px;
+      }
+
       h2 {
         text-align: center;
       }
@@ -32,12 +46,28 @@
           //   .append("h2")
           //   .text("World Cup Attendance")
 
+          //TODO: Rename these stupid buttons
+          var button_names = ["Step 1", "Step 2", "Step 3"]
+
+          var nav_bar = d3.select("body")
+                          .append("ul")
+                          .attr("class", "nav_bar")
+                          .selectAll("li")
+                          .data(button_names)
+                          .enter()
+                          .append("li")
+                          .attr("class", "step_buttons")
+                          .text(function(d) {
+                            return d;
+                          });
+
           var svg = d3.select("body")
             .append("svg")
               .attr("width", width + margin)
               .attr("height", height + margin)
             .append('g')
                 .attr('class','chart');
+
 
           d3.select("svg")
             .selectAll("circle")
