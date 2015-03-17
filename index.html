@@ -153,7 +153,11 @@
   <script type="text/javascript">
 
   //TODO: Rename these stupid buttons
-  var button_names = ["Step 1", "Step 2", "Step 3"]
+  var first_stage = "first_stage",
+      second_stage = "second_stage",
+      third_stage = "third_stage";
+
+  var button_names = [first_stage, second_stage, third_stage]
         
   //Create navigation buttons
   var buttons = d3.select("body")
@@ -176,12 +180,16 @@
       console.log(d);
   });
 
-  d3.tsv("pisa_by_country.tsv", function(d) {
-      // transform data
-      d['math_score'] = +d['math_score'];
-      d['wealth'] = +d['wealth'];
-      return d;
-  }, draw);
+  draw_first_stage("pisa_by_country.tsv")
+
+  function draw_first_stage(file){
+      d3.tsv(file, function(d) {
+          // transform data
+          d['math_score'] = +d['math_score'];
+          d['wealth'] = +d['wealth'];
+          return d;
+      }, draw);
+  }
   </script>
 </body>
 </html>
