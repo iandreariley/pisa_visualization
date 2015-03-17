@@ -28,7 +28,7 @@
         padding: 5px;
         width: 150px;
       }
-      
+
       /* Code from W3 schools */
       div.step_buttons {
         display: block;
@@ -48,28 +48,46 @@
     </style>
 
     <script type="text/javascript">
-      function draw(data) {
-      
-      /*
-        D3.js setup code
-      */
 
-          "use strict";
-          var margin = 75,
-              width = 1400 - margin,
-              height = 600 - margin,
-              radius = 4;
+      //TODO: Find a better way to do this. D3 select function
+      //probably not necessary.
+      function clear_svg(){
+          d3.selectAll("svg > *").remove();
+      }
+      function no_existing_svg(){
+          element = d3.select("svg")[0][0];
+          return element === null;
+      };
 
-          //class name for all currently visible data elements
-          var vis = "visible";
-
+      function make_svg_element(width, margin, height, css_class){
           var svg = d3.select("body")
             .append("svg")
               .attr("width", width + margin)
               .attr("height", height + margin)
             .append('g')
-                .attr('class','chart');
+                .attr('class', css_class);
 
+          return svg
+      };
+
+      function draw(data) {
+
+          "use strict";
+          var margin = 75,
+              width = 1400 - margin,
+              height = 600 - margin,
+              radius = 4,
+              css_class = "chart";
+
+          //class name for all currently visible data elements
+          var vis = "visible";
+
+          if(no_existing_svg()){
+              var svg = make_svg_element(width, margin, height, css_class);
+          }
+          else{
+
+          }
 
           d3.select("svg")
             .selectAll("circle")
@@ -80,7 +98,6 @@
           // Find range of date column
           var wealth_extent = d3.extent(data, function(d) {
               return d['wealth'];
-              debugger;
           });
 
           // Find range of attendance column
@@ -97,8 +114,6 @@
           var score_scale = d3.scale.linear()
             .range([height, margin])
             .domain(score_extent);
-
-          debugger;
 
           var wealth_axis = d3.svg.axis()
             .scale(wealth_scale);
@@ -177,7 +192,7 @@
                   });
 
   buttons.on("click", function(d){
-      console.log(d);
+      clear_svg();
   });
 
   draw_first_stage("pisa_by_country.tsv")
@@ -189,7 +204,7 @@
           d['wealth'] = +d['wealth'];
           return d;
       }, draw);
-  }
+  };
   </script>
 </body>
 </html>
