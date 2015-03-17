@@ -10,18 +10,36 @@
         fill: red;
       }
 
+      div.nav_bar {
+        text-align: center;
+      }
 
-      ul {
+      ul.nav_bar {
         list-style-type: none;
         margin: 0;
         padding: 0;
+        display: inline-table;
+        text-align: center;
       }
 
       li.step_buttons {
         float: left;
         display: inline;
         padding: 5px;
-        width: 60px;
+        width: 120px;
+      }
+
+      /* Code from W3 schools */
+      div.step_buttons {
+        display: block;
+        font-weight: bold;
+        color: #FFFFFF;
+        background-color: #98bf21;
+        width: 120px;
+        text-align: center;
+        padding: 4px;
+        text-decoration: none;
+        text-transform: uppercase;
       }
 
       h2 {
@@ -50,12 +68,16 @@
           var button_names = ["Step 1", "Step 2", "Step 3"]
 
           var nav_bar = d3.select("body")
+                          .append("div")
+                          .attr("class", "nav_bar")
                           .append("ul")
                           .attr("class", "nav_bar")
                           .selectAll("li")
                           .data(button_names)
                           .enter()
                           .append("li")
+                          .attr("class", "step_buttons")
+                          .append("div")
                           .attr("class", "step_buttons")
                           .text(function(d) {
                             return d;
