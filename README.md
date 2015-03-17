@@ -172,8 +172,10 @@ seem to have equal opportunity are not as equal and they first appear.
   - [Getting row means in R][rowMeans]
   - [Dropping columns by pattern matching in R][dropColumnsPattern]
   - [Finding non-numeric data in a column R][findNonNumeric]
+  - [Center a ul element][center_ul]
 2. [Quick-R][quickr]
-
+3. http://www.w3schools.com
+  - [Creating a navigation bar with a ul element][nav_bar]
 [1]:https://haigen.wordpress.com/sample-sas-code-for-timss-data/
 [2]:http://www.washingtonpost.com/blogs/answer-sheet/wp/2013/12/03/key-pisa-test-results-for-u-s-students/
 [3]:http://www.statcan.gc.ca/pub/81-595-m/2011092/section/app-ann03-eng.htm
@@ -182,4 +184,5 @@ seem to have equal opportunity are not as equal and they first appear.
 [dropColumnsPattern]:http://stackoverflow.com/questions/15666226/how-to-drop-columns-by-name-pattern-in-r
 [findNonNumeric]:http://stackoverflow.com/questions/21196106/finding-non-numeric-data-in-an-r-data-frame-or-vector
 [quickr]:http://www.statmethods.net/
-
+[nav_bar]:http://www.w3schools.com/css/css_navbar.asp
+[center_ul]:http://stackoverflow.com/questions/544207/can-you-help-me-center-a-ul-element-with-css
