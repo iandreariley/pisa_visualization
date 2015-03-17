@@ -173,6 +173,7 @@ seem to have equal opportunity are not as equal and they first appear.
   - [Dropping columns by pattern matching in R][dropColumnsPattern]
   - [Finding non-numeric data in a column R][findNonNumeric]
   - [Center a ul element][center_ul]
+  - [Remove all elements from an svg with D3.js][clear_svg]
 2. [Quick-R][quickr]
 3. http://www.w3schools.com
   - [Creating a navigation bar with a ul element][nav_bar]
@@ -186,3 +187,4 @@ seem to have equal opportunity are not as equal and they first appear.
 [quickr]:http://www.statmethods.net/
 [nav_bar]:http://www.w3schools.com/css/css_navbar.asp
 [center_ul]:http://stackoverflow.com/questions/544207/can-you-help-me-center-a-ul-element-with-css
+[clear_svg]:http://stackoverflow.com/questions/22452112/nvd3-clear-svg-before-loading-new-chart
