@@ -49,6 +49,14 @@
 
     <script type="text/javascript">
 
+      function x_axis(scale){
+          return d3.svg.axis().scale(scale);
+      };
+
+      function y_axis(scale){
+          return d3.svg.axis().scale(scale).orient("left");
+      }
+
       function make_scale(pix_min, pix_max, dom){
           var scale = d3.scale.linear()
             .range([pix_min, pix_max])
@@ -120,12 +128,9 @@
           // Create y-axis scale mapping attendance -> pixels
           var score_scale = make_scale(height, margin, score_extent);
 
-          var wealth_axis = d3.svg.axis()
-            .scale(wealth_scale);
+          var wealth_axis = x_axis(wealth_scale);
 
-          var score_axis = d3.svg.axis()
-            .scale(score_scale)
-            .orient("left");
+          var score_axis = y_axis(score_scale);
 
           d3.select("svg")
             .append("g")
