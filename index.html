@@ -119,8 +119,12 @@
               var mean_score = d3.mean(leaves, function(d) {
                   return d['math_score'];
               });
-
-              return mean_score;
+              
+              return {
+                'country' : leaves[0]['country'],
+                'x' : leaves[0]['wealth.bucket'],
+                'y' : mean_score
+              };
           };
 
           function comp_leaves(a,b) {
@@ -176,10 +180,10 @@
 
           var line = d3.svg.line()
             .x(function(d) {
-              return wealth_scale(+d['key']);
+              return wealth_scale(d['values']['x']);
             })
             .y(function(d) {
-              return score_scale(d['values'])
+              return score_scale(d['values']['y']);
             })
             .interpolate('basis');
 
@@ -187,7 +191,7 @@
 
           draw_line(svg, grand_mean, line, 3, 'darkslategrey');
 
-          var map = svg.selectAll('path')
+          var lines = svg.selectAll('path')
             .data(countries)
             .enter()
             .append('path')
