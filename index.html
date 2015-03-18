@@ -187,10 +187,19 @@
 
           draw_line(svg, grand_mean, line, 3, 'darkslategrey');
 
-          for (var i = 0; i < countries.length; i++) {
-            var country = countries[i]['values'];
-            draw_line(svg, country, line, 1, 'slategrey');
-          }
+          var map = svg.selectAll('path')
+            .data(countries)
+            .enter()
+            .append('path')
+            .attr('d', function(d){ return line(d['values']);})
+            .style('fill', 'none')
+            .style('stroke', 'grey')
+            .style('stroke-width', 0.5);
+
+          // for (var i = 0; i < countries.length; i++) {
+          //   var country = countries[i]['values'];
+          //   draw_line(svg, country, line, 1, 'slategrey');
+          // }
       }
 
     </script>
