@@ -84,8 +84,16 @@
             .append('g')
                 .attr('class', css_class);
 
-          return svg
+          return svg;
       };
+
+      function draw_line(svg, points_array, line_func) {
+          svg.append('svg:path')
+              .attr('d', line_func(points_array))
+              .attr('stroke', 'blue')
+              .attr('stroke-width', 1)
+              .attr('fill', 'none');
+      }
 
       function draw(data) {
           "use strict";
@@ -169,12 +177,7 @@
 
           for (var i = 0; i < countries.length; i++) {
             var country = countries[i]['values'];
-            svg.append('svg:path')
-              .attr('d', line(country))
-              .attr('stroke', 'blue')
-              .attr('stroke-width', 1)
-              .attr('fill', 'none');
-
+            draw_line(svg, country, line);
           }
       }
 
