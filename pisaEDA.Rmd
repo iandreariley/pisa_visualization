@@ -222,8 +222,9 @@ ggplot(aes(x = socio_economic_index, y = math_score), data = df) +
 ```
 ### The following plots are using median values of country aggregates
 ```{r, echo=FALSE}
-by_country_vars <- c("wealth", "socio_economic_index", "math_score",
-                     "reading_score", "science_score", "math_anxiety")
+by_country_vars <- c("country", "wealth.bucket", "socio_economic_index",
+                     "math_score","reading_score", "science_score",
+                     "math_anxiety")
 
 #aggregate points by country and median value
 country_agg <- df[by_country_vars]
@@ -259,7 +260,7 @@ qplot(socio_economic_index, math_score, data = df, color = tardy,
       alpha = I(0.1))
 
 # make a discrete grouping of wealth
-df$wealth.bucket <- cut(df$wealth, breaks = seq(-6.5, 3, .5))
+df$wealth.bucket <- cut(df$wealth, breaks = seq(-7, 3.5, .5))
 ggplot(aes(x = wealth, y = math_score),
        data = df) +
   geom_line(stat = "summary", fun.y = median) +
@@ -283,8 +284,20 @@ ggplot(aes(x = socio_economic_index, y = math_score, color = country),
 ```
 
 ```{r, echo=FALSE}
-ggplot(aes(x = wealth, y = math_score, color = gender),
+ggplot(aes(x = round(wealth/ .5) * .5,
+           y = math_score),
        data = df) +
-  geom_smooth() +
+  geom_line(stat = "summary", fun.y = median) +
   facet_wrap(~country)
+
+by_wealth <- df[by_country_vars]
+by_wealth <- aggregate(by_wealth,
+                       by = list(df$),
+                       FUN = median, na.rm = TRUE)
+by_wealth <- rename(by_wealth, c(Group.1="country", wealth="wealth",
+                                   math_score="math_score",
+                                   reading_score="reading_score",
+                                   science_score="science_score",
+                                   math_anxiety="math_anxiety",
+                                   socio_economic_index="escs"))
 ```
