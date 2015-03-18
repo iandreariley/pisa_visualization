@@ -179,6 +179,7 @@ seem to have equal opportunity are not as equal and they first appear.
   - [Creating a navigation bar with a ul element][nav_bar]
 4. [Nesting in D3][nest]
 5. [Drawing a line with D3][draw_line]
+6. [Rounding in javascript][round]
 [1]:https://haigen.wordpress.com/sample-sas-code-for-timss-data/
 [2]:http://www.washingtonpost.com/blogs/answer-sheet/wp/2013/12/03/key-pisa-test-results-for-u-s-students/
 [3]:http://www.statcan.gc.ca/pub/81-595-m/2011092/section/app-ann03-eng.htm
@@ -192,3 +193,4 @@ seem to have equal opportunity are not as equal and they first appear.
 [clear_svg]:http://stackoverflow.com/questions/22452112/nvd3-clear-svg-before-loading-new-chart
 [nest]:https://github.com/mbostock/d3/wiki/Arrays#-nest
 [draw_line]:http://www.sitepoint.com/creating-simple-line-bar-charts-using-d3-js/
+[round]:http://stackoverflow.com/questions/1726630/javascript-formatting-number-with-exactly-two-decimals
