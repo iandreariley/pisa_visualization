@@ -46,33 +46,9 @@
         text-align: center;
       }
 
-      .d3-tip {
-        line-height: 1;
-        font-weight: bold;
-        padding: 12px;
-        background: rgba(0, 0, 0, 0.8);
-        color: #fff;
-        border-radius: 2px;
+      .tooltip {
+        visibility: visible;
       }
-
-      /* Creates a small triangle extender for the tooltip */
-      .d3-tip:after {
-        box-sizing: border-box;
-        display: inline;
-        font-size: 10px;
-        width: 100%;
-        line-height: 1;
-        color: rgba(0, 0, 0, 0.8);
-        content: "\25BC";
-        position: absolute;
-        text-align: center;
-      }
-
-      /* Style northward tooltips differently */
-      .d3-tip.n:after {
-        margin: -1px 0 0 0;
-        top: 100%;
-        left: 0;
 }
     </style>
 
@@ -216,29 +192,24 @@
             })
             .interpolate('basis');
 
-          debugger;
-
           draw_line(svg, grand_mean, line, 3, 'darkslategrey');
 
-          var lines = svg.append("g")
-            .attr("class", "line_plot")
-            .attr("transform", "translate(" + margin + "," + margin + ")")
-            .selectAll('path')
+          var lines = svg.selectAll('path')
             .data(countries)
             .enter()
             .append('path')
             .attr('d', function(d){ return line(d['values']);})
             .style('fill', 'none')
             .style('stroke', 'grey')
-            .style('stroke-width', 0.5)
+            .style('stroke-width', 0.5);
 
-          // var tip = d3.tip()
-          //   .attr('class', 'd3-tip')
-          //   .offset([-10, 0])
-          //   .html(function(d) {
-          //     return "<strong>Country:</strong> <span style='color:red'>" + d.country + "</span>";
-          //   })
-          // lines.call(tip);
+          lines.append("svg:title")
+            .attr("class", "tooltip")
+            .text(function(d) {
+              return d['values'][0]['values']['country'];
+            })
+
+
 
           // for (var i = 0; i < countries.length; i++) {
           //   var country = countries[i]['values'];
