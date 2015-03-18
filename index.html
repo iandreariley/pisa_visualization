@@ -87,11 +87,11 @@
           return svg;
       };
 
-      function draw_line(svg, points_array, line_func) {
+      function draw_line(svg, points_array, line_func, weight, color) {
           svg.append('svg:path')
               .attr('d', line_func(points_array))
-              .attr('stroke', 'blue')
-              .attr('stroke-width', 1)
+              .attr('stroke', color)
+              .attr('stroke-width', weight)
               .attr('fill', 'none');
       }
 
@@ -115,7 +115,7 @@
               clear_svg();
           }
 
-          function agg_country(leaves) {
+          function agg(leaves) {
               var mean_score = d3.mean(leaves, function(d) {
                   return d['math_score'];
               });
@@ -123,13 +123,21 @@
               return mean_score;
           };
 
+          function comp_leaves(a,b) {
+              return +a - +b;
+          }
+
+          var grand_mean = d3.nest()
+            .key(function(d) {return d['wealth.bucket'];})
+            .sortKeys(comp_leaves)
+            .rollup(agg)
+            .entries(data);
+
           var countries = d3.nest()
                          .key(function(d) {return d['country'];})
                          .key(function(d) {return +d['wealth.bucket'];})
-                         .sortKeys(function(a,b) {
-                            return +a - +b;
-                         })
-                         .rollup(agg_country)
+                         .sortKeys(comp_leaves)
+                         .rollup(agg)
                          .entries(data);
 
           // Find range of date column
@@ -148,7 +156,7 @@
           // Create y-axis scale mapping attendance -> pixels
           var score_scale = d3.scale.linear()
             .range([height, margin])
-            .domain([200, 700]);
+            .domain([225, 650]);
 
           var wealth_axis = x_axis(wealth_scale);
 
@@ -175,9 +183,13 @@
             })
             .interpolate('basis');
 
+          debugger;
+
+          draw_line(svg, grand_mean, line, 3, 'darkslategrey');
+
           for (var i = 0; i < countries.length; i++) {
             var country = countries[i]['values'];
-            draw_line(svg, country, line);
+            draw_line(svg, country, line, 1, 'slategrey');
           }
       }
 
