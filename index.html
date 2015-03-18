@@ -87,7 +87,7 @@
           return svg
       };
 
-      function draw_line_chart(data) {
+      function draw(data) {
           "use strict";
 
           //TODO: make these variables global          
@@ -182,91 +182,6 @@
           }
       }
 
-      function draw(data) {
-
-          "use strict";
-          var margin = 75,
-              width = 1400 - margin,
-              height = 600 - margin,
-              radius = 4,
-              css_class = "chart";
-
-          //class name for all currently visible data elements
-          var vis = "visible";
-
-          if(no_existing_svg()){
-              var svg = make_svg_element(width, margin, height, css_class);
-          }
-          else{
-              clear_svg();
-          }
-
-          d3.select("svg")
-            .selectAll("circle")
-            .data(data)
-            .enter()
-            .append("circle");
-
-          // Find range of date column
-          var wealth_extent = d3.extent(data, function(d) {
-              return d['wealth'];
-          });
-
-          // Find range of attendance column
-          var score_extent = d3.extent(data, function(d) {
-              return d['math_score'];
-          })
-
-          // Create x-axis scale mapping dates -> pixels
-          var wealth_scale = make_scale(margin, width, wealth_extent);
-
-          // Create y-axis scale mapping attendance -> pixels
-          var score_scale = make_scale(height, margin, score_extent);
-
-          var wealth_axis = x_axis(wealth_scale);
-
-          var score_axis = y_axis(score_scale);
-
-          d3.select("svg")
-            .append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + height + ")")
-            .call(wealth_axis);
-
-          d3.select("svg")
-            .append("g")
-            .attr("class", "y axis")
-            .attr("transform", "translate(" + margin + ",0)")
-            .call(score_axis);
-
-          d3.selectAll("circle")
-            .attr("class", vis)
-            .attr("cx", function(d) {
-                return wealth_scale(d["wealth"]);
-            })
-            .attr("cy", function(d) {
-                return score_scale(d["math_score"]);
-            })
-            .attr("r", function(d) {
-                return 3;
-            })
-            .attr("fill", function(d) {
-                if(d["country"] === "Singapore")
-                  return "yellow";
-                if(d["country"] === "United States of America")
-                  return "blue";
-                return "black";
-            });
-
-            //create legend element
-            // var legend = svg.append("g")
-            //   .attr("class", "legend")
-            //   .attr("transform", "translate(" + (width - 100) + "," + 20 + ")")
-            //   .selectAll("g")
-            //   .data(["Home Team", "Others"])
-            //   .enter().append("g");
-        };
-
     </script>
   </head>
 <body>
@@ -308,7 +223,7 @@
           d['math_score'] = +d['math_score'];
           d['wealth.bucket'] = +d['wealth.bucket'];
           return d;
-      }, draw_line_chart);
+      }, draw);
   };
   </script>
 </body>
