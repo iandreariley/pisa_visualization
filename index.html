@@ -87,6 +87,95 @@
           return svg
       };
 
+      function draw_line_chart(data) {
+          "use strict";
+
+          //TODO: make these variables global          
+          var margin = 75,
+              width = 1400 - margin,
+              height = 600 - margin,
+              radius = 4,
+              css_class = "chart";
+
+          //class name for all currently visible data elements
+          var vis = "visible";
+
+          if(no_existing_svg()){
+              var svg = make_svg_element(width, margin, height, css_class);
+          }
+          else{
+              clear_svg();
+          }
+
+          function agg_country(leaves) {
+              var mean_score = d3.mean(leaves, function(d) {
+                  return d['math_score'];
+              });
+
+              return mean_score;
+          };
+
+          var nested = d3.nest()
+                         .key(function(d) {return d['country'];})
+                         .key(function(d) {return +d['wealth.bucket'];})
+                         .sortKeys(function(a,b) {
+                            return +a - +b;
+                         })
+                         .rollup(agg_country)
+                         .entries(data);
+
+          var test = nested[0]['values'];
+
+          debugger;
+
+          // Find range of date column
+          var wealth_extent = d3.extent(data, function(d) {
+              return d['wealth.bucket'];
+          });
+
+          // Find range of attendance column
+          var score_extent = d3.extent(data, function(d) {
+              return d['math_score'];
+          })
+
+          // Create x-axis scale mapping dates -> pixels
+          var wealth_scale = make_scale(margin, width, wealth_extent);
+
+          // Create y-axis scale mapping attendance -> pixels
+          var score_scale = make_scale(height, margin, score_extent);
+
+          var wealth_axis = x_axis(wealth_scale);
+
+          var score_axis = y_axis(score_scale);
+
+          d3.select("svg")
+            .append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(wealth_axis);
+
+          d3.select("svg")
+            .append("g")
+            .attr("class", "y axis")
+            .attr("transform", "translate(" + margin + ",0)")
+            .call(score_axis);
+
+          var line = d3.svg.line()
+            .x(function(d) {
+              return wealth_scale(+d['key']);
+            })
+            .y(function(d) {
+              return score_scale(d['values'])
+            })
+            .interpolate('linear');
+
+          svg.append('svg:path')
+            .attr('d', line(test))
+            .attr('stroke', 'blue')
+            .attr('stroke-width', 2)
+            .attr('fill', 'none');
+      }
+
       function draw(data) {
 
           "use strict";
@@ -103,7 +192,7 @@
               var svg = make_svg_element(width, margin, height, css_class);
           }
           else{
-
+              clear_svg();
           }
 
           d3.select("svg")
@@ -205,15 +294,15 @@
       clear_svg();
   });
 
-  draw_first_stage("pisa_by_country.tsv")
+  draw_first_stage("pisa_by_wealth.tsv");
 
   function draw_first_stage(file){
       d3.tsv(file, function(d) {
           // transform data
           d['math_score'] = +d['math_score'];
-          d['wealth'] = +d['wealth'];
+          d['wealth.bucket'] = +d['wealth.bucket'];
           return d;
-      }, draw);
+      }, draw_line_chart);
   };
   </script>
 </body>
