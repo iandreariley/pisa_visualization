@@ -92,6 +92,18 @@
           return svg;
       };
 
+      function get_country_mean(country_mean_array, country) {
+          var result = null
+          for(var i = 0; i < country_mean_array.length; i++) {
+            debugger;
+            if(country_mean_array[i]['key'] === country) {
+              result = country_mean_array[i]['values'];
+              return result.toFixed(0);
+            }
+          }
+          return result;
+      }
+
       function draw_line(svg, points_array, line_func, weight, color) {
           svg.append('svg:path')
               .attr('d', line_func(points_array))
@@ -142,6 +154,17 @@
             .rollup(agg)
             .entries(data);
 
+          var country_mean = d3.nest()
+            .key(function(d) { return d['country']})
+            .rollup(function(leaves) {
+              return d3.mean(leaves, function(d) {
+                return d['math_score'];
+              });
+            })
+            .entries(data)
+
+          debugger;
+
           var countries = d3.nest()
                          .key(function(d) {return d['country'];})
                          .key(function(d) {return +d['wealth.bucket'];})
@@ -165,7 +188,7 @@
           // Create y-axis scale mapping attendance -> pixels
           var score_scale = d3.scale.linear()
             .range([height, margin])
-            .domain([0, 650]);
+            .domain([225, 650]);
 
           var wealth_axis = x_axis(wealth_scale);
 
@@ -192,7 +215,7 @@
             })
             .interpolate('basis');
 
-          draw_line(svg, grand_mean, line, 3, 'darkslategrey');
+          draw_line(svg, grand_mean, line, 4, 'darkslategrey');
 
           var lines = svg.selectAll('path')
             .data(countries)
@@ -201,18 +224,23 @@
             .attr('d', function(d){ return line(d['values']);})
             .style('fill', 'none')
             .style('stroke', 'grey')
-            .style('stroke-width', 0.5)
+            .style('stroke-width', 1)
             .on('mouseover', function(d){
-              return d3.select(this).style('stroke', 'yellow');
+              return d3.select(this).style('stroke', 'red')
+                .style('stroke-width', 3);
             })
             .on('mouseout', function(d){
-              return d3.select(this).style('stroke', 'slategrey');
+              return d3.select(this).style('stroke', 'slategrey')
+                .style('stroke-width', 1);
             });
 
           lines.append("svg:title")
             .attr("class", "tooltip")
             .text(function(d) {
-              return d['values'][0]['values']['country'];
+              var values = d['values'][0]['values'];
+              var country = values['country'];
+              var score = get_country_mean(country_mean, country);
+              return country + '\nAverage Score: ' + score;
             })
 
 
