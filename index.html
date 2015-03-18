@@ -130,7 +130,7 @@
 
           // Find range of date column
           var wealth_extent = d3.extent(data, function(d) {
-              return d['wealth.bucket'];
+              return +d['wealth.bucket'];
           });
 
           // Find range of attendance column
@@ -142,7 +142,9 @@
           var wealth_scale = make_scale(margin, width, wealth_extent);
 
           // Create y-axis scale mapping attendance -> pixels
-          var score_scale = make_scale(height, margin, score_extent);
+          var score_scale = d3.scale.linear()
+            .range([height, margin])
+            .domain([200, 700]);
 
           var wealth_axis = x_axis(wealth_scale);
 
@@ -167,13 +169,17 @@
             .y(function(d) {
               return score_scale(d['values'])
             })
-            .interpolate('linear');
+            .interpolate('basis');
 
-          svg.append('svg:path')
-            .attr('d', line(test))
-            .attr('stroke', 'blue')
-            .attr('stroke-width', 2)
-            .attr('fill', 'none');
+          for (var i = 0; i < nested.length; i++) {
+            var country = nested[i]['values'];
+            svg.append('svg:path')
+              .attr('d', line(country))
+              .attr('stroke', 'blue')
+              .attr('stroke-width', 1)
+              .attr('fill', 'none');
+
+          }
       }
 
       function draw(data) {
