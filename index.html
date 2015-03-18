@@ -115,7 +115,7 @@
               return mean_score;
           };
 
-          var nested = d3.nest()
+          var countries = d3.nest()
                          .key(function(d) {return d['country'];})
                          .key(function(d) {return +d['wealth.bucket'];})
                          .sortKeys(function(a,b) {
@@ -123,10 +123,6 @@
                          })
                          .rollup(agg_country)
                          .entries(data);
-
-          var test = nested[0]['values'];
-
-          debugger;
 
           // Find range of date column
           var wealth_extent = d3.extent(data, function(d) {
@@ -171,8 +167,8 @@
             })
             .interpolate('basis');
 
-          for (var i = 0; i < nested.length; i++) {
-            var country = nested[i]['values'];
+          for (var i = 0; i < countries.length; i++) {
+            var country = countries[i]['values'];
             svg.append('svg:path')
               .attr('d', line(country))
               .attr('stroke', 'blue')
