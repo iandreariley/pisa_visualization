@@ -100,8 +100,8 @@
 
           //TODO: make these variables global          
           var margin = 75,
-              width = 1400 - margin,
-              height = 600 - margin,
+              width = 1200 - margin,
+              height = 900 - margin,
               radius = 4,
               css_class = "chart";
 
@@ -160,7 +160,7 @@
           // Create y-axis scale mapping attendance -> pixels
           var score_scale = d3.scale.linear()
             .range([height, margin])
-            .domain([225, 650]);
+            .domain([0, 650]);
 
           var wealth_axis = x_axis(wealth_scale);
 
