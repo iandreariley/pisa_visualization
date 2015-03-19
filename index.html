@@ -95,7 +95,6 @@
       function get_country_mean(country_mean_array, country) {
           var result = null
           for(var i = 0; i < country_mean_array.length; i++) {
-            debugger;
             if(country_mean_array[i]['key'] === country) {
               result = country_mean_array[i]['values'];
               return result.toFixed(0);
@@ -146,6 +145,17 @@
 
           function comp_leaves(a,b) {
               return +a - +b;
+          }
+
+          function draw_horiz_line(y, x1, x2, svg, color, weight) {
+            var line = svg.append("svg:line")
+              .attr('x1', x1)
+              .attr('y1', score_scale(y))
+              .attr('x2', x2)
+              .attr('y2', score_scale(y))
+              .style('stroke', color)
+              .style('stroke-width', weight)
+            return line;
           }
 
           var grand_mean = d3.nest()
@@ -215,7 +225,22 @@
             })
             .interpolate('basis');
 
+          // Draw grand mean
           draw_line(svg, grand_mean, line, 4, 'darkslategrey');
+
+          // Draw average of Shanghai, US
+          var shang_mean = get_country_mean(country_mean, 'China-Shanghai');
+          var usa_mean = get_country_mean(country_mean, 'United States of America');
+
+          debugger;
+
+          svg.append('svg:line')
+            .attr('x1', margin)
+            .attr('y1', score_scale(usa_mean))
+            .attr('x2', width)
+            .attr('y2', score_scale(usa_mean))
+            .style('stroke', 'green')
+            .style('stroke-width', 1)
 
           var lines = svg.selectAll('path')
             .data(countries)
