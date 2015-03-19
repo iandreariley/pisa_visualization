@@ -118,6 +118,7 @@
           .attr('y2', y)
           .style('stroke', color)
           .style('stroke-width', weight)
+          .style('stroke-dasharray', "10,10");
         return line;
       };
 
@@ -247,8 +248,8 @@
         var us = 'United States of America',
             china = 'China-Shanghai';
         var us_mean_line = draw_horiz_line(score_scale(get_country_mean(country_means, us)),
-          margin, width, svg, 'blue', 2);
-        var china_mean_line = draw_horiz_line(score_scale(get_country_mean(country_means, china)), margin, width, svg, 'blue', 2);
+          margin, width, svg, 'cornflowerblue', 2);
+        var china_mean_line = draw_horiz_line(score_scale(get_country_mean(country_means, china)), margin, width, svg, 'cornflowerblue', 2);
           return country_means;
       };
 
