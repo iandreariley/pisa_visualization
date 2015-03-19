@@ -103,6 +103,17 @@
           return result;
       }
 
+      function draw_horiz_line(y, x1, x2, svg, color, weight) {
+        var line = svg.append("svg:line")
+          .attr('x1', x1)
+          .attr('y1', score_scale(y))
+          .attr('x2', x2)
+          .attr('y2', score_scale(y))
+          .style('stroke', color)
+          .style('stroke-width', weight)
+        return line;
+      }
+
       function draw_line(svg, points_array, line_func, weight, color) {
           svg.append('svg:path')
               .attr('d', line_func(points_array))
@@ -145,17 +156,6 @@
 
           function comp_leaves(a,b) {
               return +a - +b;
-          }
-
-          function draw_horiz_line(y, x1, x2, svg, color, weight) {
-            var line = svg.append("svg:line")
-              .attr('x1', x1)
-              .attr('y1', score_scale(y))
-              .attr('x2', x2)
-              .attr('y2', score_scale(y))
-              .style('stroke', color)
-              .style('stroke-width', weight)
-            return line;
           }
 
           var grand_mean = d3.nest()
