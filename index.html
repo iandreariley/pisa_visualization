@@ -54,6 +54,13 @@
 
     <script type="text/javascript">
 
+      // Global vars         
+      var margin = 75,
+          width = 1200 - margin,
+          height = 900 - margin,
+          radius = 4,
+          css_class = "chart";
+
       function x_axis(scale){
           return d3.svg.axis().scale(scale);
       };
@@ -101,18 +108,18 @@
             }
           }
           return result;
-      }
+      };
 
       function draw_horiz_line(y, x1, x2, svg, color, weight) {
         var line = svg.append("svg:line")
           .attr('x1', x1)
-          .attr('y1', score_scale(y))
+          .attr('y1', y)
           .attr('x2', x2)
-          .attr('y2', score_scale(y))
+          .attr('y2', y)
           .style('stroke', color)
           .style('stroke-width', weight)
         return line;
-      }
+      };
 
       function draw_line(svg, points_array, line_func, weight, color) {
           svg.append('svg:path')
@@ -120,21 +127,28 @@
               .attr('stroke', color)
               .attr('stroke-width', weight)
               .attr('fill', 'none');
-      }
+      };
 
-      function draw(data) {
+      function comp_leaves(a,b) {
+          return +a - +b;
+      };
+
+      function agg(leaves) {
+          var mean_score = d3.mean(leaves, function(d) {
+              return d['math_score'];
+          });
+          
+          return {
+            'country' : leaves[0]['country'],
+            'x' : leaves[0]['wealth.bucket'],
+            'y' : mean_score
+          };
+      };
+
+      function stage_one(data) {
           "use strict";
 
-          //TODO: make these variables global          
-          var margin = 75,
-              width = 1200 - margin,
-              height = 900 - margin,
-              radius = 4,
-              css_class = "chart";
-
-          //class name for all currently visible data elements
-          var vis = "visible";
-
+          // Handle whether graph has already been created
           if(no_existing_svg()){
               var svg = make_svg_element(width, margin, height, css_class);
           }
@@ -142,45 +156,14 @@
               clear_svg();
           }
 
-          function agg(leaves) {
-              var mean_score = d3.mean(leaves, function(d) {
-                  return d['math_score'];
-              });
-              
-              return {
-                'country' : leaves[0]['country'],
-                'x' : leaves[0]['wealth.bucket'],
-                'y' : mean_score
-              };
-          };
-
-          function comp_leaves(a,b) {
-              return +a - +b;
-          }
-
+          // Create mean by wealth bin
           var grand_mean = d3.nest()
             .key(function(d) {return d['wealth.bucket'];})
             .sortKeys(comp_leaves)
             .rollup(agg)
             .entries(data);
 
-          var country_mean = d3.nest()
-            .key(function(d) { return d['country']})
-            .rollup(function(leaves) {
-              return d3.mean(leaves, function(d) {
-                return d['math_score'];
-              });
-            })
-            .entries(data)
-
-          debugger;
-
-          var countries = d3.nest()
-                         .key(function(d) {return d['country'];})
-                         .key(function(d) {return +d['wealth.bucket'];})
-                         .sortKeys(comp_leaves)
-                         .rollup(agg)
-                         .entries(data);
+          grand_mean = [grand_mean];
 
           // Find range of date column
           var wealth_extent = d3.extent(data, function(d) {
@@ -192,18 +175,17 @@
               return d['math_score'];
           })
 
-          // Create x-axis scale mapping dates -> pixels
+          // Create x and y scales mapping values to pixels
           var wealth_scale = make_scale(margin, width, wealth_extent);
-
-          // Create y-axis scale mapping attendance -> pixels
           var score_scale = d3.scale.linear()
             .range([height, margin])
             .domain([225, 650]);
 
+          // Create axes
           var wealth_axis = x_axis(wealth_scale);
-
           var score_axis = y_axis(score_scale);
 
+          // Draw axes to graph
           d3.select("svg")
             .append("g")
             .attr("class", "x axis")
@@ -216,6 +198,7 @@
             .attr("transform", "translate(" + margin + ",0)")
             .call(score_axis);
 
+          // Create line drawing function
           var line = d3.svg.line()
             .x(function(d) {
               return wealth_scale(d['values']['x']);
@@ -225,55 +208,101 @@
             })
             .interpolate('basis');
 
-          // Draw grand mean
-          draw_line(svg, grand_mean, line, 4, 'darkslategrey');
+          debugger;
 
-          // Draw average of Shanghai, US
-          var shang_mean = get_country_mean(country_mean, 'China-Shanghai');
-          var usa_mean = get_country_mean(country_mean, 'United States of America');
+          // Draw grand mean
+          var mean_line = svg.selectAll('path')
+            .data(grand_mean)
+            .enter()
+            .append('path')
+            .attr('d', function(d){return line(d);})
+            .style('fill', 'none')
+            .style('stroke', 'grey')
+            .style('stroke-width', 3)
 
           debugger;
 
-          svg.append('svg:line')
-            .attr('x1', margin)
-            .attr('y1', score_scale(usa_mean))
-            .attr('x2', width)
-            .attr('y2', score_scale(usa_mean))
-            .style('stroke', 'green')
-            .style('stroke-width', 1)
+          // var lines = svg.selectAll('path')
+          // .data(countries)
+          // .enter()
+          // .append('path')
+          // .attr('d', function(d){ return line(d['values']);})
+          // .style('fill', 'none')
+          // .style('stroke', 'grey')
+          // .style('stroke-width', 1)
 
-          var lines = svg.selectAll('path')
-            .data(countries)
-            .enter()
-            .append('path')
-            .attr('d', function(d){ return line(d['values']);})
-            .style('fill', 'none')
-            .style('stroke', 'grey')
-            .style('stroke-width', 1)
-            .on('mouseover', function(d){
-              return d3.select(this).style('stroke', 'red')
-                .style('stroke-width', 3);
+          return {
+            'data' : data,
+            'svg' : svg,
+            'wealth_scale' : wealth_scale,
+            'score_scale' : score_scale,
+            'wealth_axis' : wealth_axis,
+            'score_axis' : score_axis,
+          };
+      };
+
+      function stage_two(data, svg, wealth_scale, score_scale, wealth_axis, score_axis) {
+
+        setTimeout(function(d){ alert('blastoff!')}, 1000);
+          // mean scores by country
+          var country_means = d3.nest()
+            .key(function(d) { return d['country']})
+            .rollup(function(leaves) {
+              return d3.mean(leaves, function(d) {
+                return d['math_score'];
+              });
             })
-            .on('mouseout', function(d){
-              return d3.select(this).style('stroke', 'slategrey')
-                .style('stroke-width', 1);
-            });
+            .entries(data)
 
-          lines.append("svg:title")
-            .attr("class", "tooltip")
-            .text(function(d) {
-              var values = d['values'][0]['values'];
-              var country = values['country'];
-              var score = get_country_mean(country_mean, country);
-              return country + '\nAverage Score: ' + score;
-            })
+        var us = 'United States of America',
+            china = 'China-Shanghai';
+        var us_mean_line = draw_horiz_line(score_scale(get_country_mean(country_means, us)),
+          margin, width, svg, 'blue', 2);
+        var china_mean_line = draw_horiz_line(score_scale(get_country_mean(country_means, china)), margin, width, svg, 'blue', 2);
 
+        // get mean scores per wealth group per country
+        var countries = d3.nest()
+          .key(function(d) {return d['country'];})
+          .key(function(d) {return +d['wealth.bucket'];})
+          .sortKeys(comp_leaves)
+          .rollup(agg)
+          .entries(data);
+      };
 
+      function stage_three(data, svg, country_means, wealth_scale, score_scale, wealth_axis, score_axis, countries) {
 
-          // for (var i = 0; i < countries.length; i++) {
-          //   var country = countries[i]['values'];
-          //   draw_line(svg, country, line, 1, 'slategrey');
-          // }
+        // draw country lines
+        var lines = svg.selectAll('path')
+          .data(countries)
+          .enter()
+          .append('path')
+          .attr('d', function(d){ return line(d['values']);})
+          .style('fill', 'none')
+          .style('stroke', 'grey')
+          .style('stroke-width', 1)
+          .on('mouseover', function(d){
+            return d3.select(this).style('stroke', 'red')
+              .style('stroke-width', 3);
+          })
+          .on('mouseout', function(d){
+            return d3.select(this).style('stroke', 'slategrey')
+              .style('stroke-width', 1);
+          });
+
+        // Add tooltips to lines
+        lines.append("svg:title")
+          .attr("class", "tooltip")
+          .text(function(d) {
+            var values = d['values'][0]['values'];
+            var country = values['country'];
+            var score = get_country_mean(country_means, country);
+            return country + '\nAverage Score: ' + score;
+          })
+
+      };
+
+      function draw(data) {
+        stage_one(data);
       }
 
     </script>
@@ -290,26 +319,26 @@
         
   //Create navigation buttons
   var buttons = d3.select("body")
-                  .append("div")
-                  .attr("class", "nav_bar")
-                  .append("ul")
-                  .attr("class", "nav_bar")
-                  .selectAll("li")
-                  .data(button_names)
-                  .enter()
-                  .append("li")
-                  .attr("class", "step_buttons")
-                  .append("div")
-                  .attr("class", "step_buttons")
-                  .text(function(d) {
-                    return d;
-                  });
+    .append("div")
+    .attr("class", "nav_bar")
+    .append("ul")
+    .attr("class", "nav_bar")
+    .selectAll("li")
+    .data(button_names)
+    .enter()
+    .append("li")
+    .attr("class", "step_buttons")
+    .append("div")
+    .attr("class", "step_buttons")
+    .text(function(d) {
+      return d;
+  });
 
   buttons.on("click", function(d){
       clear_svg();
   });
 
-  draw_first_stage("pisa_by_wealth.tsv");
+  var obj = draw_first_stage("pisa_by_wealth.tsv");
 
   function draw_first_stage(file){
       d3.tsv(file, function(d) {
