@@ -163,6 +163,17 @@
             .rollup(agg)
             .entries(data);
 
+          // mean scores by country
+          var country_means = d3.nest()
+            .key(function(d) { return d['country']})
+            .rollup(function(leaves) {
+              return d3.mean(leaves, function(d) {
+                return d['math_score'];
+              });
+            })
+            .entries(data)
+
+
           grand_mean = [grand_mean];
 
           // Find range of date column
@@ -208,8 +219,6 @@
             })
             .interpolate('basis');
 
-          debugger;
-
           // Draw grand mean
           var mean_line = svg.selectAll('path')
             .data(grand_mean)
@@ -218,18 +227,7 @@
             .attr('d', function(d){return line(d);})
             .style('fill', 'none')
             .style('stroke', 'grey')
-            .style('stroke-width', 3)
-
-          debugger;
-
-          // var lines = svg.selectAll('path')
-          // .data(countries)
-          // .enter()
-          // .append('path')
-          // .attr('d', function(d){ return line(d['values']);})
-          // .style('fill', 'none')
-          // .style('stroke', 'grey')
-          // .style('stroke-width', 1)
+            .style('stroke-width', 3);
 
           return {
             'data' : data,
@@ -238,27 +236,33 @@
             'score_scale' : score_scale,
             'wealth_axis' : wealth_axis,
             'score_axis' : score_axis,
+            'country_means' : country_means
           };
       };
 
-      function stage_two(data, svg, wealth_scale, score_scale, wealth_axis, score_axis) {
+      function stage_two(data, svg, country_means, wealth_scale, score_scale,
+        wealth_axis, score_axis) {
 
-        setTimeout(function(d){ alert('blastoff!')}, 1000);
-          // mean scores by country
-          var country_means = d3.nest()
-            .key(function(d) { return d['country']})
-            .rollup(function(leaves) {
-              return d3.mean(leaves, function(d) {
-                return d['math_score'];
-              });
-            })
-            .entries(data)
-
+        // draw mean lines
         var us = 'United States of America',
             china = 'China-Shanghai';
         var us_mean_line = draw_horiz_line(score_scale(get_country_mean(country_means, us)),
           margin, width, svg, 'blue', 2);
         var china_mean_line = draw_horiz_line(score_scale(get_country_mean(country_means, china)), margin, width, svg, 'blue', 2);
+          return country_means;
+      };
+
+      function stage_three(data, svg, country_means, wealth_scale, score_scale,
+        wealth_axis, score_axis) {
+        
+        var line = d3.svg.line()
+          .x(function(d) {
+            return wealth_scale(d['values']['x']);
+          })
+          .y(function(d) {
+            return score_scale(d['values']['y']);
+          })
+          .interpolate('basis');
 
         // get mean scores per wealth group per country
         var countries = d3.nest()
@@ -267,9 +271,6 @@
           .sortKeys(comp_leaves)
           .rollup(agg)
           .entries(data);
-      };
-
-      function stage_three(data, svg, country_means, wealth_scale, score_scale, wealth_axis, score_axis, countries) {
 
         // draw country lines
         var lines = svg.selectAll('path')
@@ -302,7 +303,16 @@
       };
 
       function draw(data) {
-        stage_one(data);
+        var vals = stage_one(data);
+
+        setTimeout(stage_two, 1000, vals['data'], vals['svg'],
+          vals['country_means'], vals['wealth_scale'], vals['score_scale'],
+          vals['wealth_axis'], vals['score_axis']);
+
+        setTimeout(stage_three, 1000, vals['data'], vals['svg'],
+          vals['country_means'], vals['wealth_scale'], vals['score_scale'],
+          vals['wealth_axis'], vals['score_axis']);
+
       }
 
     </script>
