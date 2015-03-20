@@ -111,7 +111,7 @@
       function add_text(svg, x, y, text_string, stroke) {
         if (typeof(stroke) === 'undefined')
           stroke = 'grey';
-        svg.append('text')
+        return svg.append('text')
           .attr('x', x)
           .attr('y', y)
           .style('font-family', 'Helvetica')
@@ -366,7 +366,7 @@
             wealth_scale(-5), score_scale(607));
           add_arrow(svg, wealth_scale(-5), score_scale(537),
             wealth_scale(-5), score_scale(487));
-          add_text(svg, wealth_scale(-6), score_scale(547),
+          hi_text = add_text(svg, wealth_scale(-6), score_scale(547),
             '130 points = 3 years schooling');
 
           var lines = svg.selectAll('path')
@@ -387,63 +387,89 @@
                 return china_color;
               }
             })
-            .style('stroke-width', 1)
+            .style('stroke-width', 2)
             .on('mouseover', function(d){
               return d3.select(this).style('stroke', 'red')
                 .style('stroke-width', 3);
             })
             .on('mouseout', function(d){
               return d3.select(this).style('stroke', 'slategrey')
-                .style('stroke-width', 1);
+                .style('stroke-width', 2);
             });
 
-            // Add tooltips to lines
-            first_lines.append("svg:title")
-              .attr("class", "tooltip")
-              .text(function(d) {
-                var values = d['values'][0]['values'];
-                var country = values['country'];
-                var score = get_country_mean(country_means, country);
-                return country + '\nAverage Score: ' + score;
-              });
+          // Add tooltips to lines
+          first_lines.append("svg:title")
+            .attr("class", "tooltip")
+            .text(function(d) {
+              var values = d['values'][0]['values'];
+              var country = values['country'];
+              var score = get_country_mean(country_means, country);
+              return country + '\nAverage Score: ' + score;
+            });
+          setTimeout(function(){
 
-          setTimeout(function() {
+            svg.selectAll("line").remove()
+            hi_text.remove();
+            draw_horiz_line(score_scale(402), margin, width, svg,
+              us_color, 2);
+            draw_horiz_line(score_scale(509), margin, width, svg,
+              us_color, 2)
+            draw_horiz_line(score_scale(455), margin, width, svg,
+              china_color, 2)
+            draw_horiz_line(score_scale(640), margin, width, svg,
+              china_color, 2);
+            add_arrow(svg, wealth_scale(-5), score_scale(635-75),
+              wealth_scale(-5), score_scale(630));
+            add_arrow(svg, wealth_scale(-5), score_scale(455 + 75),
+              wealth_scale(-5), score_scale(460));
+            add_arrow(svg, wealth_scale(-5.5), score_scale(509 - 40),
+              wealth_scale(-5.5), score_scale(504));
+            add_arrow(svg, wealth_scale(-5.5), score_scale(402 + 40),
+              wealth_scale(-5.5), score_scale(407));
+            add_text(svg, wealth_scale(-5), score_scale(545),
+              "180 points > years")
+            add_text(svg, wealth_scale(-5.4), score_scale(425),
+              "100 points > 2 years")
+            debugger;
 
-            // set us and china lines to standard line color
-            first_lines.style('stroke', 'grey');
+            setTimeout(function() {
 
-            // remove all highlighting text and arrows
-            svg.selectAll('line').remove();
-            svg.selectAll('text').remove();
+              // set us and china lines to standard line color
+              first_lines.style('stroke', 'grey');
 
-            var final_chart = lines.append('path')
-              .filter(function(d) {
-                return d['key'] !== us && d['key'] !== china;
-              })
-              .attr('d', function(d){
-                return line(d['values']);})
-              .style('fill', 'none')
-              .style('stroke', 'grey')
-              .style('stroke-width', 1)
-              .on('mouseover', function(d){
-                return d3.select(this).style('stroke', 'red')
-                  .style('stroke-width', 3);
-              })
-              .on('mouseout', function(d){
-                return d3.select(this).style('stroke', 'slategrey')
-                  .style('stroke-width', 1);
-              });
+              // remove all highlighting text and arrows
+              svg.selectAll('line').remove();
+              svg.selectAll('text').remove();
 
-            // Add tooltips to lines
-            final_chart.append("svg:title")
-              .attr("class", "tooltip")
-              .text(function(d) {
-                var values = d['values'][0]['values'];
-                var country = values['country'];
-                var score = get_country_mean(country_means, country);
-                return country + '\nAverage Score: ' + score;
-              });
-          }, 10000);
+              var final_chart = lines.append('path')
+                .filter(function(d) {
+                  return d['key'] !== us && d['key'] !== china;
+                })
+                .attr('d', function(d){
+                  return line(d['values']);})
+                .style('fill', 'none')
+                .style('stroke', 'grey')
+                .style('stroke-width', 1)
+                .on('mouseover', function(d){
+                  return d3.select(this).style('stroke', 'red')
+                    .style('stroke-width', 3);
+                })
+                .on('mouseout', function(d){
+                  return d3.select(this).style('stroke', 'slategrey')
+                    .style('stroke-width', 1);
+                });
+
+              // Add tooltips to lines
+              final_chart.append("svg:title")
+                .attr("class", "tooltip")
+                .text(function(d) {
+                  var values = d['values'][0]['values'];
+                  var country = values['country'];
+                  var score = get_country_mean(country_means, country);
+                  return country + '\nAverage Score: ' + score;
+                });
+            }, 10000);
+          }, 10000)
         }, 3000, vals);
       };
 
