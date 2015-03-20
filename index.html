@@ -67,7 +67,16 @@
       2012 pisa math test by wealth bracket. Wealth, in this case, is\
       measured by the OECD index, which is calculated by the student's\
       possession of certain ammenities like his/her own room,\
-      a computer, etc.";
+      a computer, etc.",
+      text_two = "The average score of students in the United States is\
+      just above average, and 130 points below the average score of students\
+      in Shanghai, China, which was the highest scoring individual group of\
+      students in the 2012 PISA tests. However, there is less of a disparity\
+      between the scores of rich and poor students in the U.S. than in\
+      Shanghai."
+      text_three = "Below are the average scores by wealth bracket of all of\
+      the countries that participated in the PISA 2012 survey. Mouseover the\
+      lines to highlight them and see further information";
 
       function x_axis(scale){
           return d3.svg.axis().scale(scale);
@@ -286,6 +295,7 @@
       function stage_two(data, svg, country_means, wealth_scale, score_scale,
         wealth_axis, score_axis) {
 
+
         // make an arrow marker
         // lifted wholesale from Mozilla Developer Nework
         svg.append('defs')
@@ -317,14 +327,13 @@
       };
 
       function stage_three(vals) {
+        
       // open up values object
         var wealth_scale = vals.wealth_scale;
         var score_scale = vals.score_scale;
         var country_means = vals['country_means'];
         var svg = vals.svg;
         var data = vals['data'];
-        svg.selectAll('line').remove();
-        svg.selectAll('text').remove();
 
         // get mean scores per wealth group per country
         var countries = d3.nest()
@@ -351,6 +360,11 @@
 
           var us_color = 'blue',
               china_color = "gold";
+
+          // remove previous highlight lines and change text
+          svg.selectAll('line').remove();
+          svg.selectAll('text').remove();
+          text_box.text(text_two);
 
           // draw mean lines for us and shanghai
           var us_mean_line = draw_horiz_line(score_scale(get_country_mean(country_means, us)),
@@ -394,7 +408,7 @@
             })
             .on('mouseout', function(d){
               return d3.select(this).style('stroke', 'slategrey')
-                .style('stroke-width', 2);
+                .style('stroke-width', 1);
             });
 
           // Add tooltips to lines
@@ -426,7 +440,7 @@
               wealth_scale(-5.5), score_scale(504));
             add_arrow(svg, wealth_scale(-5.5), score_scale(402 + 40),
               wealth_scale(-5.5), score_scale(407));
-            add_text(svg, wealth_scale(-5), score_scale(545),
+            add_text(svg, wealth_scale(-5.5), score_scale(545),
               "180 points > years")
             add_text(svg, wealth_scale(-5.4), score_scale(425),
               "100 points > 2 years")
@@ -435,7 +449,11 @@
             setTimeout(function() {
 
               // set us and china lines to standard line color
-              first_lines.style('stroke', 'grey');
+              first_lines.style('stroke', 'grey')
+                .style('stroke-width', 1);
+
+              // change text_box text
+              text_box.text(text_three);
 
               // remove all highlighting text and arrows
               svg.selectAll('line').remove();
@@ -468,18 +486,19 @@
                   var score = get_country_mean(country_means, country);
                   return country + '\nAverage Score: ' + score;
                 });
-            }, 10000);
-          }, 10000)
-        }, 3000, vals);
+            }, 30000);
+          }, 30000)
+        }, 30000, vals);
       };
 
       function draw(data) {
         var vals = stage_one(data);
 
-        setTimeout(stage_two, 1000, data, vals['svg'], vals['country_means'], vals['wealth_scale'], vals['score_scale'],
+        setTimeout(stage_two, 1000, data, vals['svg'], vals['country_means'],
+          vals['wealth_scale'], vals['score_scale'],
           vals['wealth_axis'], vals['score_axis']);
 
-        setTimeout(stage_three, 3000, vals);
+        setTimeout(stage_three, 1000, vals);
 
       };
 
@@ -496,36 +515,43 @@
   var button_names = [first_stage, second_stage, third_stage]
         
   //Create navigation buttons
-  var buttons = d3.select("body")
-    .append("div")
-    .attr("class", "nav_bar")
-    .append("ul")
-    .attr("class", "nav_bar")
-    .selectAll("li")
-    .data(button_names)
-    .enter()
-    .append("li")
-    .attr("class", "step_buttons")
-    .append("div")
-    .attr("class", "step_buttons")
-    .text(function(d) {
-      return d;
-  });
+  // var buttons = d3.select("body")
+  //   .append("div")
+  //   .attr("class", "nav_bar")
+  //   .append("ul")
+  //   .attr("class", "nav_bar")
+  //   .selectAll("li")
+  //   .data(button_names)
+  //   .enter()
+  //   .append("li")
+  //   .attr("class", "step_buttons")
+  //   .append("div")
+  //   .attr("class", "step_buttons")
+  //   .text(function(d) {
+  //     return d;
+  // });
+
+  var header = d3.select("body")
+    .append("h2")
+    .style("text-align", "center")
+    .style("font-family", font)
+    .text("PISA 2012 Math Score by Wealth");
 
   var text_box = d3.select("body")
     .append("div")
     .attr("class", "text_box")
     .style("margin-left", margin + "px")
     .style("width", width - margin + "px")
+    .style("height", "75px")
     .style("word-wrap", "break-word")
     .style("font-family", font)
     .style("display", "block")
     .style("color", text_color)
     .text(opening_text);
 
-  buttons.on("click", function(d){
-      clear_svg();
-  });
+  // buttons.on("click", function(d){
+  //     clear_svg();
+  // });
 
   var obj = draw_first_stage("pisa_by_wealth.tsv");
 
