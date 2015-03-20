@@ -166,6 +166,31 @@ However, countries across the board show a generally positive correlation betwee
 the escs index and math score, suggesting that perhaps even the countries that
 seem to have equal opportunity are not as equal and they first appear.
 
+### Troubles
+
+My main issue with d3 was subsetting my nested data. I first tried the following:
+
+var filtered = nested.filter(function(d) { return d['key'] === foo })
+
+var shapes = d3.selectAll('path')
+    .data(filtered)
+    .enter()
+    .append('path')
+    .attr('d', function(d) { //accessor })
+
+But it didn't work.
+However, this did:
+
+var shapes = d3.selectAll('path')
+    .data(nested)
+    .enter()
+    .append('path')
+    .filter(function(d) { return d['key'] == foo })
+    .attr('d', function(d) { //accessor })
+
+That particular solution I found on [stack overflow][5]. Thank goodness for that
+site.
+
 ## References
 
 1. http://stackoverflow.com
@@ -186,6 +211,7 @@ seem to have equal opportunity are not as equal and they first appear.
 [3]:http://www.statcan.gc.ca/pub/81-595-m/2011092/section/app-ann03-eng.htm
 [rowMeans]:http://stackoverflow.com/questions/9490485/how-can-i-get-the-average-mean-of-selected-columns]
 [4]:http://stats.oecd.org/glossary/detail.asp?ID=5401
+[5]:http://stackoverflow.com/questions/20335118/filter-data-in-d3-to-draw-either-circle-or-square
 [dropColumnsPattern]:http://stackoverflow.com/questions/15666226/how-to-drop-columns-by-name-pattern-in-r
 [findNonNumeric]:http://stackoverflow.com/questions/21196106/finding-non-numeric-data-in-an-r-data-frame-or-vector
 [quickr]:http://www.statmethods.net/
