@@ -99,15 +99,17 @@
           return svg;
       };
 
-      function add_text(svg, x, y, text_string) {
-          svg.append('text')
-            .attr('x', x)
-            .attr('y', y)
-            .style('font-family', 'Helvetica')
-            .style('stroke', 'darkslategrey')
-            .style('font-size', 12)
-            .style('font-weight', 300)
-            .text(text_string);
+      function add_text(svg, x, y, text_string, stroke) {
+        if (typeof(stroke) === 'undefined')
+          stroke = 'grey';
+        svg.append('text')
+          .attr('x', x)
+          .attr('y', y)
+          .style('font-family', 'Helvetica')
+          .style('stroke', stroke)
+          .style('font-size', 12)
+          .style('font-weight', 300)
+          .text(text_string);
       };
 
       function add_arrow(svg, x1, y1, x2, y2) {
@@ -337,13 +339,17 @@
         
         setTimeout(function(values) {
 
-          // draw mean lines for us and shanghai
-          var us_mean_line = draw_horiz_line(score_scale(get_country_mean(country_means, us)),
-            margin, width, svg, 'cornflowerblue', 2);
-          var china_mean_line = draw_horiz_line(score_scale(get_country_mean(country_means, china)), margin, width, svg, 'cornflowerblue', 2);
-
           var us_color = 'blue',
               china_color = "gold";
+
+          // draw mean lines for us and shanghai
+          var us_mean_line = draw_horiz_line(score_scale(get_country_mean(country_means, us)),
+            margin, width, svg, us_color, 2);
+          var china_mean_line = draw_horiz_line(score_scale(get_country_mean(country_means, china)), margin, width, svg, china_color, 2);
+          add_text(svg, wealth_scale(1.2), score_scale(640),
+            'Shanghai (China)');
+          add_text(svg, wealth_scale(2.1), score_scale(500),
+            'USA')
 
           // draw lines and text highlighting difference between China and US
           add_arrow(svg, wealth_scale(-5), score_scale(557),
@@ -393,7 +399,10 @@
 
           setTimeout(function() {
 
-            debugger;
+            // set us and china lines to standard line color
+            first_lines.style('stroke', 'grey');
+
+            // remove all highlighting text and arrows
             svg.selectAll('line').remove();
             svg.selectAll('text').remove();
 
@@ -424,7 +433,7 @@
                 var score = get_country_mean(country_means, country);
                 return country + '\nAverage Score: ' + score;
               });
-          }, 3000);
+          }, 10000);
         }, 3000, vals);
       };
 
