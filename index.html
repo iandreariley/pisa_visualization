@@ -55,11 +55,19 @@
     <script type="text/javascript">
 
       // Global vars         
-      var margin = 75,
+      var margin = 50,
           width = 1200 - margin,
           height = 900 - margin,
           radius = 4,
-          css_class = "chart";
+          chart_class = "chart"
+          font = "Helvetica"
+          text_color = "darkslategrey";
+
+      var opening_text = "The graph below represents the mean score on the \
+      2012 pisa math test by wealth bracket. Wealth, in this case, is\
+      measured by the OECD index, which is calculated by the student's\
+      possession of certain ammenities like his/her own room,\
+      a computer, etc.";
 
       function x_axis(scale){
           return d3.svg.axis().scale(scale);
@@ -88,13 +96,14 @@
           return element === null;
       };
 
-      function make_svg_element(width, margin, height, css_class){
+      function make_svg_element(width, top_margin, left_margin,
+       height, css_class){
           var svg = d3.select("body")
             .append("svg")
-              .attr("width", width + margin)
-              .attr("height", height + margin)
+              .attr("width", width + left_margin)
+              .attr("height", height + top_margin)
             .append('g')
-                .attr('class', css_class);
+              .attr('class', css_class);
 
           return svg;
       };
@@ -183,7 +192,8 @@
 
           // Handle whether graph has already been created
           if(no_existing_svg()){
-              var svg = make_svg_element(width, margin, height, css_class);
+              var svg = make_svg_element(width, margin, margin,
+                height, chart_class);
           }
           else{
               clear_svg();
@@ -223,7 +233,7 @@
           var wealth_scale = make_scale(margin, width, wealth_extent);
           var score_scale = d3.scale.linear()
             .range([height, margin])
-            .domain([225, 650]);
+            .domain([0, 650]);
 
           // Create axes
           var wealth_axis = x_axis(wealth_scale);
@@ -475,6 +485,17 @@
     .text(function(d) {
       return d;
   });
+
+  var text_box = d3.select("body")
+    .append("div")
+    .attr("class", "text_box")
+    .style("margin-left", margin + "px")
+    .style("width", width - margin + "px")
+    .style("word-wrap", "break-word")
+    .style("font-family", font)
+    .style("display", "block")
+    .style("color", text_color)
+    .text(opening_text);
 
   buttons.on("click", function(d){
       clear_svg();
