@@ -106,13 +106,11 @@
 
       function add_arrow(svg, x1, y1, x2, y2) {
 
-          svg.append('svg:line')
-            .attr('x1', x1)
-            .attr('y1', y1)
-            .attr('x2', x2)
-            .attr('y2', y2)
-            .style('stroke', 'black')
-            .attr('marker-end', 'url(#triangle)');
+        var color = "black",
+          weight = 2
+        var line = draw_line(x1, y1, x2, y2, svg, text_color, weight)
+
+        return line.attr('marker-end', 'url(#triangle)');
       }
 
       function get_country(country_array, country) {
@@ -134,25 +132,31 @@
           return result;
       };
 
-      function draw_horiz_line(y, x1, x2, svg, color, weight) {
+      function draw_line(x1, y1, x2, y2, svg, color, weight, dashed) {
+
+        if( typeof(dashed) === 'undefined')
+          dashed = false;
         var line = svg.append("svg:line")
           .attr('x1', x1)
-          .attr('y1', y)
+          .attr('y1', y1)
           .attr('x2', x2)
-          .attr('y2', y)
+          .attr('y2', y2)
           .style('stroke', color)
           .style('stroke-width', weight)
-          .style('stroke-dasharray', "10,10");
-        return line;
+
+        if(dashed)
+          return line.style('stroke-dasharray', "10,10");
+        else
+          return line;
       };
 
-      function draw_line(svg, points_array, line_func, weight, color) {
-          svg.append('svg:path')
-              .attr('d', line_func(points_array))
-              .attr('stroke', color)
-              .attr('stroke-width', weight)
-              .attr('fill', 'none');
-      };
+      // function draw_curve(svg, points_array, line_func, weight, color) {
+      //     svg.append('svg:path')
+      //         .attr('d', line_func(points_array))
+      //         .attr('stroke', color)
+      //         .attr('stroke-width', weight)
+      //         .attr('fill', 'none');
+      // };
 
       function comp_leaves(a,b) {
           return +a - +b;
@@ -285,11 +289,11 @@
           .attr('d', 'M 0 0 L 10 5 L 0 10 z')
 
         //draw high low lines
-        high_line = draw_horiz_line(score_scale(500), left_margin, 
-          width, svg, 'grey')
+        high_line = draw_line(left_margin, score_scale(500), 
+          width, score_scale(500), svg, 'grey', 2, true)
 
-        low_line = draw_horiz_line(score_scale(359), left_margin,
-          width, svg, 'grey')
+        low_line = draw_line(left_margin, score_scale(359),
+          width, score_scale(359), svg, 'grey', 2, true)
 
         // draw arrows and text highlighting score difference over wealth
         add_arrow(svg, wealth_scale(.9), score_scale(450),
@@ -341,9 +345,14 @@
           text_box.text(text_two);
 
           // draw mean lines for us and shanghai
-          var us_mean_line = draw_horiz_line(score_scale(get_country_mean(country_means, us)),
-            left_margin, width, svg, us_color, 2);
-          var china_mean_line = draw_horiz_line(score_scale(get_country_mean(country_means, china)), left_margin, width, svg, china_color, 2);
+          var us_mean = score_scale(get_country_mean(country_means, us)),
+              china_mean = score_scale(get_country_mean(country_means, china)),
+              us_mean_line = draw_line(left_margin, us_mean, width, us_mean,
+                svg, us_color, 2, true),
+              china_mean_line = draw_line(left_margin, china_mean, width,
+                china_mean, svg, china_color, 2, true);
+
+          // Label mean lines with text
           add_text(svg, wealth_scale(1.2), score_scale(640),
             'Shanghai (China)');
           add_text(svg, wealth_scale(2.1), score_scale(500),
@@ -398,14 +407,14 @@
 
             svg.selectAll("line").remove()
             hi_text.remove();
-            draw_horiz_line(score_scale(402), left_margin, width, svg,
-              us_color, 2);
-            draw_horiz_line(score_scale(509), left_margin, width, svg,
-              us_color, 2)
-            draw_horiz_line(score_scale(455), left_margin, width, svg,
-              china_color, 2)
-            draw_horiz_line(score_scale(640), left_margin, width, svg,
-              china_color, 2);
+            draw_line(left_margin, score_scale(402), width, score_scale(402),
+              svg, us_color, 2, true);
+            draw_line(left_margin, score_scale(509), width, score_scale(509),
+              svg, us_color, 2, true);
+            draw_line(left_margin, score_scale(455), width, score_scale(455),
+              svg, us_color, 2, true);
+            draw_line(left_margin, score_scale(640), width, score_scale(640),
+              svg, us_color, 2, true);
             add_arrow(svg, wealth_scale(-5), score_scale(635-75),
               wealth_scale(-5), score_scale(630));
             add_arrow(svg, wealth_scale(-5), score_scale(455 + 75),
