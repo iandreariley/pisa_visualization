@@ -123,6 +123,16 @@
           return result;
       };
 
+      function highlight(country) {
+        d3.selectAll(".curve")
+          .style("stroke-width", 1)
+          .style("stroke", "grey")
+
+        d3.select("#" + country)
+          .style("stroke", "red")
+          .style("stroke-width", 2);
+      }
+
       function draw_line(x1, y1, x2, y2, svg, color, weight, dashed) {
 
         if( typeof(dashed) === 'undefined')
@@ -169,7 +179,7 @@
         "use strict";
 
         // Add SVG element to DOM
-        var svg = d3.select("body")
+        var svg = d3.select("div.chart")
           .append("svg")
             .attr("width", width + left_margin)
             .attr("height", height + top_margin)
@@ -341,7 +351,10 @@
             .filter(function(d) {
               return d['key'] === us || d['key'] === china;
             })
-            .attr("class", "first_lines")
+            .attr("id", function(d) {
+              return d['key'];
+            })
+            .attr("class", "curve first_lines")
             .attr('d', function(d){
               return line(d['values']);})
             .style('fill', 'none')
@@ -408,7 +421,7 @@
               var country = values['country'];
               var score = get_country_mean(country_means, country);
               return country + '\nAverage Score: ' + score;
-            });;
+            });
 
           // change text_box text
           text_box.text(text_three);
@@ -421,6 +434,7 @@
             .filter(function(d) {
               return d['key'] !== us && d['key'] !== china;
             })
+            .attr("class", "curve")
             .attr('d', function(d){
               return line(d['values']);})
             .style('fill', 'none')
@@ -444,6 +458,23 @@
               var score = get_country_mean(country_means, country);
               return country + '\nAverage Score: ' + score;
             });
+
+          // Remove 'next' button, as this is the last page
+          button.remove();
+
+          // Add a <select> element to allow user to highlight country
+          var country_selector = header.append("select")
+            .attr("float", "right")
+            .on("change", function() {
+              console.log("hi!");
+            })
+
+          var options = country_selector.selectAll("option")
+            .data(countries)
+            .enter()
+            .append("option")
+            .attr("value", function(d) { return d['key']; })
+            .text(function(d) { return d['key']; })
         };
 
         var stage_array = [stage_one, stage_two, stage_three, stage_four,
@@ -456,15 +487,6 @@
             stidx += 1;
           }
         });
-      };
-
-      function stage_three() {
-          
-          setTimeout(function(){
-
-            setTimeout(function() {
-            }, 30000);
-          }, 30000);
       };
 
     </script>
@@ -514,6 +536,16 @@
     .style("background", "darkslategrey")
     .style("color", "white")
     .text("NEXT");
+
+  var chart = d3.select("body")
+  .append("div")
+  .attr("class", chart_class)
+  .attr("width", width)
+  .attr("height", height)
+  .style("display", "block")
+
+  var chart_buttons = chart.append("div")
+    .attr("float", "right")
 
   var obj = draw_first_stage("pisa_by_wealth.tsv");
 
