@@ -128,9 +128,10 @@
           .style("stroke-width", 1)
           .style("stroke", "grey")
 
-        d3.select("#" + country)
+        var selected = d3.select("#" + country)
           .style("stroke", "red")
-          .style("stroke-width", 2);
+          .style("stroke-width", 3);
+
       }
 
       function draw_line(x1, y1, x2, y2, svg, color, weight, dashed) {
@@ -352,7 +353,7 @@
               return d['key'] === us || d['key'] === china;
             })
             .attr("id", function(d) {
-              return d['key'];
+              return d['key'].replace(/ /g, '-');
             })
             .attr("class", "curve first_lines")
             .attr('d', function(d){
@@ -434,6 +435,7 @@
             .filter(function(d) {
               return d['key'] !== us && d['key'] !== china;
             })
+            .attr("id", function(d) { return d['key'].replace(/ /g, '-'); })
             .attr("class", "curve")
             .attr('d', function(d){
               return line(d['values']);})
@@ -465,16 +467,23 @@
           // Add a <select> element to allow user to highlight country
           var country_selector = header.append("select")
             .attr("float", "right")
-            .on("change", function() {
-              console.log("hi!");
-            })
+            .on("change", highlighter)
 
           var options = country_selector.selectAll("option")
-            .data(countries)
-            .enter()
+            .data(countries);
+
+          options.enter()
             .append("option")
             .attr("value", function(d) { return d['key']; })
-            .text(function(d) { return d['key']; })
+            .text(function(d) { return d['key']; });
+
+          function highlighter() {
+            var index = country_selector.property("selectedIndex");
+            var selected_country = options[0][index]['__data__']['key'];
+            selected_country = selected_country.replace(/ /g, '-');
+            console.log(selected_country);
+            highlight(selected_country);
+          };
         };
 
         var stage_array = [stage_one, stage_two, stage_three, stage_four,
