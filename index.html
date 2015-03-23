@@ -10,42 +10,6 @@
         fill: red;
       }
 
-      div.nav_bar {
-        text-align: center;
-      }
-
-      ul.nav_bar {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        display: inline-table;
-        text-align: center;
-      }
-
-      li.step_buttons {
-        float: left;
-        display: inline;
-        padding: 5px;
-        width: 150px;
-      }
-
-      /* Code from W3 schools */
-      div.step_buttons {
-        display: block;
-        font-weight: bold;
-        color: #FFFFFF;
-        background-color: #98bf21;
-        width: 150px;
-        text-align: center;
-        padding: 4px;
-        text-decoration: none;
-        text-transform: uppercase;
-      }
-
-      h2 {
-        text-align: center;
-      }
-
       .tooltip {
         visibility: visible;
       }
@@ -516,47 +480,48 @@
 <body>
   <script type="text/javascript">
 
-  //TODO: Rename these stupid buttons
-  var first_stage = "first_stage",
-      second_stage = "second_stage",
-      third_stage = "third_stage";
-
-  var button_names = [first_stage, second_stage, third_stage]
-        
-  //Create navigation buttons
-  // var buttons = d3.select("body")
-  //   .append("div")
-  //   .attr("class", "nav_bar")
-  //   .append("ul")
-  //   .attr("class", "nav_bar")
-  //   .selectAll("li")
-  //   .data(button_names)
-  //   .enter()
-  //   .append("li")
-  //   .attr("class", "step_buttons")
-  //   .append("div")
-  //   .attr("class", "step_buttons")
-  //   .text(function(d) {
-  //     return d;
-  // });
+  var header_margin = 10
 
   var header = d3.select("body")
-    .append("h2")
-    .style("text-align", "center")
-    .style("font-family", font)
-    .text("PISA 2012 Math Score by Wealth");
-
-  var text_box = d3.select("body")
     .append("div")
-    .attr("class", "text_box")
+    .attr("class", "header")
     .style("margin-left", margin + "px")
     .style("width", width - margin + "px")
     .style("height", "75px")
+    .style("display", "block")
+
+  var title = header.append("h2")
+    .style("padding-left", header_margin + "px")
+    .style("font-family", font)
+    .style("color", text_color)
+    .text("PISA 2012 Math Score by Wealth");
+
+  var text_box = header.append("div")
+    .attr("class", "text_box")
+    .style("padding-left", header_margin + "px")
+    .style("width", width - margin - 200 +"px")
+    .style("height", "50px")
     .style("word-wrap", "break-word")
     .style("font-family", font)
-    .style("display", "block")
+    .style("float", "left")
     .style("color", text_color)
     .text(opening_text);
+        
+  //Create navigation buttons
+  var button = header.append("div")
+    .attr("class", "next_button")
+    .style("display", "table")
+    .style("width", "75px")
+    .style("height", "25px")
+    .style("float", "right")
+    .append("div")
+    .style("display", "table-cell")
+    .style("border-radius", "5px")
+    .style("vertical-align", "middle")
+    .style("text-align", "center")
+    .style("background", "darkslategrey")
+    .style("color", "white")
+    .text("NEXT");
 
   // buttons.on("click", function(d){
   //     clear_svg();
