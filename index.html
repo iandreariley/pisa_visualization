@@ -408,8 +408,7 @@
             .style('stroke', 'grey')
             .style('stroke-width', 1)
             .on('mouseover', function(d){
-              return d3.select(this).style('stroke', 'red')
-                .style('stroke-width', 3);
+              highlight(d['key'].replace(/ /g, '-'));
             })
             .on('mouseout', function(d){
               return d3.select(this).style('stroke', 'slategrey')
@@ -443,8 +442,7 @@
             .style('stroke', 'grey')
             .style('stroke-width', 1)
             .on('mouseover', function(d){
-              return d3.select(this).style('stroke', 'red')
-                .style('stroke-width', 3);
+              highlight(d['key'].replace(/ /g, '-'));
             })
             .on('mouseout', function(d){
               return d3.select(this).style('stroke', 'slategrey')
