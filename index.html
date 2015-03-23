@@ -28,9 +28,10 @@
     <script type="text/javascript">
 
       // Global vars         
-      var margin = 50,
-          width = 1200 - margin,
-          height = 700 - margin,
+      var left_margin = 75,
+          top_margin = 50,
+          width = 1200 - left_margin,
+          height = 700 - top_margin,
           radius = 4,
           chart_class = "chart"
           font = "Helvetica"
@@ -174,7 +175,7 @@
 
           // Handle whether graph has already been created
           if(no_existing_svg()){
-              var svg = make_svg_element(width, margin, margin,
+              var svg = make_svg_element(width, top_margin, left_margin,
                 height, chart_class);
           }
           else{
@@ -212,9 +213,9 @@
           })
 
           // Create x and y scales mapping values to pixels
-          var wealth_scale = make_scale(margin, width, wealth_extent);
+          var wealth_scale = make_scale(left_margin, width, wealth_extent);
           var score_scale = d3.scale.linear()
-            .range([height, margin])
+            .range([height, top_margin])
             .domain([0, 650]);
 
           // Create axes
@@ -231,7 +232,7 @@
           d3.select("svg")
             .append("g")
             .attr("class", "y axis")
-            .attr("transform", "translate(" + margin + ",0)")
+            .attr("transform", "translate(" + left_margin + ",0)")
             .call(score_axis);
 
           // Create line drawing function
@@ -284,10 +285,10 @@
           .attr('d', 'M 0 0 L 10 5 L 0 10 z')
 
         //draw high low lines
-        high_line = draw_horiz_line(score_scale(500), margin, 
+        high_line = draw_horiz_line(score_scale(500), left_margin, 
           width, svg, 'grey')
 
-        low_line = draw_horiz_line(score_scale(359), margin,
+        low_line = draw_horiz_line(score_scale(359), left_margin,
           width, svg, 'grey')
 
         // draw arrows and text highlighting score difference over wealth
@@ -341,8 +342,8 @@
 
           // draw mean lines for us and shanghai
           var us_mean_line = draw_horiz_line(score_scale(get_country_mean(country_means, us)),
-            margin, width, svg, us_color, 2);
-          var china_mean_line = draw_horiz_line(score_scale(get_country_mean(country_means, china)), margin, width, svg, china_color, 2);
+            left_margin, width, svg, us_color, 2);
+          var china_mean_line = draw_horiz_line(score_scale(get_country_mean(country_means, china)), left_margin, width, svg, china_color, 2);
           add_text(svg, wealth_scale(1.2), score_scale(640),
             'Shanghai (China)');
           add_text(svg, wealth_scale(2.1), score_scale(500),
@@ -397,13 +398,13 @@
 
             svg.selectAll("line").remove()
             hi_text.remove();
-            draw_horiz_line(score_scale(402), margin, width, svg,
+            draw_horiz_line(score_scale(402), left_margin, width, svg,
               us_color, 2);
-            draw_horiz_line(score_scale(509), margin, width, svg,
+            draw_horiz_line(score_scale(509), left_margin, width, svg,
               us_color, 2)
-            draw_horiz_line(score_scale(455), margin, width, svg,
+            draw_horiz_line(score_scale(455), left_margin, width, svg,
               china_color, 2)
-            draw_horiz_line(score_scale(640), margin, width, svg,
+            draw_horiz_line(score_scale(640), left_margin, width, svg,
               china_color, 2);
             add_arrow(svg, wealth_scale(-5), score_scale(635-75),
               wealth_scale(-5), score_scale(630));
@@ -485,8 +486,8 @@
   var header = d3.select("body")
     .append("div")
     .attr("class", "header")
-    .style("margin-left", margin + "px")
-    .style("width", width - margin + "px")
+    .style("margin-left", left_margin + "px")
+    .style("width", width - left_margin + "px")
     .style("height", "75px")
     .style("display", "block")
 
@@ -499,7 +500,7 @@
   var text_box = header.append("div")
     .attr("class", "text_box")
     .style("padding-left", header_margin + "px")
-    .style("width", width - margin - 200 +"px")
+    .style("width", width - left_margin - 200 +"px")
     .style("height", "50px")
     .style("word-wrap", "break-word")
     .style("font-family", font)
