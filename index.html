@@ -14,11 +14,7 @@
         visibility: visible;
       }
 
-      .x.axis path {
-        display: none;
-      }
-
-      .y.axis line, .y.axis path {
+      .axis line, .axis path {
         fill: none;
         stroke: #000;
       }
@@ -72,7 +68,14 @@
       text_six = "Below are the wealth-score curves for all of the economies \
       that participated in the 2012 PISA assessment. Mouse over lines to view \
       the name and mean score of an economy, or select countries by name in \
-      the drop menu on the right."
+      the drop menu on the right.";
+
+      var title_one = "The PISA 2012 Dataset",
+          title_two = "Correlation of Wealth and Math Skills",
+          title_three = "Wealth and Math Skills",
+          title_four = "Comparing Two Economies",
+          title_five = "Equitability Within an Economy",
+          title_six = "Exploring Wealth and Education";
 
       function x_axis(scale){
           return d3.svg.axis().scale(scale);
