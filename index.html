@@ -41,11 +41,11 @@
       education can apply their learning to real-life situations, rather than \
       testing a specific curriculum.",
       text_two = "The line below represents average score on the PISA math \
-      test given the students' familial wealth. PISA uses its own index to \
+      test by wealth bracket. PISA uses its own index to \
       measure wealth, rather than a monetary metric like yearly income. This \
       accounts for the fact that the amount of income that constitutes \
       \"wealth\" may differ between nations. The PISA index is based on a \
-      student's access to certain amenities, like his/her own place to study \
+      student's access to certain amenities, like his/her own place to study, \
       a DVD player, etc.",
       text_three  = "The difference between the lowest scoring wealth bracket \
       and the highest scoring is about 140 points, which PISA estimates \
@@ -60,7 +60,7 @@
       text_five = "However, the data also suggest that United States \
       education is more equitable. The disparity between the USA's lowest \
       scoring and hightest scoring brackets is 100 points, or about two and a \
-      half years of schooling. In Shanghai the difference is 180 points, or \
+      half years of schooling. In Shanghai that difference is 180 points, or \
       more than 4 years by PISA estimations.",
       text_six = "Below are the wealth-score curves for all of the economies \
       that participated in the 2012 PISA assessment. Mouse over lines to view \
@@ -120,7 +120,14 @@
       function add_arrow(svg, x1, y1, x2, y2) {
 
         var color = "black",
-          weight = 2
+          weight = 2,
+          diff = 8;
+
+        // Shorten length of arrow to account for marker end
+        if (y2 - y1 < 0)
+          y2 += diff;
+        else
+          y2 -= diff;
         var line = draw_line(x1, y1, x2, y2, svg, text_color, weight)
 
         return line.attr('marker-end', 'url(#triangle)');
@@ -372,7 +379,6 @@
           // remove previous highlight lines and change text
           svg.selectAll('line').remove();
           svg.selectAll('text').remove();
-          text_box.text(text_two);
 
           // draw mean lines for us and shanghai
           var us_mean = score_scale(get_country_mean(country_means, us)),
@@ -521,8 +527,15 @@
             .attr("float", "right")
             .on("change", highlighter)
 
+          // Sort countries variable and bind data to <option> elements
           var options = country_selector.selectAll("option")
-            .data(countries);
+            .data(countries.sort(function(a, b) {
+              if(a['key'] < b['key'])
+                return -1;
+              else if (a['key'] > b['key'])
+                return 1;
+              return 0;
+            }));
 
           options.enter()
             .append("option")
