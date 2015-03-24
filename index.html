@@ -49,10 +49,7 @@
       a DVD player, etc.",
       text_three  = "The difference between the lowest scoring wealth bracket \
       and the highest scoring is about 140 points, which PISA estimates \
-      represents about three years of schooling (41 points = 1 year). Note \
-      that the data for very low and very high wealth indices were sparse, so \
-      the line there depends on fewer data points than other points on the \
-      line, making them less reliable predictors of population trends.",
+      represents about three years of schooling (41 points = 1 year).",
       text_four = "Shown here is a comparison between two of the world's top \
       economies - the United States, and Shanghai (China has yet to implement \
       nation-wide PISA tests). Shanghai has the highest average math score in \
@@ -201,6 +198,14 @@
           };
       };
 
+      function update_text(text_title, text_body) {
+        debugger;
+        d3.select(".header h2")
+          .text(text_title);
+        d3.select(".text_box")
+          .text(text_body);
+      }
+
       function draw(data) {
         "use strict";
 
@@ -313,6 +318,8 @@
 
         function stage_one() {
 
+          update_text(title_two, text_two);
+
           // Draw grand mean
           var mean_line = svg.selectAll('path')
             .data(grand_mean)
@@ -325,6 +332,8 @@
         };
 
         function stage_two() {
+
+          update_text(title_three, text_three);
 
           // make an arrow marker
           // lifted wholesale from Mozilla Developer Nework
@@ -357,6 +366,8 @@
         };
 
         function stage_three() {
+
+          update_text(title_four, text_four);
 
           // remove previous highlight lines and change text
           svg.selectAll('line').remove();
@@ -414,6 +425,8 @@
 
         function stage_four() {
 
+          update_text(title_five, text_five);
+
           // Draw max/min lines for china and the us
           svg.selectAll("line").remove()
           svg.selectAll(".mean_text").remove();
@@ -445,6 +458,7 @@
 
         function stage_five() {
 
+          update_text(title_six, text_six);
 
           // set us and china lines to standard line color
           svg.selectAll(".first_lines")
@@ -465,9 +479,6 @@
               var score = get_country_mean(country_means, country);
               return country + '\nAverage Score: ' + score;
             });
-
-          // change text_box text
-          text_box.text(text_three);
 
           // remove all highlighting text and arrows
           svg.selectAll('line').remove();
@@ -558,7 +569,7 @@
     .style("padding-left", header_margin + "px")
     .style("font-family", font)
     .style("color", text_color)
-    .text("PISA 2012 Math Score by Wealth");
+    .text(title_one);
 
   var text_box = header.append("div")
     .attr("class", "text_box")
