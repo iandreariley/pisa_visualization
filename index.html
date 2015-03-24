@@ -253,6 +253,24 @@
           .attr("transform", "translate(" + left_margin + ",0)")
           .call(score_axis);
 
+        //Draw labels to graph
+        d3.select("svg")
+          .append("text")
+          .attr("class", "x label")
+          .attr("text-anchor", "middle")
+          .attr("x", (width - left_margin)/2 + left_margin )
+          .attr("y", top_margin + height)
+          .text("Wealth");
+
+        d3.select("svg")
+          .append("text")
+          .attr("class", "y label")
+          .attr("text-anchor", "middle")
+          .attr("y", 20)
+          .attr("x", -(height/2))
+          .attr("transform", "rotate(-90)")
+          .text("PISA Math Score");
+
         // Curve-drawing function
         var line = d3.svg.line()
           .x(function(d) {
