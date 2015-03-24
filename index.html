@@ -37,20 +37,42 @@
           font = "Helvetica",
           text_color = "darkslategrey";
 
-      var opening_text = "The graph below represents the mean score on the \
-      2012 pisa math test by wealth bracket. Wealth, in this case, is\
-      measured by the OECD index, which is calculated by the student's\
-      possession of certain ammenities like his/her own room,\
-      a computer, etc.",
-      text_two = "The average score of students in the United States is\
-      just above average, and 130 points below the average score of students\
-      in Shanghai, China, which was the highest scoring individual group of\
-      students in the 2012 PISA tests. However, there is less of a disparity\
-      between the scores of rich and poor students in the U.S. than in\
-      Shanghai."
-      text_three = "Below are the average scores by wealth bracket of all of\
-      the countries that participated in the PISA 2012 survey. Mouseover the\
-      lines to highlight them and see further information";
+      var text_one = "The following data were taken from the 2012 Programme \
+      for International Student Assessment (PISA) dataset. These data \
+      represent the math scores and wealth of over half a millions students \
+      in 68 economies. PISA tests (which cover the areas of math, science and \
+      reading) aim to assess whether students at the end of compulsory \
+      education can apply their learning to real-life situations, rather than \
+      testing a specific curriculum.",
+      text_two = "The line below represents average score on the PISA math \
+      test given the students' familial wealth. PISA uses its own index to \
+      measure wealth, rather than a monetary metric like yearly income. This \
+      accounts for the fact that the amount of income that constitutes \
+      \"wealth\" may differ between nations. The PISA index is based on a \
+      student's access to certain amenities, like his/her own place to study \
+      a DVD player, etc.",
+      text_three  = "The difference between the lowest scoring wealth bracket \
+      and the highest scoring is about 140 points, which PISA estimates \
+      represents about three years of schooling (41 points = 1 year). Note \
+      that the data for very low and very high wealth indices were sparse, so \
+      the line there depends on fewer data points than other points on the \
+      line, making them less reliable predictors of population trends.",
+      text_four = "Shown here is a comparison between two of the world's top \
+      economies - the United States, and Shanghai (China has yet to implement \
+      nation-wide PISA tests). Shanghai has the highest average math score in \
+      the 2012 PISA dataset. The average for the United States is 130 points \
+      below Shanghai, which suggests that the average American 15 year-old \
+      would need another three years of school to catch up with his/her \
+      counterpart in Shanghai.",
+      text_five = "However, the data also suggest that United States \
+      education is more equitable. The disparity between the USA's lowest \
+      scoring and hightest scoring brackets is 100 points, or about two and a \
+      half years of schooling. In Shanghai the difference is 180 points, or \
+      more than 4 years by PISA estimations.",
+      text_six = "Below are the wealth-score curves for all of the economies \
+      that participated in the 2012 PISA assessment. Mouse over lines to view \
+      the name and mean score of an economy, or select countries by name in \
+      the drop menu on the right."
 
       function x_axis(scale){
           return d3.svg.axis().scale(scale);
@@ -544,7 +566,7 @@
     .style("font-family", font)
     .style("float", "left")
     .style("color", text_color)
-    .text(opening_text);
+    .text(text_one);
         
   //Create navigation button
   var button = header.append("div")
