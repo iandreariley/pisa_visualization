@@ -189,6 +189,11 @@
             .style('stroke-width', stroke_width);
       }
 
+      function clear_annotations(svg) {
+          svg.selectAll('line').remove();
+          svg.selectAll('text').remove();
+      }
+
       function draw_line(x1, y1, x2, y2, svg, color, weight, dashed) {
 
         if( typeof(dashed) === 'undefined')
@@ -358,12 +363,12 @@
 
           update_text(title_two, text_two);
 
-          var mean = filter_by_key(countries, ['mean']);
-
           // Remove any unecessary curves from chart (all but one)
-          trim_curves(curves, mean);
-
+          // as well as any text annotation or lines
           // Draw selected cureves (mean) to remaining paths
+          clear_annotations(svg);
+          var mean = filter_by_key(countries, ['mean']);
+          trim_curves(curves, mean);
           draw_curves(curves, mean, line, 'darkslategrey', 3);
         };
 
@@ -410,8 +415,7 @@
           update_text(title_four, text_four);
 
           // remove previous highlight lines and change text
-          svg.selectAll('line').remove();
-          svg.selectAll('text').remove();
+          clear_annotations(svg);
 
           // draw mean lines for us and shanghai
           var us_mean = score_scale(get_country_mean(country_means, us)),
@@ -514,9 +518,7 @@
               return country + '\nAverage Score: ' + score;
             });
 
-          // remove all highlighting text and arrows
-          svg.selectAll('line').remove();
-          svg.selectAll('text').remove();
+          clear_annotations(svg);
 
           var final_chart = lines.append('path')
             .filter(function(d) {
@@ -583,12 +585,20 @@
                           stage_five];
         var stidx = 0;
 
-        button.on("click", function(d){
+        // Add click events to header buttons
+        next_button.on("click", function(d){
           if(stidx < stage_array.length){
             stage_array[stidx]();
             stidx += 1;
           }
         });
+
+        prev_button.on("click", function(d) {
+          if(stidx > 1) {
+            stage_array[stidx - 2]();
+            stidx -= 1;
+          }
+        })
       };
 
     </script>
@@ -627,16 +637,31 @@
   var button = header.append("div")
     .attr("class", "next_button")
     .style("display", "table")
-    .style("width", "75px")
+    .style("width", "150px")
     .style("height", "25px")
-    .style("float", "right")
-    .append("div")
+    .style("float", "right");
+
+  var prev_button = button.append("div")
     .style("display", "table-cell")
     .style("border-radius", "5px")
     .style("vertical-align", "middle")
     .style("text-align", "center")
     .style("background", "darkslategrey")
     .style("color", "white")
+    .style("border-color", "white")
+    .style("border-color", "white")
+    .style("border", "solid 1px")
+    .text("PREV");
+
+  var next_button = button.append("div")
+    .style("display", "table-cell")
+    .style("border-radius", "5px")
+    .style("vertical-align", "middle")
+    .style("text-align", "center")
+    .style("background", "darkslategrey")
+    .style("color", "white")
+    .style("border-color", "white")
+    .style("border", "solid 1px")
     .text("NEXT");
 
   var chart = d3.select("body")
