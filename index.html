@@ -117,6 +117,15 @@
         return text;
       };
 
+      // filter function from
+      // http://stackoverflow.com/questions/7378228/
+      // check-if-value-is-in-array-with-javascript
+      function filter_by_key(data, keys) {
+        return data.filter(function(d) {
+          return keys.indexOf(d['key']) > -1;
+        });
+      };
+
       function add_arrow(svg, x1, y1, x2, y2) {
 
         var color = "black",
@@ -131,7 +140,7 @@
         var line = draw_line(x1, y1, x2, y2, svg, text_color, weight)
 
         return line.attr('marker-end', 'url(#triangle)');
-      }
+      };
 
       function get_country(country_array, country) {
         for(var i = 0; i < country_array.length; i++) {
@@ -161,6 +170,23 @@
           .style("stroke", "red")
           .style("stroke-width", 3);
 
+      };
+
+      function trim_curves(selection, data) {
+        selection.data(data)
+          .exit()
+          .remove();
+      };
+
+      function draw_curves(selection, data, line_func, stroke, stroke_width) {
+
+          return selection.data(data)
+            .enter()
+            .append('path')
+            .attr('d', function(d) {return line_func(d['values']); })
+            .style('fill', 'none')
+            .style('stroke', stroke)
+            .style('stroke-width', stroke_width);
       }
 
       function draw_line(x1, y1, x2, y2, svg, color, weight, dashed) {
@@ -206,7 +232,6 @@
       };
 
       function update_text(text_title, text_body) {
-        debugger;
         d3.select(".header h2")
           .text(text_title);
         d3.select(".text_box")
@@ -231,9 +256,6 @@
           .rollup(agg)
           .entries(data);
 
-        // Add to array so that we can add it as a data element
-        grand_mean = [grand_mean];
-
         // Mean test score by country
         var country_means = d3.nest()
           .key(function(d) { return d['country']})
@@ -251,6 +273,12 @@
           .sortKeys(comp_leaves)
           .rollup(agg)
           .entries(data);
+
+        // Add to array so that we can add it as a data element
+        grand_mean = {'key' : "mean",
+                      'values' : grand_mean};
+
+        countries.push(grand_mean);
 
         // Bind data to path elements and chart
         var lines = svg.selectAll('path')
@@ -323,24 +351,29 @@
             us_color = 'blue',
             china_color = "gold";
 
+        // Path selection for adding/removing country curves to chart
+        var curves = svg.selectAll('path');
+
         function stage_one() {
 
           update_text(title_two, text_two);
 
-          // Draw grand mean
-          var mean_line = svg.selectAll('path')
-            .data(grand_mean)
-            .enter()
-            .append('path')
-            .attr('d', function(d){return line(d);})
-            .style('fill', 'none')
-            .style('stroke', 'darkslategrey')
-            .style('stroke-width', 3);
+          var mean = filter_by_key(countries, ['mean']);
+
+          // Remove any unecessary curves from chart (all but one)
+          trim_curves(curves, mean);
+
+          // Draw selected cureves (mean) to remaining paths
+          draw_curves(curves, mean, line, 'darkslategrey', 3);
         };
 
         function stage_two() {
 
           update_text(title_three, text_three);
+
+          var mean = filter_by_key(countries, ['mean']);
+          trim_curves(curves, mean);
+          draw_curves(curves, mean, line, 'darkslategrey', 3);
 
           // make an arrow marker
           // lifted wholesale from Mozilla Developer Nework
@@ -402,13 +435,8 @@
           add_text(svg, wealth_scale(-6), score_scale(547),
             '130 points = 3 years schooling', 'grey', "mean_text");
 
-          // Bind data to path elements and chart
-          var lines = svg.selectAll('path')
-            .data(countries)
-            .enter()
-
           // Draw US and china curves in their respective colors
-          var first_lines = lines.append('path')
+          curves.append('path')
             .filter(function(d) {
               return d['key'] === us || d['key'] === china;
             })
