@@ -114,20 +114,20 @@
 
       function selector_from_string(str) {
         // Replace spaces with hyphens and remove parens
-        return str.replace(/ /g, '-').replace(/\(|\)/g, '');
+        return str.replace(/ /g, "-").replace(/\(|\)/g, "");
       }
 
       function add_text(svg, x, y, text_string, stroke, text_class) {
 
         // Add text element to dom
-        var text = svg.append('text')
+        var text = svg.append("text")
           .attr("class", text_class)
-          .attr('x', x)
-          .attr('y', y)
-          .style('font-family', 'Helvetica')
-          .style('stroke', stroke)
-          .style('font-size', font_size)
-          .style('font-weight', font_weight)
+          .attr("x", x)
+          .attr("y", y)
+          .style("font-family", font)
+          .style("stroke", stroke)
+          .style("font-size", font_size)
+          .style("font-weight", font_weight)
           .text(text_string);
 
         return text;
@@ -138,7 +138,7 @@
       // check-if-value-is-in-array-with-javascript
       function filter_by_key(data, keys) {
         return data.filter(function(d) {
-          return keys.indexOf(d['key']) > -1;
+          return keys.indexOf(d["key"]) > -1;
         });
       };
 
@@ -155,12 +155,12 @@
           y2 -= diff;
         var line = draw_line(x1, y1, x2, y2, svg, text_color, weight)
 
-        return line.attr('marker-end', 'url(#triangle)');
+        return line.attr("marker-end", "url(#triangle)");
       };
 
       function get_country(country_array, country) {
         for(var i = 0; i < country_array.length; i++) {
-          if (country_array[i]['key'] === country) {
+          if (country_array[i]["key"] === country) {
             return country_array[i];
           }
         }
@@ -169,8 +169,8 @@
       function get_country_mean(country_mean_array, country) {
           var result = null;
           for(var i = 0; i < country_mean_array.length; i++) {
-            if(country_mean_array[i]['key'] === country) {
-              result = country_mean_array[i]['values'];
+            if(country_mean_array[i]["key"] === country) {
+              result = country_mean_array[i]["values"];
               return parseInt(result.toFixed(0));
             }
           }
@@ -202,38 +202,38 @@
 
           return selection.data(data)
             .enter()
-            .append('path')
-            .attr('d', function(d) {return line_func(d['values']); })
-            .style('fill', 'none')
-            .style('stroke', stroke)
-            .style('stroke-width', stroke_width)
-            .attr("id", function(d) { return selector_from_string(d['key']); })
+            .append("path")
+            .attr("d", function(d) {return line_func(d["values"]); })
+            .style("fill", "none")
+            .style("stroke", stroke)
+            .style("stroke-width", stroke_width)
+            .attr("id", function(d) { return selector_from_string(d["key"]); })
             .attr("class", function(d) {
-              if(d['key'] !== 'mean')
-                return 'country';
-              return 'mean';
+              if(d["key"] !== "mean")
+                return "country";
+              return "mean";
             });
       }
 
       function clear_annotations(svg) {
-          svg.selectAll('line').remove();
-          svg.selectAll('text').remove();
+          svg.selectAll("line").remove();
+          svg.selectAll("text").remove();
       }
 
       function draw_line(x1, y1, x2, y2, svg, color, weight, dashed) {
 
-        if( typeof(dashed) === 'undefined')
+        if( typeof(dashed) === "undefined")
           dashed = false;
         var line = svg.append("svg:line")
-          .attr('x1', x1)
-          .attr('y1', y1)
-          .attr('x2', x2)
-          .attr('y2', y2)
-          .style('stroke', color)
-          .style('stroke-width', weight);
+          .attr("x1", x1)
+          .attr("y1", y1)
+          .attr("x2", x2)
+          .attr("y2", y2)
+          .style("stroke", color)
+          .style("stroke-width", weight);
 
         if(dashed)
-          return line.style('stroke-dasharray', "10,10");
+          return line.style("stroke-dasharray", "10,10");
         else
           return line;
       };
@@ -244,13 +244,13 @@
 
       function agg(leaves) {
           var mean_score = d3.mean(leaves, function(d) {
-              return d['math_score'];
+              return d["math_score"];
           });
           
           return {
-            'country' : leaves[0]['country'],
-            'x' : leaves[0]['wealth.bucket'],
-            'y' : mean_score
+            "country" : leaves[0]["country"],
+            "x" : leaves[0]["wealth.bucket"],
+            "y" : mean_score
           };
       };
 
@@ -269,30 +269,30 @@
           .append("svg")
             .attr("width", width + left_margin)
             .attr("height", height + top_margin)
-          .append('g')
-            .attr('class', chart_class);
+          .append("g")
+            .attr("class", chart_class);
 
         // Mean test score by wealth bin across all countries
         var grand_mean = d3.nest()
-          .key(function(d) {return d['wealth.bucket'];})
+          .key(function(d) {return d["wealth.bucket"];})
           .sortKeys(comp_leaves)
           .rollup(agg)
           .entries(data);
 
         // Mean test score by country
         var country_means = d3.nest()
-          .key(function(d) { return d['country']})
+          .key(function(d) { return d["country"]})
           .rollup(function(leaves) {
             return d3.mean(leaves, function(d) {
-              return d['math_score'];
+              return d["math_score"];
             });
           })
           .entries(data);
 
         // Mean test score by wealth bin for each country in PISA set
         var countries = d3.nest()
-          .key(function(d) {return d['country'];})
-          .key(function(d) {return +d['wealth.bucket'];})
+          .key(function(d) {return d["country"];})
+          .key(function(d) {return +d["wealth.bucket"];})
           .sortKeys(comp_leaves)
           .rollup(agg)
           .entries(data);
@@ -300,30 +300,30 @@
         var mean_score = d3.nest()
           .rollup(function(leaves) {
             return d3.mean(leaves, function(d) {
-              return d['math_score'];
+              return d["math_score"];
             });
           })
           .entries(data);
 
         // Add to array so that we can add it as a data element
-        grand_mean = {'key' : "mean",
-                      'values' : grand_mean};
+        grand_mean = {"key" : "mean",
+                      "values" : grand_mean};
 
         countries.push(grand_mean);
 
         // Bind data to path elements and chart
-        var lines = svg.selectAll('path')
+        var lines = svg.selectAll("path")
           .data(countries)
           .enter()
 
         // Find range of date column
         var wealth_extent = d3.extent(data, function(d) {
-            return +d['wealth.bucket'];
+            return +d["wealth.bucket"];
         });
 
         // Find range of attendance column
         var score_extent = d3.extent(data, function(d) {
-            return d['math_score'];
+            return d["math_score"];
         });
 
         // Create x and y scales mapping values to pixels
@@ -378,43 +378,43 @@
             m_height = m_width,
             ref_x = 1,
             ref_y = 5;
-        d3.select('svg').append('defs')
-          .append('marker')
-          .attr('id', 'triangle')
-          .attr('viewBox', "0 0 10 10")
-          .attr('refX', ref_x)
-          .attr('refY', ref_y)
-          .attr('markerWidth', m_width)
-          .attr('markerHeight', m_height)
-          .attr('orient', 'auto')
-          .append('path')
-          .style('stroke', text_color)
-          .style('fill', text_color)
-          .attr('d', 'M 0 0 L 10 5 L 0 10 z');
+        d3.select("svg").append("defs")
+          .append("marker")
+          .attr("id", "triangle")
+          .attr("viewBox", "0 0 10 10")
+          .attr("refX", ref_x)
+          .attr("refY", ref_y)
+          .attr("markerWidth", m_width)
+          .attr("markerHeight", m_height)
+          .attr("orient", "auto")
+          .append("path")
+          .style("stroke", text_color)
+          .style("fill", text_color)
+          .attr("d", "M 0 0 L 10 5 L 0 10 z");
 
         // Curve-drawing function
         var line = d3.svg.line()
           .x(function(d) {
-            return wealth_scale(d['values']['x']);
+            return wealth_scale(d["values"]["x"]);
           })
           .y(function(d) {
-            return score_scale(d['values']['y']);
+            return score_scale(d["values"]["y"]);
           })
-          .interpolate('basis');
+          .interpolate("basis");
 
-        var us = 'United States of America',
-            china = 'China-Shanghai',
-            us_color = 'blue',
+        var us = "United States of America",
+            china = "China-Shanghai",
+            us_color = "blue",
             china_color = "gold";
 
         // Path selection for adding/removing country curves to chart
-        var curves = svg.selectAll('path');
+        var curves = svg.selectAll("path");
 
         function draw_span(min_score, max_score, x, arr_length,
           arr_offset, hi_color, lo_color) {
 
-          if(typeof(lo_color) === 'undefined')
-            if(typeof(hi_color) === 'undefined') {
+          if(typeof(lo_color) === "undefined")
+            if(typeof(hi_color) === "undefined") {
               hi_color = curve_color;
               lo_color = curve_color;
             } else
@@ -450,7 +450,7 @@
           // as well as any text annotation or lines
           // Draw selected cureves (mean) to remaining paths
           clear_annotations(svg);
-          var mean = filter_by_key(countries, ['mean']);
+          var mean = filter_by_key(countries, ["mean"]);
           trim_curves(svg, []);
           draw_curves(curves, mean, line, mean_color, mean_width);
         };
@@ -459,7 +459,7 @@
 
           update_text(title_three, text_three);
 
-          var mean = filter_by_key(countries, ['mean']);
+          var mean = filter_by_key(countries, ["mean"]);
           clear_annotations(svg);
           trim_curves(svg, []);
           draw_curves(curves, mean, line, mean_color, mean_width);
@@ -473,29 +473,29 @@
 
           draw_span(min_score, max_score, x, arrow_length, offset);
           add_text(svg, wealth_scale(0), text_y,
-            '140 points > 3 years of schooling');
+            "140 points > 3 years of schooling");
         };
 
         function stage_three() {
 
           update_text(title_four, text_four);
 
-          var curves_to_draw = filter_by_key(countries, ['mean', us, china]);
+          var curves_to_draw = filter_by_key(countries, ["mean", us, china]);
 
           // remove previous highlight lines and change text
           clear_annotations(svg);
           trim_curves(svg, []);
           draw_curves(curves, curves_to_draw, line,
             function(d) {
-              if(d['key'] === us)
+              if(d["key"] === us)
                 return us_color;
-              else if(d['key'] === china)
+              else if(d["key"] === china)
                 return china_color;
               else
-                return 'darkslategrey';
+                return mean_color;
             },
             function(d) {
-              if(d['key'] === us || d['key'] === china)
+              if(d["key"] === us || d["key"] === china)
                 return 2;
               else
                 return 3;
@@ -513,18 +513,18 @@
 
           // Label mean lines with text
           add_text(svg, wealth_scale(1.2), score_scale(640),
-            'Shanghai (China)');
+            "Shanghai (China)");
           add_text(svg, wealth_scale(2.1), score_scale(500),
-            'USA')
+            "USA")
           add_text(svg, wealth_scale(-6), score_scale(547),
-            '130 points = 3 years schooling', curve_color, "mean_text");
+            "130 points = 3 years schooling", curve_color, "mean_text");
         };
 
         function stage_four() {
 
           update_text(title_five, text_five);
 
-          var curves_to_draw = filter_by_key(countries, ['mean', us, china]);
+          var curves_to_draw = filter_by_key(countries, ["mean", us, china]);
 
           // remove previous highlight lines and change text
           d3.select("select").remove();
@@ -532,15 +532,15 @@
           trim_curves(svg, []);
           draw_curves(curves, curves_to_draw, line,
             function(d) {
-              if(d['key'] === us)
+              if(d["key"] === us)
                 return us_color;
-              else if(d['key'] === china)
+              else if(d["key"] === china)
                 return china_color;
               else
-                return 'darkslategrey';
+                return mean_color;
             },
             function(d) {
-              if(d['key'] === us || d['key'] === china)
+              if(d["key"] === us || d["key"] === china)
                 return 2;
               else
                 return 3;
@@ -562,9 +562,9 @@
 
           // Add text explaining difference in terms of years of schooling
           add_text(svg, wealth_scale(-5.5), score_scale(545),
-            "180 points > 3 years", 'grey', "span")
+            "180 points > 3 years", text_color, "span")
           add_text(svg, wealth_scale(-5.4), score_scale(425),
-            "100 points > 2 years", 'grey', "span")
+            "100 points > 2 years", text_color, "span")
         };
 
         function stage_five() {
@@ -576,35 +576,35 @@
 
           var country_curves = draw_curves(curves, countries, line,
             function(d) {
-              if(d['key'] === 'mean')
-                return 'darkslategrey';
-              return 'grey';
+              if(d["key"] === "mean")
+                return mean_color;
+              return curve_color;
             },
             function(d) {
-              if(d['key'] === 'mean')
+              if(d["key"] === "mean")
                 return 3;
               return 1;
             })
-            .on('mouseover', function(d){
-              highlight(selector_from_string(d['key']));
+            .on("mouseover", function(d){
+              highlight(selector_from_string(d["key"]));
             })
-            .on('mouseout', function(d){
-              if(d['key'] === 'mean')
-                return d3.select(this).style('stroke', 'darkslategrey');
-              return d3.select(this).style('stroke', 'slategrey')
-                .style('stroke-width', 1);
+            .on("mouseout", function(d){
+              if(d["key"] === "mean")
+                return d3.select(this).style("stroke", mean_color);
+              return d3.select(this).style("stroke", curve_color)
+                .style("stroke-width", 1);
             });
 
           // Add tooltips to lines
           country_curves.append("svg:title")
             .attr("class", "tooltip")
             .text(function(d) {
-              if(d['key'] === 'mean')
-                return 'Mean\nAverage Score: ' + mean_score.toFixed();
-              var values = d['values'][0]['values'];
-              var country = values['country'];
+              if(d["key"] === "mean")
+                return "Mean\nAverage Score: " + mean_score.toFixed();
+              var values = d["values"][0]["values"];
+              var country = values["country"];
               var score = get_country_mean(country_means, country);
-              return country + '\nAverage Score: ' + score;
+              return country + "\nAverage Score: " + score;
             });
 
           // Add a <select> element to allow user to highlight country
@@ -616,21 +616,21 @@
           // Sort countries variable and bind data to <option> elements
           var options = country_selector.selectAll("option")
             .data(countries.sort(function(a, b) {
-              if(a['key'] < b['key'])
+              if(a["key"] < b["key"])
                 return -1;
-              else if (a['key'] > b['key'])
+              else if (a["key"] > b["key"])
                 return 1;
               return 0;
             }));
 
           options.enter()
             .append("option")
-            .attr("value", function(d) { return d['key']; })
-            .text(function(d) { return d['key']; });
+            .attr("value", function(d) { return d["key"]; })
+            .text(function(d) { return d["key"]; });
 
           function highlighter() {
             var index = country_selector.property("selectedIndex");
-            var selected_country = options[0][index]['__data__']['key'];
+            var selected_country = options[0][index]["__data__"]["key"];
             selected_country = selector_from_string(selected_country);
             console.log(selected_country);
             highlight(selected_country);
@@ -716,8 +716,8 @@
   function draw_first_stage(file){
       d3.tsv(file, function(d) {
           // transform data
-          d['math_score'] = +d['math_score'];
-          d['wealth.bucket'] = +d['wealth.bucket'];
+          d["math_score"] = +d["math_score"];
+          d["wealth.bucket"] = +d["wealth.bucket"];
           return d;
       }, draw);
   };
