@@ -121,13 +121,6 @@
         return str.replace(/ /g, '-').replace(/\(|\)/g, '');
       }
 
-      //TODO: Find a better way to do this. D3 select function
-      //probably not necessary.
-      function no_existing_svg(){
-          element = d3.select("svg")[0][0];
-          return element === null;
-      };
-
       function add_text(svg, x, y, text_string, stroke, text_class) {
 
         // Add text element to dom
