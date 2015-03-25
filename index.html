@@ -94,6 +94,10 @@
           d3.selectAll("svg > *").remove();
       };
 
+      function selector_from_string(str) {
+        return str.replace(/ /g, '-').replace(/\(|\)/g, '');
+      }
+
       //TODO: Find a better way to do this. D3 select function
       //probably not necessary.
       function no_existing_svg(){
@@ -162,9 +166,12 @@
       };
 
       function highlight(country) {
-        d3.selectAll(".curve")
+        d3.selectAll(".country")
           .style("stroke-width", 1)
-          .style("stroke", "grey")
+          .style("stroke", "grey");
+
+        d3.selectAll("mean")
+          .style("stroke", "darkslategrey");
 
         var selected = d3.select("#" + country)
           .style("stroke", "red")
@@ -187,7 +194,13 @@
             .attr('d', function(d) {return line_func(d['values']); })
             .style('fill', 'none')
             .style('stroke', stroke)
-            .style('stroke-width', stroke_width);
+            .style('stroke-width', stroke_width)
+            .attr("id", function(d) { return selector_from_string(d['key']); })
+            .attr("class", function(d) {
+              if(d['key'] !== 'mean')
+                return 'country';
+              return 'mean';
+            });
       }
 
       function clear_annotations(svg) {
@@ -212,14 +225,6 @@
         else
           return line;
       };
-
-      // function draw_curve(svg, points_array, line_func, weight, color) {
-      //     svg.append('svg:path')
-      //         .attr('d', line_func(points_array))
-      //         .attr('stroke', color)
-      //         .attr('stroke-width', weight)
-      //         .attr('fill', 'none');
-      // };
 
       function comp_leaves(a,b) {
           return +a - +b;
@@ -279,6 +284,16 @@
           .sortKeys(comp_leaves)
           .rollup(agg)
           .entries(data);
+
+        var mean_score = d3.nest()
+          .rollup(function(leaves) {
+            return d3.mean(leaves, function(d) {
+              return d['math_score'];
+            });
+          })
+          .entries(data);
+
+        debugger;
 
         // Add to array so that we can add it as a data element
         grand_mean = {'key' : "mean",
@@ -369,7 +384,7 @@
           // Draw selected cureves (mean) to remaining paths
           clear_annotations(svg);
           var mean = filter_by_key(countries, ['mean']);
-          trim_curves(svg, mean);
+          trim_curves(svg, []);
           draw_curves(curves, mean, line, 'darkslategrey', 3);
         };
 
@@ -379,12 +394,15 @@
 
           var mean = filter_by_key(countries, ['mean']);
           debugger;
-          trim_curves(svg, mean);
+          clear_annotations(svg);
+          trim_curves(svg, []);
           draw_curves(curves, mean, line, 'darkslategrey', 3);
 
           // make an arrow marker
+          // Attach to parent svg element so it isn't deleted by
+          // chart clearing functions.
           // lifted wholesale from Mozilla Developer Nework
-          svg.append('defs')
+          d3.select('svg').append('defs')
             .append('marker')
             .attr('id', 'triangle')
             .attr('viewBox', "0 0 10 10")
@@ -420,7 +438,7 @@
 
           // remove previous highlight lines and change text
           clear_annotations(svg);
-          trim_curves(svg, curves_to_draw);
+          trim_curves(svg, []);
           draw_curves(curves, curves_to_draw, line,
             function(d) {
               if(d['key'] === us)
@@ -435,7 +453,7 @@
                 return 2;
               else
                 return 3;
-            })
+            });
 
           // draw mean lines for us and shanghai
           var us_mean = score_scale(get_country_mean(country_means, us)),
@@ -464,9 +482,27 @@
 
           update_text(title_five, text_five);
 
-          // Draw max/min lines for china and the us
-          svg.selectAll("line").remove()
-          svg.selectAll(".mean_text").remove();
+          var curves_to_draw = filter_by_key(countries, ['mean', us, china]);
+
+          // remove previous highlight lines and change text
+          clear_annotations(svg);
+          trim_curves(svg, []);
+          draw_curves(curves, curves_to_draw, line,
+            function(d) {
+              if(d['key'] === us)
+                return us_color;
+              else if(d['key'] === china)
+                return china_color;
+              else
+                return 'darkslategrey';
+            },
+            function(d) {
+              if(d['key'] === us || d['key'] === china)
+                return 2;
+              else
+                return 3;
+            });
+
           draw_line(left_margin, score_scale(402), width, score_scale(402),
             svg, us_color, 2, true);
           draw_line(left_margin, score_scale(509), width, score_scale(509),
@@ -497,63 +533,46 @@
 
           update_text(title_six, text_six);
 
-          // set us and china lines to standard line color
-          svg.selectAll(".first_lines")
-            .style('stroke', 'grey')
-            .style('stroke-width', 1)
-            .on('mouseover', function(d){
-              highlight(d['key'].replace(/ /g, '-'));
-            })
-            .on('mouseout', function(d){
-              return d3.select(this).style('stroke', 'slategrey')
-                .style('stroke-width', 1);
-            })
-            .append("svg:title")
-            .attr("class", "tooltip")
-            .text(function(d) {
-              var values = d['values'][0]['values'];
-              var country = values['country'];
-              var score = get_country_mean(country_means, country);
-              return country + '\nAverage Score: ' + score;
-            });
-
           clear_annotations(svg);
+          trim_curves(svg, []);
 
-          var final_chart = lines.append('path')
-            .filter(function(d) {
-              return d['key'] !== us && d['key'] !== china;
+          var country_curves = draw_curves(curves, countries, line,
+            function(d) {
+              if(d['key'] === 'mean')
+                return 'darkslategrey';
+              return 'grey';
+            },
+            function(d) {
+              if(d['key'] === 'mean')
+                return 3;
+              return 1;
             })
-            .attr("id", function(d) { return d['key'].replace(/ /g, '-'); })
-            .attr("class", "curve")
-            .attr('d', function(d){
-              return line(d['values']);})
-            .style('fill', 'none')
-            .style('stroke', 'grey')
-            .style('stroke-width', 1)
             .on('mouseover', function(d){
-              highlight(d['key'].replace(/ /g, '-'));
+              highlight(selector_from_string(d['key']));
             })
             .on('mouseout', function(d){
+              if(d['key'] === 'mean')
+                return d3.select(this).style('stroke', 'darkslategrey');
               return d3.select(this).style('stroke', 'slategrey')
                 .style('stroke-width', 1);
             });
 
           // Add tooltips to lines
-          final_chart.append("svg:title")
+          country_curves.append("svg:title")
             .attr("class", "tooltip")
             .text(function(d) {
+              if(d['key'] === 'mean')
+                return 'Mean\nAverage Score: ' + mean_score.toFixed();
               var values = d['values'][0]['values'];
               var country = values['country'];
               var score = get_country_mean(country_means, country);
               return country + '\nAverage Score: ' + score;
             });
 
-          // Remove 'next' button, as this is the last page
-          button.remove();
-
           // Add a <select> element to allow user to highlight country
           var country_selector = header.append("select")
-            .attr("float", "right")
+            .style("float", "right")
+            .style("margin-top", "3px")
             .on("change", highlighter)
 
           // Sort countries variable and bind data to <option> elements
@@ -574,7 +593,7 @@
           function highlighter() {
             var index = country_selector.property("selectedIndex");
             var selected_country = options[0][index]['__data__']['key'];
-            selected_country = selected_country.replace(/ /g, '-');
+            selected_country = selector_from_string(selected_country);
             console.log(selected_country);
             highlight(selected_country);
           };
@@ -634,7 +653,7 @@
         
   //Create navigation button
   var button = header.append("div")
-    .attr("class", "next_button")
+    .attr("class", "button")
     .style("display", "table")
     .style("width", "150px")
     .style("height", "25px")
