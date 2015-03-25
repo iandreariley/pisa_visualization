@@ -166,6 +166,146 @@ However, countries across the board show a generally positive correlation betwee
 the escs index and math score, suggesting that perhaps even the countries that
 seem to have equal opportunity are not as equal and they first appear.
 
+### Feedback
+
+The following are emails I recieved back from friends who took a look at the
+project, which I shared on [my website][ http://iandreariley.com/pisa.html].
+
+#### Stephanie
+
+This is so cool!  I loved the graph at the end.  The only thing I noticed is that it
+seems that the "Florida, USA" link does not work.  But that could have been my
+computer.  Way to go.
+
+#### Cole
+
+1. I understood the graphics.
+
+2. Only thing I saw is that on the first page "Half a millions" should be "Half a
+million."  I think?
+
+#### Julia
+
+Nice!
+
+My first couple questions were actually answered by following images.  I really like
+the horizontal lines and definition of the range between scores.  That was my main
+initial burning question because it was hard to see where the line fell on the
+y-axis.
+
+To formally answer your questions:
+Is there anything you don't understand about the graphic?
+No
+What was your main takeaway from the visualization?
+Wealth brackets between about -2 and 1 follow more of a predictable pattern between
+nations, with more wealth predicting higher math scores.  The outlying groups (the
+more impovershed and more wealthy) are less predictable.
+What questions do you still have about the data?
+I wonder why the dip in math scores in the wealthy groups?  Is this because of Paris
+Hilton and Nicole Richie?
+Are there any spelling or usage errors or inconsistencies?
+On the first image it says 'half a millions'.  I think you might mean million
+(singular).
+Great work!  Thanks for sharing.  Go you!
+
+#### Julia 2
+
+Oh yeah, so is the overall average (the bold line) just averaging Vietnam and
+Malaysia for the below -5 wealth?  I didn't pick up on that the first time.  Depends
+on what you're going for, but yeah I might remove the below -5 groups like you say.  
+
+I just noticed something else.  The overall average (bold line) - are we given the
+numerical average?  On the last 'page', when hovering over each country's line, you
+get the numerical average, but I don't know if the number is better or worse than the
+overall average (numerically).
+
+Seriously all I've been doing all day long for days is looking at data and yours is
+really high-end.  If all the data I've been staring at looked that good and was that
+user-friendly my life would be so much easier right now.  High-five.
+
+#### Dad
+
+Looks good. I'm a big fan of the data presentations of "the upshot" at the New York
+Times online version, and this is very like -- really indistinguishable from what
+they do. That said, some of the lines on the last page didn't light up when using
+the drop down menu -- Massachusetts, Connecticut, USA, and Perm? Not sure if they
+were highlighted by the cursor.
+
+#### Mom
+
+Wow! Really great. 
+My only suggestion is that you make a way to go back - at least on the last page to
+get back to the start. 
+Dad adds that the locations that didn't light up seemed all to be subsidiary places
+such as states within the USA and Perm in the Russian federation. He was wrong about
+USA - it worked fine. 
+Good work, mister data wrangler!
+
+#### Mom 2
+
+Just noticed an anomaly this AM when my computer was still displaying the last of
+your charts: when I pointed my cursor at the left-most part of the line representing
+average PISA score (because I couldn't recall what it represented), a little box came
+up saying it was Shanghai's scores . . . 
+Over and out
+
+#### Arian
+
+Is there anything you don't understand about the graphic?
+
+No you killed it!
+
+What was your main takeaway from the visualization?
+
+Even if you're smart in Singapore, you're hella poor. Also it indirectly showed the wealth disparity between nations. So many of the countries that participated in the assessment didn't even go past -5 wealth. (I see you Ireland/UK) (and poor Malaysia) (but is that also due to scarcity of the amenities mentioned earlier?)
+
+Are there any spelling or usage errors or inconsistencies?
+
+In Equitability Within an Economy, it says "the disparity between the USA's lowest
+scoring and hightest scoring brackets is 100 points" 
+
+Also Connecticut, Florida, and Massachusetts are listed in the Countries drop down
+menu. 
+
+Hope this was helpful, great work dude! Loved the mouse over/drop down menu page, fascinating!
+
+#### Arian 2
+
+Sorry I should've been more specific, it was after a long day!
+
+In " Equitability Within an Economy" 'Hightest' should be 'highest' I'm guessing.
+
+#### Michael
+
+Ok, seriously and honestly, everything made sense and was clear.
+
+A couple questions: I'm guessing some countries didn't have scores for wealth below
+-5, thats why in the final graphic so many didn't have data plotted below -5,
+correct?  Or is it that Ireland is balling out of control and no one is poor there?
+This made me wonder how every country had data plotted up to the maximum wealth of 3.
+I though most would "max out" before that.  
+
+Or maybe I misunderstand this whole thing?  In which case, I assure you, it is my
+fault not yours.  
+
+Also why is it that nearly every country saw a math score dip between wealth at 2 and
+3?  My best guess is that Jordanian actors, singers and dancers are wealthy but not
+really educated.
+
+#### Daniel
+
+Question on the PISA wealth index:  since it a scale that most probably aren't
+familiar with, would it be appropriate to put it in some context? Like 0 = average,
+1 = top 50%, 2 = top 25% etc etc? Why are there so many more wealth brackets below
+zero than above–based on percentage of population? There are way more poor people
+than rich?
+
+Wealthy Jordanians are the worst at math.
+
+That dip in the highest wealth brackets is fascinating. 
+
+No spelling or usage errors that I saw. 
+
 ### Troubles
 
 My main issue with d3 was subsetting my nested data. I first tried the following:
