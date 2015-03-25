@@ -1,6 +1,20 @@
 # Visualization of the PISA dataset
 #### by Ian Riley
 
+## Use
+
+The most recent version of the project can be downloaded in its entirety here:
+https://github.com/iandreariley/pisa_visualization
+
+To run it locally, put both the pisa_by_wealth.tsv and index.html files in the same
+directory, and use 'python -m SimpleHTTPServer' to get a server running in that
+directory. Open a browser and type localhost:8000 in the url field, and the
+visualization should start.
+
+To see the visualization online go [here][http://www.iandreariley.com/pisa.html] for
+the old version, and [here][http://www.iandreariley.com/pisa_updated.html] for the
+new version.
+
 ## Process
 
 The Pisa dataset is a large one. I noticed that it used a column for each question
@@ -304,7 +318,28 @@ Wealthy Jordanians are the worst at math.
 
 That dip in the highest wealth brackets is fascinating. 
 
-No spelling or usage errors that I saw. 
+No spelling or usage errors that I saw.
+
+#### Alexandra
+
+When my cursor hovers above the "next" button it doesn't change to a hand to indicate
+that it's a button to click on. It turns into, like the cursor for a word doc.
+Can you not go backwards on the slides?
+The comparing two economies says: "130 points = 3 years of schooling", but the slide
+before had a > instead of a =.
+
+### Reiteration
+
+The big takeaways from the emails were the need for a "back" button and that the
+state (Mass, Conn. and FLA) didn't light up when they were selected from the drop
+menu, which I hadn't noticed. It turns out this was a regex problem: In the
+javascript replace function, I hand't specified a way to remove parentheses, which
+resulted in a bunch of bad ids for the path elements for the states, which meant I
+couldn't access them by id.
+The back button took some doing, but it really cleaned my code up (by necessity) and
+made the display a lot more user friendly. There's a natural desire to go back and
+look at previous information once you've done some exploration of the data on your
+own.
 
 ### Troubles
 
