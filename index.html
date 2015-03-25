@@ -172,8 +172,9 @@
 
       };
 
-      function trim_curves(selection, data) {
-        selection.data(data)
+      function trim_curves(svg, data) {
+        var kill = svg.selectAll("path")
+          .data(data)
           .exit()
           .remove();
       };
@@ -368,7 +369,7 @@
           // Draw selected cureves (mean) to remaining paths
           clear_annotations(svg);
           var mean = filter_by_key(countries, ['mean']);
-          trim_curves(curves, mean);
+          trim_curves(svg, mean);
           draw_curves(curves, mean, line, 'darkslategrey', 3);
         };
 
@@ -377,7 +378,8 @@
           update_text(title_three, text_three);
 
           var mean = filter_by_key(countries, ['mean']);
-          trim_curves(curves, mean);
+          debugger;
+          trim_curves(svg, mean);
           draw_curves(curves, mean, line, 'darkslategrey', 3);
 
           // make an arrow marker
@@ -414,8 +416,26 @@
 
           update_text(title_four, text_four);
 
+          var curves_to_draw = filter_by_key(countries, ['mean', us, china]);
+
           // remove previous highlight lines and change text
           clear_annotations(svg);
+          trim_curves(svg, curves_to_draw);
+          draw_curves(curves, curves_to_draw, line,
+            function(d) {
+              if(d['key'] === us)
+                return us_color;
+              else if(d['key'] === china)
+                return china_color;
+              else
+                return 'darkslategrey';
+            },
+            function(d) {
+              if(d['key'] === us || d['key'] === china)
+                return 2;
+              else
+                return 3;
+            })
 
           // draw mean lines for us and shanghai
           var us_mean = score_scale(get_country_mean(country_means, us)),
@@ -438,27 +458,6 @@
             wealth_scale(-5), score_scale(487));
           add_text(svg, wealth_scale(-6), score_scale(547),
             '130 points = 3 years schooling', 'grey', "mean_text");
-
-          // Draw US and china curves in their respective colors
-          curves.append('path')
-            .filter(function(d) {
-              return d['key'] === us || d['key'] === china;
-            })
-            .attr("id", function(d) {
-              return d['key'].replace(/ /g, '-');
-            })
-            .attr("class", "curve first_lines")
-            .attr('d', function(d){
-              return line(d['values']);})
-            .style('fill', 'none')
-            .style('stroke', function(d) {
-              if(d['key'] === us) {
-                return us_color;
-              } else {
-                return china_color;
-              }
-            })
-            .style('stroke-width', 2)
         };
 
         function stage_four() {
