@@ -28,10 +28,16 @@
           top_margin = 50,
           width = 1200 - left_margin,
           height = 700 - top_margin,
-          radius = 4,
           chart_class = "chart",
           font = "Helvetica",
-          text_color = "darkslategrey";
+          mean_width = 3,
+          highlight_width = 3,
+          dash_line_width = 2,
+          line_width = 1,
+          highlight_color = "darkorange",
+          curve_color = "grey",
+          text_color = "darkslategrey",
+          mean_color = "darkslategrey";
 
       var text_one = "The following data were taken from the 2012 Programme \
       for International Student Assessment (PISA) dataset. These data \
@@ -171,10 +177,10 @@
           .style("stroke", "grey");
 
         d3.selectAll("mean")
-          .style("stroke", "darkslategrey");
+          .style("stroke", mean_color);
 
         var selected = d3.select("#" + country)
-          .style("stroke", "red")
+          .style("stroke", highlight_color)
           .style("stroke-width", 3);
 
       };
@@ -664,7 +670,7 @@
     .style("border-radius", "5px")
     .style("vertical-align", "middle")
     .style("text-align", "center")
-    .style("background", "darkslategrey")
+    .style("background", text_color)
     .style("color", "white")
     .style("border-color", "white")
     .style("border-color", "white")
@@ -676,7 +682,7 @@
     .style("border-radius", "5px")
     .style("vertical-align", "middle")
     .style("text-align", "center")
-    .style("background", "darkslategrey")
+    .style("background", text_color)
     .style("color", "white")
     .style("border-color", "white")
     .style("border", "solid 1px")
