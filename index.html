@@ -82,6 +82,20 @@
           title_five = "Equitability Within an Economy",
           title_six = "Exploring Wealth and Education";
 
+      function add_button(parent, text) {
+        return parent.append("div")
+          .style("display", "table-cell")
+          .style("border-radius", "5px")
+          .style("vertical-align", "middle")
+          .style("text-align", "center")
+          .style("background", text_color)
+          .style("color", "white")
+          .style("border-color", "white")
+          .style("border-color", "white")
+          .style("border", "solid 1px")
+          .text(text);
+      }
+
       function x_axis(scale){
           return d3.svg.axis().scale(scale);
       };
@@ -687,35 +701,16 @@
     .text(text_one);
         
   //Create navigation button
-  var button = header.append("div")
+  var button_panel = header.append("div")
     .attr("class", "button")
     .style("display", "table")
     .style("width", "150px")
     .style("height", "25px")
     .style("float", "right");
 
-  var prev_button = button.append("div")
-    .style("display", "table-cell")
-    .style("border-radius", "5px")
-    .style("vertical-align", "middle")
-    .style("text-align", "center")
-    .style("background", text_color)
-    .style("color", "white")
-    .style("border-color", "white")
-    .style("border-color", "white")
-    .style("border", "solid 1px")
-    .text("PREV");
+  var prev_button = add_button(button_panel, "PREV");
 
-  var next_button = button.append("div")
-    .style("display", "table-cell")
-    .style("border-radius", "5px")
-    .style("vertical-align", "middle")
-    .style("text-align", "center")
-    .style("background", text_color)
-    .style("color", "white")
-    .style("border-color", "white")
-    .style("border", "solid 1px")
-    .text("NEXT");
+  var next_button = add_button(button_panel, "NEXT");
 
   var chart = d3.select("body")
   .append("div")
