@@ -34,10 +34,12 @@
           highlight_width = 3,
           dash_line_width = 2,
           line_width = 1,
-          highlight_color = "darkorange",
+          highlight_color = "red",
           curve_color = "grey",
           text_color = "darkslategrey",
-          mean_color = "darkslategrey";
+          mean_color = "darkslategrey",
+          font_size = 12,
+          font_weight = 300;
 
       var text_one = "The following data were taken from the 2012 Programme \
       for International Student Assessment (PISA) dataset. These data \
@@ -65,7 +67,7 @@
       counterpart in Shanghai.",
       text_five = "However, the data also suggest that United States \
       education is more equitable. The difference between the USA's lowest \
-      scoring and hightest scoring brackets is 100 points, or about two and a \
+      scoring and highest scoring brackets is 100 points, or about two and a \
       half years of schooling. In Shanghai that difference is 180 points, or \
       more than 4 years by PISA estimations.",
       text_six = "Below are the wealth-score curves for all of the economies \
@@ -101,6 +103,7 @@
       };
 
       function selector_from_string(str) {
+        // Replace spaces with hyphens and remove parens
         return str.replace(/ /g, '-').replace(/\(|\)/g, '');
       }
 
@@ -120,8 +123,8 @@
           .attr('y', y)
           .style('font-family', 'Helvetica')
           .style('stroke', stroke)
-          .style('font-size', 12)
-          .style('font-weight', 300)
+          .style('font-size', font_size)
+          .style('font-weight', font_weight)
           .text(text_string);
 
         return text;
@@ -161,11 +164,11 @@
       }
 
       function get_country_mean(country_mean_array, country) {
-          var result = null
+          var result = null;
           for(var i = 0; i < country_mean_array.length; i++) {
             if(country_mean_array[i]['key'] === country) {
               result = country_mean_array[i]['values'];
-              return result.toFixed(0);
+              return parseInt(result.toFixed(0));
             }
           }
           return result;
@@ -173,7 +176,7 @@
 
       function highlight(country) {
         d3.selectAll(".country")
-          .style("stroke-width", 1)
+          .style("stroke-width", line_width)
           .style("stroke", "grey");
 
         d3.selectAll("mean")
@@ -181,7 +184,7 @@
 
         var selected = d3.select("#" + country)
           .style("stroke", highlight_color)
-          .style("stroke-width", 3);
+          .style("stroke-width", highlight_width);
 
       };
 
@@ -224,7 +227,7 @@
           .attr('x2', x2)
           .attr('y2', y2)
           .style('stroke', color)
-          .style('stroke-width', weight)
+          .style('stroke-width', weight);
 
         if(dashed)
           return line.style('stroke-dasharray', "10,10");
@@ -299,8 +302,6 @@
           })
           .entries(data);
 
-        debugger;
-
         // Add to array so that we can add it as a data element
         grand_mean = {'key' : "mean",
                       'values' : grand_mean};
@@ -323,10 +324,12 @@
         });
 
         // Create x and y scales mapping values to pixels
+        var max_y = 650,
+            min_y = 0;
         var wealth_scale = make_scale(left_margin, width, wealth_extent);
         var score_scale = d3.scale.linear()
           .range([height, top_margin])
-          .domain([0, 650]);
+          .domain([min_y, max_y]);
 
         // Create axes
         var wealth_axis = x_axis(wealth_scale);
@@ -354,14 +357,37 @@
           .attr("y", top_margin + height)
           .text("Wealth");
 
+        var y_lab_offset = 20;
         d3.select("svg")
           .append("text")
           .attr("class", "y label")
           .attr("text-anchor", "middle")
-          .attr("y", 20)
+          .attr("y", y_lab_offset)
           .attr("x", -(height/2))
           .attr("transform", "rotate(-90)")
           .text("PISA Math Score");
+
+        // make an arrow marker
+        // Attach to parent svg element so it isn't deleted by
+        // chart clearing functions.
+        // lifted wholesale from Mozilla Developer Nework
+        var m_width = 5,
+            m_height = m_width,
+            ref_x = 1,
+            ref_y = 5;
+        d3.select('svg').append('defs')
+          .append('marker')
+          .attr('id', 'triangle')
+          .attr('viewBox', "0 0 10 10")
+          .attr('refX', ref_x)
+          .attr('refY', ref_y)
+          .attr('markerWidth', m_width)
+          .attr('markerHeight', m_height)
+          .attr('orient', 'auto')
+          .append('path')
+          .style('stroke', text_color)
+          .style('fill', text_color)
+          .attr('d', 'M 0 0 L 10 5 L 0 10 z');
 
         // Curve-drawing function
         var line = d3.svg.line()
@@ -381,6 +407,38 @@
         // Path selection for adding/removing country curves to chart
         var curves = svg.selectAll('path');
 
+        function draw_span(min_score, max_score, x, arr_length,
+          arr_offset, hi_color, lo_color) {
+
+          if(typeof(lo_color) === 'undefined')
+            if(typeof(hi_color) === 'undefined') {
+              hi_color = curve_color;
+              lo_color = curve_color;
+            } else
+              lo_color = hi_color;
+
+          debugger;
+          var hi_line_y = score_scale(max_score),
+              lo_line_y = score_scale(min_score),
+              arr_x = wealth_scale(x);
+
+          //draw high low lines
+          draw_line(left_margin, hi_line_y, width, hi_line_y, svg,
+            hi_color, dash_line_width, true);
+          draw_line(left_margin, lo_line_y, width, lo_line_y, svg,
+            lo_color, dash_line_width, true);
+          debugger;
+          var top_arrow_end = score_scale(max_score - arr_length),
+              bot_arrow_end = score_scale(min_score + arr_length),
+              top_arrow_tip = score_scale(max_score) + arr_offset,
+              bot_arrow_tip = score_scale(min_score) - arr_offset;
+          debugger;
+          // draw arrows and text highlighting score difference over wealth
+          add_arrow(svg, arr_x, top_arrow_end, arr_x, top_arrow_tip);
+          add_arrow(svg, arr_x, bot_arrow_end, arr_x, bot_arrow_tip);
+
+        }
+
         function stage_one() {
 
           update_text(title_two, text_two);
@@ -391,7 +449,7 @@
           clear_annotations(svg);
           var mean = filter_by_key(countries, ['mean']);
           trim_curves(svg, []);
-          draw_curves(curves, mean, line, 'darkslategrey', 3);
+          draw_curves(curves, mean, line, mean_color, mean_width);
         };
 
         function stage_two() {
@@ -399,40 +457,19 @@
           update_text(title_three, text_three);
 
           var mean = filter_by_key(countries, ['mean']);
-          debugger;
           clear_annotations(svg);
           trim_curves(svg, []);
-          draw_curves(curves, mean, line, 'darkslategrey', 3);
+          draw_curves(curves, mean, line, mean_color, mean_width);
 
-          // make an arrow marker
-          // Attach to parent svg element so it isn't deleted by
-          // chart clearing functions.
-          // lifted wholesale from Mozilla Developer Nework
-          d3.select('svg').append('defs')
-            .append('marker')
-            .attr('id', 'triangle')
-            .attr('viewBox', "0 0 10 10")
-            .attr('refX', 1)
-            .attr('refY', 5)
-            .attr('markerWidth', 6)
-            .attr('markerHeight', 6)
-            .attr('orient', 'auto')
-            .append('path')
-            .attr('d', 'M 0 0 L 10 5 L 0 10 z');
+          var max_score = 500,
+              min_score = 359,
+              offset = 5,
+              arrow_length = 50,
+              x = .9,
+              text_y = score_scale((max_score + min_score)/2);
 
-          //draw high low lines
-          var high_line = draw_line(left_margin, score_scale(500), 
-            width, score_scale(500), svg, 'grey', 2, true);
-
-          var low_line = draw_line(left_margin, score_scale(359),
-            width, score_scale(359), svg, 'grey', 2, true);
-
-          // draw arrows and text highlighting score difference over wealth
-          add_arrow(svg, wealth_scale(.9), score_scale(450),
-            wealth_scale(.9), score_scale(495));
-          add_arrow(svg, wealth_scale(.9), score_scale(409),
-            wealth_scale(.9), score_scale(364));
-          add_text(svg, wealth_scale(0), score_scale(430),
+          draw_span(min_score, max_score, x, arrow_length, offset);
+          add_text(svg, wealth_scale(0), text_y,
             '140 points > 3 years of schooling');
         };
 
@@ -461,27 +498,23 @@
                 return 3;
             });
 
-          // draw mean lines for us and shanghai
-          var us_mean = score_scale(get_country_mean(country_means, us)),
-              china_mean = score_scale(get_country_mean(country_means, china)),
-              us_mean_line = draw_line(left_margin, us_mean, width, us_mean,
-                svg, us_color, 2, true),
-              china_mean_line = draw_line(left_margin, china_mean, width,
-                china_mean, svg, china_color, 2, true);
+          var china_score = get_country_mean(country_means, china),
+              us_score = get_country_mean(country_means, us),
+              offset = 5,
+              arrow_length = 50,
+              x = -5,
+              text_y = score_scale((china_score + us_score)/2);
+
+          draw_span(us_score, china_score, x, arrow_length, offset,
+            china_color, us_color);
 
           // Label mean lines with text
           add_text(svg, wealth_scale(1.2), score_scale(640),
             'Shanghai (China)');
           add_text(svg, wealth_scale(2.1), score_scale(500),
             'USA')
-
-          // draw lines and text highlighting difference between China and US
-          add_arrow(svg, wealth_scale(-5), score_scale(557),
-            wealth_scale(-5), score_scale(607));
-          add_arrow(svg, wealth_scale(-5), score_scale(537),
-            wealth_scale(-5), score_scale(487));
           add_text(svg, wealth_scale(-6), score_scale(547),
-            '130 points = 3 years schooling', 'grey', "mean_text");
+            '130 points = 3 years schooling', curve_color, "mean_text");
         };
 
         function stage_four() {
@@ -491,6 +524,7 @@
           var curves_to_draw = filter_by_key(countries, ['mean', us, china]);
 
           // remove previous highlight lines and change text
+          d3.select("select").remove();
           clear_annotations(svg);
           trim_curves(svg, []);
           draw_curves(curves, curves_to_draw, line,
@@ -509,24 +543,19 @@
                 return 3;
             });
 
-          draw_line(left_margin, score_scale(402), width, score_scale(402),
-            svg, us_color, 2, true);
-          draw_line(left_margin, score_scale(509), width, score_scale(509),
-            svg, us_color, 2, true);
-          draw_line(left_margin, score_scale(455), width, score_scale(455),
-            svg, china_color, 2, true);
-          draw_line(left_margin, score_scale(640), width, score_scale(640),
-            svg, china_color, 2, true);
+          var us_max = 509,
+              us_min = 402,
+              us_x = -5.5,
+              us_arr_len = 40,
+              china_max = 640,
+              china_min = 455,
+              china_x = -5,
+              china_arr_len = 75,
+              offset = 5;
 
-          // Add arrows highlightening difference between max and min
-          add_arrow(svg, wealth_scale(-5), score_scale(635-75),
-            wealth_scale(-5), score_scale(630));
-          add_arrow(svg, wealth_scale(-5), score_scale(455 + 75),
-            wealth_scale(-5), score_scale(460));
-          add_arrow(svg, wealth_scale(-5.5), score_scale(509 - 40),
-            wealth_scale(-5.5), score_scale(504));
-          add_arrow(svg, wealth_scale(-5.5), score_scale(402 + 40),
-            wealth_scale(-5.5), score_scale(407));
+          draw_span(us_min, us_max, us_x, us_arr_len, offset, us_color);
+          draw_span(china_min, china_max, china_x, china_arr_len, offset,
+            china_color);
 
           // Add text explaining difference in terms of years of schooling
           add_text(svg, wealth_scale(-5.5), score_scale(545),
