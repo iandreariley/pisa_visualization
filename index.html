@@ -112,10 +112,6 @@
           return scale;
       };
 
-      function clear_svg(){
-          d3.selectAll("svg > *").remove();
-      };
-
       function selector_from_string(str) {
         // Replace spaces with hyphens and remove parens
         return str.replace(/ /g, '-').replace(/\(|\)/g, '');
