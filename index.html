@@ -711,9 +711,9 @@
   var chart_buttons = chart.append("div")
     .attr("float", "right")
 
-  var obj = draw_first_stage("pisa_by_wealth.tsv");
+  process("pisa_by_wealth.tsv");
 
-  function draw_first_stage(file){
+  function process(file){
       d3.tsv(file, function(d) {
           // transform data
           d["math_score"] = +d["math_score"];
