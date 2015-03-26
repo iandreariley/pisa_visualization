@@ -15,6 +15,9 @@ To see the visualization online go [here][http://www.iandreariley.com/pisa.html]
 the old version, and [here][http://www.iandreariley.com/pisa_updated.html] for the
 new version.
 
+Also, if you're interested in the exploratory data analysis I did for this project,
+a link to those charts can be found [here][http://www.iandreariley.pisaEDA.html].
+
 ## Process
 
 The Pisa dataset is a large one. I noticed that it used a column for each question
