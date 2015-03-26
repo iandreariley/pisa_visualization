@@ -11,13 +11,15 @@ directory, and use 'python -m SimpleHTTPServer' to get a server running in that
 directory. Open a browser and type localhost:8000 in the url field, and the
 visualization should start.
 
-To see the visualization online go [here][http://www.iandreariley.com/pisa.html] for
-the old version, and [here][http://www.iandreariley.com/pisa_updated.html] for the
+To see the visualization online go [here][old] for
+the old version, and [here][new] for the
 new version.
+[old]:http://www.iandreariley.com/pisa.html
+[new]:http://www.iandreariley.com/pisa_updated.html
 
 Also, if you're interested in the exploratory data analysis I did for this project,
-a link to those charts can be found [here][http://www.iandreariley.pisaEDA.html].
-
+a link to those charts can be found [here][eda].
+[eda]:http://www.iandreariley.pisaEDA.html
 ## Process
 
 The Pisa dataset is a large one. I noticed that it used a column for each question
