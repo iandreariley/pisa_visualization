@@ -274,10 +274,22 @@
 
         // Mean test score by wealth bin across all countries
         var grand_mean = d3.nest()
-          .key(function(d) {return d["wealth.bucket"];})
+          .key(function(d) {return d["wealth"];})
           .sortKeys(comp_leaves)
-          .rollup(agg)
+          .rollup(function (leaves) {
+            var mean_score = d3.sum(leaves, function (d) {
+              return d['math_score'] * d['weight']
+            });
+
+            return {
+              'country' : 'mean',
+              'wealth' : leaves[0]['wealth'],
+              'math_score' : mean_score
+            };
+          })
           .entries(data);
+
+        debugger;
 
         // Mean test score by country
         var country_means = d3.nest()
@@ -711,7 +723,7 @@
   var chart_buttons = chart.append("div")
     .attr("float", "right")
 
-  process("pisa_by_wealth.tsv");
+  process("country_wealth_agg_with_pop.tsv");
 
   function process(file){
       d3.tsv(file, function(d) {
