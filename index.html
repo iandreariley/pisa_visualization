@@ -41,6 +41,7 @@
           font_size = 12,
           font_weight = 300;
 
+      // Displayed texts for each "slide" in the visualization
       var text_one = "The following data were taken from the 2012 Programme \
       for International Student Assessment (PISA) dataset. These data \
       represent the math scores and wealth of over half a million students \
@@ -75,6 +76,7 @@
       the name and mean score of an economy, or select countries by name in \
       the drop menu on the right.";
 
+      // Titles for each "slide" in the visualization.
       var title_one = "The PISA 2012 Dataset",
           title_two = "Correlation of Wealth and Math Skills",
           title_three = "Wealth and Math Skills",
@@ -82,6 +84,9 @@
           title_five = "Equitability Within an Economy",
           title_six = "Exploring Wealth and Education";
 
+      // Adds a stylized div button to the DOM and then returns a handle to it.
+      // It does not attach an eventListener in the process.
+      // Currently used to add the "Previous" and "Next" buttons to the page.
       function add_button(parent, text) {
         return parent.append("div")
           .style("display", "table-cell")
@@ -96,14 +101,24 @@
           .text(text);
       }
 
+      // Attaches a horizontal d3 axis to the DOM.
+      // Takes a d3 scale object.
+      // Returns a handle to the x-axis object.
       function x_axis(scale){
           return d3.svg.axis().scale(scale);
       };
 
+      // Attaches a vertical d3 axis to the DOM.
+      // Takes a d3 scale object.
+      // Returns a handle to the y-axis object.
       function y_axis(scale){
           return d3.svg.axis().scale(scale).orient("left");
       }
 
+      // Attaches a d3 scale object to the DOM.
+      // Takes the endpoints of the pixel range of the scale, as well as a DOM
+      // object.
+      // returns a handle to the scale object.
       function make_scale(pix_min, pix_max, dom){
           var scale = d3.scale.linear()
             .range([pix_min, pix_max])
@@ -112,11 +127,18 @@
           return scale;
       };
 
+      // Creates a valid d3 selector string from the values (e.g. country
+      // names) taken in from the raw dataset.
+      // Take a raw string, and returns a valid selector string.
       function selector_from_string(str) {
         // Replace spaces with hyphens and remove parens
         return str.replace(/ /g, "-").replace(/\(|\)/g, "");
       }
 
+      // Adds text at a specific location on the svg element.
+      // Takes the svg element, the x and y coordinates that are the top-left
+      // corner of the text element as well as styling elements.
+      // Returns a handle to the text element.
       function add_text(svg, x, y, text_string, stroke, text_class) {
 
         // Add text element to dom
@@ -142,6 +164,9 @@
         });
       };
 
+      // Adds an visible arrow element to the svg.
+      // Takes a start point (x1, y1) and an end point (x2, y2)
+      // returns a handle to the arrow element.
       function add_arrow(svg, x1, y1, x2, y2) {
 
         var color = "black",
@@ -158,6 +183,8 @@
         return line.attr("marker-end", "url(#triangle)");
       };
 
+      // Searches for a key in country array and, if found, returns the object
+      // with the key.
       function get_country(country_array, country) {
         for(var i = 0; i < country_array.length; i++) {
           if (country_array[i]["key"] === country) {
@@ -166,6 +193,8 @@
         }
       }
 
+      // Searches for a country key in an array of key value pairs and returns
+      // a rounded value.
       function get_country_mean(country_mean_array, country) {
           var result = null;
           for(var i = 0; i < country_mean_array.length; i++) {
@@ -177,6 +206,9 @@
           return result;
       };
 
+      // De-highlights all previously highlighted country curves, and
+      // highlights the curve with the passed-in country name. A highlight
+      // increases the stroke of the curve and changes it's color.
       function highlight(country) {
         d3.selectAll(".country")
           .style("stroke-width", line_width)
@@ -191,6 +223,8 @@
 
       };
 
+      // Removes all curves from the svg element. Used to change between slides
+      // in the visualization.
       function trim_curves(svg, data) {
         var kill = svg.selectAll("path")
           .data(data)
@@ -198,6 +232,8 @@
           .remove();
       };
 
+      // Binds data to path elements and draws them on the svg. Selection
+      // should be a selection of "path" elements from the svg.
       function draw_curves(selection, data, line_func, stroke, stroke_width) {
 
           return selection.data(data)
@@ -215,11 +251,14 @@
             });
       }
 
+      // Removes all arrows and text from the svg. Used to change between
+      // slides.
       function clear_annotations(svg) {
           svg.selectAll("line").remove();
           svg.selectAll("text").remove();
       }
 
+      // Draws a line on the svg element from (x1, y1) to (x2, y2).
       function draw_line(x1, y1, x2, y2, svg, color, weight, dashed) {
 
         if( typeof(dashed) === "undefined")
@@ -238,10 +277,15 @@
           return line;
       };
 
+      // Compares the value of two data leaves. Note: The '+' casts the var to
+      // a number.
       function comp_leaves(a,b) {
           return +a - +b;
       };
 
+      // Returns the mean score of leaves.
+      // All elements of leaves are expected to have the same country and
+      // "wealth.bucket" values.
       function agg(leaves) {
           var mean_score = d3.mean(leaves, function(d) {
               return d["math_score"];
@@ -254,6 +298,8 @@
           };
       };
 
+      // Updates the header text and title for the slides. Used to change
+      // slides.
       function update_text(text_title, text_body) {
         d3.select(".header h2")
           .text(text_title);
@@ -261,6 +307,11 @@
           .text(text_body);
       }
 
+      /*                          *
+       *                          *
+       *    MAIN DRAW FUNCTION    *
+       *                          *
+       *                          */
       function draw(data) {
         "use strict";
 
