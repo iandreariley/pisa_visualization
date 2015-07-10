@@ -235,11 +235,13 @@
       // Binds data to path elements and draws them on the svg. Selection
       // should be a selection of "path" elements from the svg.
       function draw_curves(selection, data, line_func, stroke, stroke_width) {
-
+          debugger;
           return selection.data(data)
             .enter()
             .append("path")
-            .attr("d", function(d) {return line_func(d["values"]); })
+            .attr("d", function(d) {
+              debugger;
+              return line_func(d["values"]); })
             .style("fill", "none")
             .style("stroke", stroke)
             .style("stroke-width", stroke_width)
@@ -334,8 +336,8 @@
 
             return {
               'country' : 'mean',
-              'wealth' : leaves[0]['wealth'],
-              'math_score' : mean_score
+              'x' : leaves[0]['wealth'],
+              'y' : mean_score
             };
           })
           .entries(data);
@@ -385,7 +387,7 @@
 
         // Find range of wealth column.
         var wealth_extent = d3.extent(data, function(d) {
-            return d["wealth"];
+            return +d["wealth"];
         });
 
         // Find range of math scores.
