@@ -285,7 +285,7 @@
 
       // Returns the mean score of leaves.
       // All elements of leaves are expected to have the same country and
-      // "wealth.bucket" values.
+      // "wealth" values.
       function agg(leaves) {
           var mean_score = d3.mean(leaves, function(d) {
               return d["math_score"];
@@ -293,7 +293,7 @@
           
           return {
             "country" : leaves[0]["country"],
-            "x" : leaves[0]["wealth.bucket"],
+            "x" : leaves[0]["wealth"],
             "y" : mean_score
           };
       };
@@ -323,13 +323,13 @@
           .append("g")
             .attr("class", chart_class);
 
-        // Mean test score by wealth bin across all countries
+        // Mean test score by wealth bin, weighted by country population.
         var grand_mean = d3.nest()
           .key(function(d) {return d["wealth"];})
           .sortKeys(comp_leaves)
           .rollup(function (leaves) {
             var mean_score = d3.sum(leaves, function (d) {
-              return d['math_score'] * d['weight']
+              return d['math_score'] * +d['weight']
             });
 
             return {
@@ -352,10 +352,12 @@
           })
           .entries(data);
 
+        debugger;
+
         // Mean test score by wealth bin for each country in PISA set
         var countries = d3.nest()
           .key(function(d) {return d["country"];})
-          .key(function(d) {return +d["wealth.bucket"];})
+          .key(function(d) {return +d["wealth"];})
           .sortKeys(comp_leaves)
           .rollup(agg)
           .entries(data);
@@ -374,17 +376,17 @@
 
         countries.push(grand_mean);
 
-        // Bind data to path elements and chart
+        // Bind data to path elements and chart.
         var lines = svg.selectAll("path")
           .data(countries)
           .enter()
 
-        // Find range of date column
+        // Find range of wealth column.
         var wealth_extent = d3.extent(data, function(d) {
-            return +d["wealth.bucket"];
+            return +d["wealth"];
         });
 
-        // Find range of attendance column
+        // Find range of math scores.
         var score_extent = d3.extent(data, function(d) {
             return d["math_score"];
         });
@@ -780,7 +782,7 @@
       d3.tsv(file, function(d) {
           // transform data
           d["math_score"] = +d["math_score"];
-          d["wealth.bucket"] = +d["wealth.bucket"];
+          d["wealth"] = +d["wealth"];
           return d;
       }, draw);
   };
