@@ -370,6 +370,8 @@
           })
           .entries(data);
 
+        debugger;
+
         // Add to array so that we can add it as a data element
         grand_mean = {"key" : "mean",
                       "values" : grand_mean};
@@ -383,7 +385,7 @@
 
         // Find range of wealth column.
         var wealth_extent = d3.extent(data, function(d) {
-            return +d["wealth"];
+            return d["wealth"];
         });
 
         // Find range of math scores.
@@ -508,7 +510,7 @@
         }
 
         function stage_one() {
-
+          debugger;
           update_text(title_two, text_two);
 
           // Remove any unecessary curves from chart (all but one)
@@ -517,7 +519,9 @@
           clear_annotations(svg);
           var mean = filter_by_key(countries, ["mean"]);
           trim_curves(svg, []);
+          debugger;
           draw_curves(curves, mean, line, mean_color, mean_width);
+          debugger;
         };
 
         function stage_two() {
