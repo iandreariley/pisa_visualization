@@ -712,6 +712,7 @@
 
   var header_margin = 10
 
+  // Header will contain text and titles for each "slide."
   var header = d3.select("body")
     .append("div")
     .attr("class", "header")
@@ -720,12 +721,14 @@
     .style("height", "75px")
     .style("display", "block")
 
+  // Add title div to header that will contain title for each slide.
   var title = header.append("h2")
     .style("padding-left", header_margin + "px")
     .style("font-family", font)
     .style("color", text_color)
     .text(title_one);
 
+  // Add text box to header div to contain slide text.
   var text_box = header.append("div")
     .attr("class", "text_box")
     .style("padding-left", header_margin + "px")
@@ -737,7 +740,7 @@
     .style("color", text_color)
     .text(text_one);
         
-  //Create navigation button
+  // Create navigation button panel
   var button_panel = header.append("div")
     .attr("class", "button")
     .style("display", "table")
@@ -745,6 +748,7 @@
     .style("height", "25px")
     .style("float", "right");
 
+  // Add next and pervious buttons to the button panel.
   var prev_button = add_button(button_panel, "PREV");
 
   var next_button = add_button(button_panel, "NEXT");
@@ -755,10 +759,13 @@
   .attr("class", chart_class)
   .attr("width", width)
   .attr("height", height)
-  .style("display", "block")
+  .style("display", "block");
 
+  // Load data.
   process("pisa_by_country_and_wealth_filtered.tsv");
 
+  // Loads data from tsv file in context-root directory. casts numeric columns to numeric
+  // values from strings. 
   function process(file){
       d3.tsv(file, function(d) {
           // transform data
