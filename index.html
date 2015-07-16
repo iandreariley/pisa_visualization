@@ -749,15 +749,13 @@
 
   var next_button = add_button(button_panel, "NEXT");
 
+  // Append a div where we will add the svg element that is the chart body.
   var chart = d3.select("body")
   .append("div")
   .attr("class", chart_class)
   .attr("width", width)
   .attr("height", height)
   .style("display", "block")
-
-  var chart_buttons = chart.append("div")
-    .attr("float", "right")
 
   process("pisa_by_country_and_wealth_filtered.tsv");
 
