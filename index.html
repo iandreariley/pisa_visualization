@@ -135,12 +135,14 @@
         return str.replace(/ /g, "-").replace(/\(|\)/g, "");
       }
 
+      // Returns the maximum value of the given key.
       function maximum(data, key) {
-        return d3.max(data, function(d) { return d["values"][key]; });
+        return d3.max(data[0]["values"], function(d) { return d["values"][key]; });
       }
 
+      // Returns the minimum value of the given key.
       function minimum(data, key) {
-        return d3.min(data, function(d) { return d["values"][key]; });
+        return d3.min(data[0]["values"], function(d) { return d["values"][key]; });
       }
 
       // Adds text at a specific location on the svg element.
@@ -508,8 +510,8 @@
           trim_curves(svg, []);
           draw_curves(curves, mean, line, mean_color, mean_width);
 
-          var max_score = maximum(mean[0]["values"], "y"),
-              min_score = minimum(mean[0]["values"], "y"),
+          var max_score = maximum(mean, "y"),
+              min_score = minimum(mean, "y"),
               offset = 5,
               arrow_length = .3 * (max_score - min_score),
               x = .9,
@@ -591,12 +593,12 @@
             });
           var us_data = filter_by_key(countries, [us]);
           var china_data = filter_by_key(countries, [china]);
-          var us_max = maximum(us_data[0]["values"], "y"),
-              us_min = minimum(us_data[0]["values"], "y"),
+          var us_max = maximum(us_data, "y"),
+              us_min = minimum(us_data, "y"),
               us_x = -5.5,
               us_arr_len = 0.3 * (us_max - us_min),
-              china_max = maximum(china_data[0]["values"], "y"),
-              china_min = minimum(china_data[0]["values"], "y"),
+              china_max = maximum(china_data, "y"),
+              china_min = minimum(china_data, "y"),
               china_x = -5,
               china_arr_len = 0.3 * (china_max - china_min),
               offset = 5;
