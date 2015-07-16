@@ -368,10 +368,8 @@
         var country_means = d3.nest()
           .key(function(d) { return d["country"]})
           .rollup(function(leaves) {
-            return d3.mean(leaves, function(d) {
-              return d["math_score"];
-            });
-          })
+            return leaves[0]["country_mean"];
+            })
           .entries(data);
 
         debugger;
@@ -809,6 +807,7 @@
           // transform data
           d["math_score"] = +d["math_score"];
           d["wealth"] = +d["wealth"];
+          d["country_mean"] = +d["country_mean"];
           return d;
       }, draw);
   };
