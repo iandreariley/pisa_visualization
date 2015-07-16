@@ -135,6 +135,14 @@
         return str.replace(/ /g, "-").replace(/\(|\)/g, "");
       }
 
+      function maximum(data, key) {
+        return d3.max(data, function(d) { return d["values"][key]; });
+      }
+
+      function minimum(data, key) {
+        return d3.min(data, function(d) { return d["values"][key]; });
+      }
+
       // Adds text at a specific location on the svg element.
       // Takes the svg element, the x and y coordinates that are the top-left
       // corner of the text element as well as styling elements.
@@ -235,12 +243,10 @@
       // Binds data to path elements and draws them on the svg. Selection
       // should be a selection of "path" elements from the svg.
       function draw_curves(selection, data, line_func, stroke, stroke_width) {
-          debugger;
           return selection.data(data)
             .enter()
             .append("path")
             .attr("d", function(d) {
-              debugger;
               return line_func(d["values"]); })
             .style("fill", "none")
             .style("stroke", stroke)
@@ -325,45 +331,6 @@
           .append("g")
             .attr("class", chart_class);
 
-
-
-        // Mean test score by wealth bin, weighted by country population.
-        // var grand_mean = d3.nest()
-        //   .key(function(d) {return d["wealth"];})
-        //   .sortKeys(comp_leaves)
-        //   .rollup(function (leaves) {
-        //     var mean_score = d3.sum(leaves, function (d) {
-        //       return d['math_score'] * +d['weight']
-        //     });
-
-        //     return {
-        //       'country' : 'mean',
-        //       'x' : leaves[0]['wealth'],
-        //       'y' : mean_score
-        //     };
-        //   })
-        //   .entries(data);
-
-        var mean_data = data.filter(function(d) {
-          return d["country"] == "Mean";
-        })
-
-        debugger;
-
-        var grand_mean = d3.nest()
-          .key(function(d) { return d["wealth"]; })
-          .sortKeys(comp_leaves)
-          .rollup(function(leaves) {
-            return {
-              "country" : "mean",
-              "x" : leaves[0]["wealth"],
-              "y" : leaves[0]["math_score"]
-            };
-          })
-          .entries(mean_data)
-
-        debugger;
-
         // Mean test score by country
         var country_means = d3.nest()
           .key(function(d) { return d["country"]})
@@ -372,31 +339,25 @@
             })
           .entries(data);
 
-        debugger;
-
         // Mean test score by wealth bin for each country in PISA set
+        // including the grand mean.
         var countries = d3.nest()
           .key(function(d) {return d["country"];})
           .key(function(d) {return +d["wealth"];})
           .sortKeys(comp_leaves)
-          .rollup(agg)
-          .entries(data);
-
-        var mean_score = d3.nest()
           .rollup(function(leaves) {
-            return d3.mean(leaves, function(d) {
-              return d["math_score"];
-            });
+            return {
+              "country" : leaves[0]["country"],
+              "x" : leaves[0]["wealth"],
+              "y" : leaves[0]["math_score"]
+            };
           })
           .entries(data);
 
-        debugger;
-
-        // Add to array so that we can add it as a data element
-        grand_mean = {"key" : "mean",
-                      "values" : grand_mean};
-
-        countries.push(grand_mean);
+        // Get mean test score weighted by country population from csv data.
+        var mean_score = data.filter(function(d) {
+          return d["country"] == "mean";
+        })[0]["country_mean"];
 
         // Bind data to path elements and chart.
         var lines = svg.selectAll("path")
@@ -507,7 +468,6 @@
             } else
               lo_color = hi_color;
 
-          debugger;
           var hi_line_y = score_scale(max_score),
               lo_line_y = score_scale(min_score),
               arr_x = wealth_scale(x);
@@ -517,12 +477,10 @@
             hi_color, dash_line_width, true);
           draw_line(left_margin, lo_line_y, width, lo_line_y, svg,
             lo_color, dash_line_width, true);
-          debugger;
           var top_arrow_end = score_scale(max_score - arr_length),
               bot_arrow_end = score_scale(min_score + arr_length),
               top_arrow_tip = score_scale(max_score) + arr_offset,
               bot_arrow_tip = score_scale(min_score) - arr_offset;
-          debugger;
           // draw arrows and text highlighting score difference over wealth
           add_arrow(svg, arr_x, top_arrow_end, arr_x, top_arrow_tip);
           add_arrow(svg, arr_x, bot_arrow_end, arr_x, bot_arrow_tip);
@@ -530,7 +488,6 @@
         }
 
         function stage_one() {
-          debugger;
           update_text(title_two, text_two);
 
           // Remove any unecessary curves from chart (all but one)
@@ -539,9 +496,7 @@
           clear_annotations(svg);
           var mean = filter_by_key(countries, ["mean"]);
           trim_curves(svg, []);
-          debugger;
           draw_curves(curves, mean, line, mean_color, mean_width);
-          debugger;
         };
 
         function stage_two() {
@@ -553,16 +508,16 @@
           trim_curves(svg, []);
           draw_curves(curves, mean, line, mean_color, mean_width);
 
-          var max_score = 500,
-              min_score = 359,
+          var max_score = maximum(mean[0]["values"], "y"),
+              min_score = minimum(mean[0]["values"], "y"),
               offset = 5,
-              arrow_length = 50,
+              arrow_length = .3 * (max_score - min_score),
               x = .9,
               text_y = score_scale((max_score + min_score)/2);
-
+          debugger;
           draw_span(min_score, max_score, x, arrow_length, offset);
           add_text(svg, wealth_scale(0), text_y,
-            "140 points > 3 years of schooling");
+            "70 points = almost 3 years of schooling");
         };
 
         function stage_three() {
@@ -605,7 +560,7 @@
             "Shanghai (China)");
           add_text(svg, wealth_scale(2.1), score_scale(500),
             "USA")
-          add_text(svg, wealth_scale(-6), score_scale(547),
+          add_text(svg, wealth_scale(-5.9), score_scale(547),
             "130 points = 3 years schooling", curve_color, "mean_text");
         };
 
@@ -634,15 +589,16 @@
               else
                 return 3;
             });
-
-          var us_max = 509,
-              us_min = 402,
+          var us_data = filter_by_key(countries, [us]);
+          var china_data = filter_by_key(countries, [china]);
+          var us_max = maximum(us_data[0]["values"], "y"),
+              us_min = minimum(us_data[0]["values"], "y"),
               us_x = -5.5,
-              us_arr_len = 40,
-              china_max = 640,
-              china_min = 455,
+              us_arr_len = 0.3 * (us_max - us_min),
+              china_max = maximum(china_data[0]["values"], "y"),
+              china_min = minimum(china_data[0]["values"], "y"),
               china_x = -5,
-              china_arr_len = 75,
+              china_arr_len = 0.3 * (china_max - china_min),
               offset = 5;
 
           draw_span(us_min, us_max, us_x, us_arr_len, offset, us_color);
@@ -650,10 +606,11 @@
             china_color);
 
           // Add text explaining difference in terms of years of schooling
-          add_text(svg, wealth_scale(-5.5), score_scale(545),
-            "180 points > 3 years", text_color, "span")
-          add_text(svg, wealth_scale(-5.4), score_scale(425),
-            "100 points > 2 years", text_color, "span")
+          add_text(svg, wealth_scale(-5.5), score_scale((china_max + china_min) / 2),
+            "123 points = 3 years", text_color, "span")
+          add_text(svg, wealth_scale(-5.9), score_scale((us_max + us_min) / 2),
+            "82 points = 2 years", text_color, "span")
+          debugger;
         };
 
         function stage_five() {
