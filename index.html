@@ -325,22 +325,42 @@
           .append("g")
             .attr("class", chart_class);
 
-        // Mean test score by wealth bin, weighted by country population.
-        var grand_mean = d3.nest()
-          .key(function(d) {return d["wealth"];})
-          .sortKeys(comp_leaves)
-          .rollup(function (leaves) {
-            var mean_score = d3.sum(leaves, function (d) {
-              return d['math_score'] * +d['weight']
-            });
 
+
+        // Mean test score by wealth bin, weighted by country population.
+        // var grand_mean = d3.nest()
+        //   .key(function(d) {return d["wealth"];})
+        //   .sortKeys(comp_leaves)
+        //   .rollup(function (leaves) {
+        //     var mean_score = d3.sum(leaves, function (d) {
+        //       return d['math_score'] * +d['weight']
+        //     });
+
+        //     return {
+        //       'country' : 'mean',
+        //       'x' : leaves[0]['wealth'],
+        //       'y' : mean_score
+        //     };
+        //   })
+        //   .entries(data);
+
+        var mean_data = data.filter(function(d) {
+          return d["country"] == "Mean";
+        })
+
+        debugger;
+
+        var grand_mean = d3.nest()
+          .key(function(d) { return d["wealth"]; })
+          .sortKeys(comp_leaves)
+          .rollup(function(leaves) {
             return {
-              'country' : 'mean',
-              'x' : leaves[0]['wealth'],
-              'y' : mean_score
+              "country" : "mean",
+              "x" : leaves[0]["wealth"],
+              "y" : leaves[0]["math_score"]
             };
           })
-          .entries(data);
+          .entries(mean_data)
 
         debugger;
 
@@ -782,7 +802,7 @@
   var chart_buttons = chart.append("div")
     .attr("float", "right")
 
-  process("country_wealth_agg_with_pop.tsv");
+  process("pisa_by_country_and_wealth_filtered.tsv");
 
   function process(file){
       d3.tsv(file, function(d) {
