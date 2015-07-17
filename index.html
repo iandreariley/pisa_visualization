@@ -274,34 +274,17 @@
       }
 
       function select(country, countries, country_means) {
-        debugger;
         var selectedClass = "selected";
         // Determine whether this class is already selected
         var country_curve = d3.select("#" + country);
         var alreadySelected = country_curve.classed(selectedClass);
         d3.selectAll(".selected")
-          .classed(selectedClass, false)
-          .style("stroke", function(d) {
-            if(d["key"] === "mean")
-              return mean_color;
-            else
-              return curve_color;
-          })
-          .style("stroke-width", function(d) {
-            if(d["key"] == "mean")
-              return mean_width;
-            else
-              return 1;
-          });
+          .classed(selectedClass, false);
         // Toggle selection of clicked element.
         country_curve.classed(selectedClass, !alreadySelected);
         // Make actual changes to appearance. Refactor this to class selection one day.
-        d3.selectAll(".info")
-          .remove();
-        if(alreadySelected) {
-          country_curve.style("stroke", curve_color)
-                       .style("stroke-width", line_width);
-        } else {
+        d3.selectAll(".info").remove();
+        if(!alreadySelected) {
           country_data = filter_by_key(countries, [country]);
           var info_panel = d3.select(".info_panel");
           info_panel.append("p")
@@ -314,8 +297,6 @@
                     .text("Range: " + (maximum(country_curve[0][0]["__data__"]["values"],
                       "y") - minimum(country_curve[0][0]["__data__"]["values"], "y")))
                     .classed("info", true);
-          country_curve.style("stroke", "yellow")
-                       .style("stroke-width", 3);
         }
       }
 
