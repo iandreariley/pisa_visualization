@@ -220,17 +220,9 @@
       // highlights the curve with the passed-in country name. A highlight
       // increases the stroke of the curve and changes it's color.
       function highlight(country) {
-        d3.selectAll(".country")
-          .style("stroke-width", line_width)
-          .style("stroke", "grey");
-
-        d3.selectAll("mean")
-          .style("stroke", mean_color);
-
         var selected = d3.select("#" + country)
           .style("stroke", highlight_color)
           .style("stroke-width", highlight_width);
-
       };
 
       // Removes all curves from the svg element. Used to change between slides
@@ -333,6 +325,19 @@
           .append("g")
             .attr("class", chart_class);
 
+        // Add info panel to the right of the svg element.
+        var info_panel = d3.select("div.chart")
+          .append("div")
+          .style("margin-top", 2*top_margin + "px")
+          .style("width", "180px")
+          .style("height", height - top_margin + "px")
+          .style("border-color", "red")
+          .style("border-style", "solid")
+          .style("border-width", "1px")
+          .style("position", "absolute")
+          .style("top", top_margin + "px")
+          .style("left", width + left_margin - 250 + "px");
+
         // Mean test score by country
         var country_means = d3.nest()
           .key(function(d) { return d["country"]})
@@ -379,7 +384,7 @@
         // Create x and y scales mapping values to pixels
         var max_y = 650,
             min_y = 0;
-        var wealth_scale = make_scale(left_margin, width, wealth_extent);
+        var wealth_scale = make_scale(left_margin, width - 200, wealth_extent);
         var score_scale = d3.scale.linear()
           .range([height, top_margin])
           .domain([min_y, max_y]);
@@ -475,9 +480,9 @@
               arr_x = wealth_scale(x);
 
           //draw high low lines
-          draw_line(left_margin, hi_line_y, width, hi_line_y, svg,
+          draw_line(left_margin, hi_line_y, width - 200, hi_line_y, svg,
             hi_color, dash_line_width, true);
-          draw_line(left_margin, lo_line_y, width, lo_line_y, svg,
+          draw_line(left_margin, lo_line_y, width - 200, lo_line_y, svg,
             lo_color, dash_line_width, true);
           var top_arrow_end = score_scale(max_score - arr_length),
               bot_arrow_end = score_scale(min_score + arr_length),
@@ -516,7 +521,6 @@
               arrow_length = .3 * (max_score - min_score),
               x = .9,
               text_y = score_scale((max_score + min_score)/2);
-          debugger;
           draw_span(min_score, max_score, x, arrow_length, offset);
           add_text(svg, wealth_scale(0), text_y,
             "70 points = almost 3 years of schooling");
