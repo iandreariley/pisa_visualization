@@ -137,12 +137,12 @@
 
       // Returns the maximum value of the given key.
       function maximum(data, key) {
-        return d3.max(data[0]["values"], function(d) { return d["values"][key]; });
+        return d3.max(data, function(d) { return d["values"][key]; });
       }
 
       // Returns the minimum value of the given key.
       function minimum(data, key) {
-        return d3.min(data[0]["values"], function(d) { return d["values"][key]; });
+        return d3.min(data, function(d) { return d["values"][key]; });
       }
 
       // Adds text at a specific location on the svg element.
@@ -225,11 +225,12 @@
           .style("stroke-width", highlight_width);
       };
 
-      function select(country) {
+      function select(country, countries, country_means) {
         debugger;
         var selectedClass = "selected";
         // Determine whether this class is already selected
-        var alreadySelected = d3.select("#" + country).classed(selectedClass);
+        var country_curve = d3.select("#" + country);
+        var alreadySelected = country_curve.classed(selectedClass);
         d3.selectAll(".selected")
           .classed(selectedClass, false)
           .style("stroke", function(d) {
@@ -245,11 +246,30 @@
               return 1;
           });
         // Toggle selection of clicked element.
-        d3.select("#" + country).classed(selectedClass, !alreadySelected);
+        country_curve.classed(selectedClass, !alreadySelected);
         // Make actual changes to appearance. Refactor this to class selection one day.
-        d3.select("#" + country)
-          .style("stroke", "yellow")
-          .style("stroke-width", 3);
+        d3.selectAll(".info")
+          .remove();
+        if(alreadySelected) {
+          country_curve.style("stroke", curve_color)
+                       .style("stroke-width", line_width);
+        } else {
+          debugger;
+          country_data = filter_by_key(countries, [country]);
+          var info_panel = d3.select(".info_panel");
+          info_panel.append("p")
+                    .text("Country: " + country)
+                    .classed("info", true);
+          info_panel.append("p")
+                    .text("Mean: " + country_curve[0][0]["__data__"]["values"][0]["values"]["mean"])
+                    .classed("info", true);
+          info_panel.append("p")
+                    .text("Range: " + (maximum(country_curve[0][0]["__data__"]["values"],
+                      "y") - minimum(country_curve[0][0]["__data__"]["values"], "y")))
+                    .classed("info", true);
+          country_curve.style("stroke", "yellow")
+                       .style("stroke-width", 3);
+        }
       }
 
       // Removes all curves from the svg element. Used to change between slides
@@ -363,7 +383,8 @@
           .style("border-width", "1px")
           .style("position", "absolute")
           .style("top", top_margin + "px")
-          .style("left", width + left_margin - 250 + "px");
+          .style("left", width + left_margin - 250 + "px")
+          .classed("info_panel", true);
 
         // Mean test score by country
         var country_means = d3.nest()
@@ -383,7 +404,8 @@
             return {
               "country" : leaves[0]["country"],
               "x" : leaves[0]["wealth"],
-              "y" : leaves[0]["math_score"]
+              "y" : leaves[0]["math_score"],
+              "mean" : leaves[0]["country_mean"]
             };
           })
           .entries(data);
@@ -542,8 +564,8 @@
           trim_curves(svg, []);
           draw_curves(curves, mean, line, mean_color, mean_width);
 
-          var max_score = maximum(mean, "y"),
-              min_score = minimum(mean, "y"),
+          var max_score = maximum(mean[0]["values"], "y"),
+              min_score = minimum(mean[0]["values"], "y"),
               offset = 5,
               arrow_length = .3 * (max_score - min_score),
               x = .9,
@@ -624,12 +646,12 @@
             });
           var us_data = filter_by_key(countries, [us]);
           var china_data = filter_by_key(countries, [china]);
-          var us_max = maximum(us_data, "y"),
-              us_min = minimum(us_data, "y"),
+          var us_max = maximum(us_data[0]["values"], "y"),
+              us_min = minimum(us_data[0]["values"], "y"),
               us_x = -5.5,
               us_arr_len = 0.3 * (us_max - us_min),
-              china_max = maximum(china_data, "y"),
-              china_min = minimum(china_data, "y"),
+              china_max = maximum(china_data[0]["values"], "y"),
+              china_min = minimum(china_data[0]["values"], "y"),
               china_x = -5,
               china_arr_len = 0.3 * (china_max - china_min),
               offset = 5;
@@ -675,9 +697,7 @@
                 .style("stroke-width", 1);
             })
             .on("click", function(d) {
-              debugger;
-              select(selector_from_string(d["key"]));
-              debugger;
+              select(selector_from_string(d["key"]), countries, country_means);
             });
 
           // Add tooltips to lines
@@ -692,13 +712,13 @@
               return country + "\nAverage Score: " + score;
             });
 
-          // Add a <select> element to allow user to highlight country
+          // Add a drop menu for user to select countries from.
           var country_selector = header.append("select")
             .style("float", "right")
             .style("margin-top", "3px")
             .on("change", selector)
 
-          // Sort countries variable and bind data to <option> elements
+          // Sort countries variable and bind data to each option of the drop menu
           var options = country_selector.selectAll("option")
             .data(countries.sort(function(a, b) {
               if(a["key"] < b["key"])
@@ -718,7 +738,7 @@
             var selected_country = options[0][index]["__data__"]["key"];
             selected_country = selector_from_string(selected_country);
             console.log(selected_country);
-            select(selected_country);
+            select(selected_country, countries, country_means);
           };
         };
 
