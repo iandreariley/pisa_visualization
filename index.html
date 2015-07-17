@@ -220,10 +220,37 @@
       // highlights the curve with the passed-in country name. A highlight
       // increases the stroke of the curve and changes it's color.
       function highlight(country) {
-        var selected = d3.select("#" + country)
+        var highlighted = d3.select("#" + country)
           .style("stroke", highlight_color)
           .style("stroke-width", highlight_width);
       };
+
+      function select(country) {
+        debugger;
+        var selectedClass = "selected";
+        // Determine whether this class is already selected
+        var alreadySelected = d3.select("#" + country).classed(selectedClass);
+        d3.selectAll(".selected")
+          .classed(selectedClass, false)
+          .style("stroke", function(d) {
+            if(d["key"] === "mean")
+              return mean_color;
+            else
+              return curve_color;
+          })
+          .style("stroke-width", function(d) {
+            if(d["key"] == "mean")
+              return mean_width;
+            else
+              return 1;
+          });
+        // Toggle selection of clicked element.
+        d3.select("#" + country).classed(selectedClass, !alreadySelected);
+        // Make actual changes to appearance. Refactor this to class selection one day.
+        d3.select("#" + country)
+          .style("stroke", "yellow")
+          .style("stroke-width", 3);
+      }
 
       // Removes all curves from the svg element. Used to change between slides
       // in the visualization.
@@ -613,10 +640,9 @@
 
           // Add text explaining difference in terms of years of schooling
           add_text(svg, wealth_scale(-5.5), score_scale((china_max + china_min) / 2),
-            "123 points = 3 years", text_color, "span")
+            "123 points = 3 years", text_color, "span");
           add_text(svg, wealth_scale(-5.9), score_scale((us_max + us_min) / 2),
-            "82 points = 2 years", text_color, "span")
-          debugger;
+            "82 points = 2 years", text_color, "span");
         };
 
         function stage_five() {
@@ -641,10 +667,17 @@
               highlight(selector_from_string(d["key"]));
             })
             .on("mouseout", function(d){
-              if(d["key"] === "mean")
+              if(d3.select(this).classed("selected"))
+                return d3.select(this).style("stroke", "yellow");
+              else if(d["key"] === "mean")
                 return d3.select(this).style("stroke", mean_color);
               return d3.select(this).style("stroke", curve_color)
                 .style("stroke-width", 1);
+            })
+            .on("click", function(d) {
+              debugger;
+              select(selector_from_string(d["key"]));
+              debugger;
             });
 
           // Add tooltips to lines
@@ -663,7 +696,7 @@
           var country_selector = header.append("select")
             .style("float", "right")
             .style("margin-top", "3px")
-            .on("change", highlighter)
+            .on("change", selector)
 
           // Sort countries variable and bind data to <option> elements
           var options = country_selector.selectAll("option")
@@ -680,12 +713,12 @@
             .attr("value", function(d) { return d["key"]; })
             .text(function(d) { return d["key"]; });
 
-          function highlighter() {
+          function selector() {
             var index = country_selector.property("selectedIndex");
             var selected_country = options[0][index]["__data__"]["key"];
             selected_country = selector_from_string(selected_country);
             console.log(selected_country);
-            highlight(selected_country);
+            select(selected_country);
           };
         };
 
