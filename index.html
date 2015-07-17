@@ -14,6 +14,10 @@
         visibility: visible;
       }
 
+      .bold {
+        font-weight: 
+      }
+
       .axis line, .axis path {
         fill: none;
         stroke: #000;
@@ -63,6 +67,18 @@
         fill: none;
         stroke: yellow;
         stroke-width: 3;
+      }
+
+      #United-States-of-America.country.special {
+        fill: none;
+        stroke: blue;
+        stroke-width: 2;
+      }
+
+      #China-Shanghai.country.special {
+        fill: none;
+        stroke: gold;
+        stroke-width: 2;
       }
 }
     </style>
@@ -273,7 +289,7 @@
         d3.select("#" + country).classed("highlighted", false);
       }
 
-      function select(country, countries, country_means) {
+      function select(country) {
         var selectedClass = "selected";
         // Determine whether this class is already selected
         var country_curve = d3.select("#" + country);
@@ -285,11 +301,8 @@
         // Make actual changes to appearance. Refactor this to class selection one day.
         d3.selectAll(".info").remove();
         if(!alreadySelected) {
-          country_data = filter_by_key(countries, [country]);
           var info_panel = d3.select(".info_panel");
-          info_panel.append("p")
-                    .text("Country: " + country)
-                    .classed("info", true);
+          info_panel.append("strong").text("Country: ").classed("info", true).append("p").text(country);
           info_panel.append("p")
                     .text("Mean: " + country_curve[0][0]["__data__"]["values"][0]["values"]["mean"])
                     .classed("info", true);
@@ -311,7 +324,7 @@
 
       // Binds data to path elements and draws them on the svg. Selection
       // should be a selection of "path" elements from the svg.
-      function draw_curves(selection, data, line_func, stroke, stroke_width) {
+      function draw_curves(selection, data, line_func, isSpecial) {
           return selection.data(data)
             .enter()
             .append("path")
@@ -322,7 +335,8 @@
               if(d["key"] !== "mean")
                 return "country";
               return "mean";
-            });
+            })
+            .classed("special", isSpecial);
       }
 
       // Removes all arrows and text from the svg. Used to change between
@@ -577,7 +591,7 @@
           clear_annotations(svg);
           var mean = filter_by_key(countries, ["mean"]);
           trim_curves(svg, []);
-          draw_curves(curves, mean, line, mean_color, mean_width);
+          draw_curves(curves, mean, line, false);
         };
 
         function stage_two() {
@@ -587,7 +601,7 @@
           var mean = filter_by_key(countries, ["mean"]);
           clear_annotations(svg);
           trim_curves(svg, []);
-          draw_curves(curves, mean, line, mean_color, mean_width);
+          draw_curves(curves, mean, line, false);
 
           var max_score = maximum(mean[0]["values"], "y"),
               min_score = minimum(mean[0]["values"], "y"),
@@ -609,21 +623,7 @@
           // remove previous highlight lines and change text
           clear_annotations(svg);
           trim_curves(svg, []);
-          draw_curves(curves, curves_to_draw, line,
-            function(d) {
-              if(d["key"] === us)
-                return us_color;
-              else if(d["key"] === china)
-                return china_color;
-              else
-                return mean_color;
-            },
-            function(d) {
-              if(d["key"] === us || d["key"] === china)
-                return 2;
-              else
-                return 3;
-            });
+          draw_curves(curves, curves_to_draw, line, true);
 
           var china_score = get_country_mean(country_means, china),
               us_score = get_country_mean(country_means, us),
@@ -654,21 +654,7 @@
           d3.select("select").remove();
           clear_annotations(svg);
           trim_curves(svg, []);
-          draw_curves(curves, curves_to_draw, line,
-            function(d) {
-              if(d["key"] === us)
-                return us_color;
-              else if(d["key"] === china)
-                return china_color;
-              else
-                return mean_color;
-            },
-            function(d) {
-              if(d["key"] === us || d["key"] === china)
-                return 2;
-              else
-                return 3;
-            });
+          draw_curves(curves, curves_to_draw, line, true);
           var us_data = filter_by_key(countries, [us]);
           var china_data = filter_by_key(countries, [china]);
           var us_max = maximum(us_data[0]["values"], "y"),
@@ -699,26 +685,11 @@
           clear_annotations(svg);
           trim_curves(svg, []);
 
-          var country_curves = draw_curves(curves, countries, line,
-            function(d) {
-              if(d["key"] === "mean")
-                return mean_color;
-              return curve_color;
-            },
-            function(d) {
-              if(d["key"] === "mean")
-                return 3;
-              return 1;
-            })
-            .on("mouseover", function(d){
-              highlight(selector_from_string(d["key"]));
-            })
-            .on("mouseout", function(d){
-              dehighlight(selector_from_string(d["key"]));
-            })
-            .on("click", function(d) {
-              select(selector_from_string(d["key"]), countries, country_means);
-            });
+          // Draw all country curves and add event handlers.
+          var country_curves = draw_curves(curves, countries, line)
+            .on("mouseover", function(d){ highlight(selector_from_string(d["key"])); })
+            .on("mouseout", function(d){  dehighlight(selector_from_string(d["key"])); })
+            .on("click", function(d) { select(selector_from_string(d["key"])); });
 
           // Add tooltips to lines
           country_curves.append("svg:title")
