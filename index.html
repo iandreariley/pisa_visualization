@@ -18,6 +18,46 @@
         fill: none;
         stroke: #000;
       }
+
+      .country {
+        fill: none;
+        stroke: grey;
+        stroke-weight: 1;
+      }
+
+      .country.highlighted {
+        fill: none;
+        stroke: red;
+        stroke-weight: 3;
+      }
+
+      .country.selected {
+        fill: none;
+        stroke: yellow;
+        stroke-weight: 3;
+      }
+
+      .country.selected.highlighted {
+        .country.highlighted;
+      }
+
+      .mean {
+        fill: none;
+        stroke: darkslategrey;
+        stroke-weight: 3;
+      }
+
+      .mean.highlighted {
+        .country.highlighted;
+      }
+
+      .mean.selected.highlighted {
+        .country.highlighted;
+      }
+
+      .mean.selected {
+        .country.selected;
+      }
 }
     </style>
 
@@ -254,7 +294,6 @@
           country_curve.style("stroke", curve_color)
                        .style("stroke-width", line_width);
         } else {
-          debugger;
           country_data = filter_by_key(countries, [country]);
           var info_panel = d3.select(".info_panel");
           info_panel.append("p")
@@ -289,9 +328,6 @@
             .append("path")
             .attr("d", function(d) {
               return line_func(d["values"]); })
-            .style("fill", "none")
-            .style("stroke", stroke)
-            .style("stroke-width", stroke_width)
             .attr("id", function(d) { return selector_from_string(d["key"]); })
             .attr("class", function(d) {
               if(d["key"] !== "mean")
