@@ -22,19 +22,19 @@
       .country {
         fill: none;
         stroke: grey;
-        stroke-weight: 1;
+        stroke-width: 1;
       }
 
       .country.highlighted {
         fill: none;
         stroke: red;
-        stroke-weight: 3;
+        stroke-width: 3;
       }
 
       .country.selected {
         fill: none;
         stroke: yellow;
-        stroke-weight: 3;
+        stroke-width: 3;
       }
 
       .country.selected.highlighted {
@@ -44,19 +44,25 @@
       .mean {
         fill: none;
         stroke: darkslategrey;
-        stroke-weight: 3;
+        stroke-width: 3;
       }
 
       .mean.highlighted {
-        .country.highlighted;
+        fill: none;
+        stroke: red;
+        stroke-width: 3;
       }
 
       .mean.selected.highlighted {
-        .country.highlighted;
+        fill: none;
+        stroke: red;
+        stroke-width: 3;
       }
 
       .mean.selected {
-        .country.selected;
+        fill: none;
+        stroke: yellow;
+        stroke-width: 3;
       }
 }
     </style>
@@ -260,10 +266,12 @@
       // highlights the curve with the passed-in country name. A highlight
       // increases the stroke of the curve and changes it's color.
       function highlight(country) {
-        var highlighted = d3.select("#" + country)
-          .style("stroke", highlight_color)
-          .style("stroke-width", highlight_width);
+        d3.select("#" + country).classed("highlighted", true);
       };
+
+      function dehighlight(country) {
+        d3.select("#" + country).classed("highlighted", false);
+      }
 
       function select(country, countries, country_means) {
         debugger;
@@ -725,12 +733,7 @@
               highlight(selector_from_string(d["key"]));
             })
             .on("mouseout", function(d){
-              if(d3.select(this).classed("selected"))
-                return d3.select(this).style("stroke", "yellow");
-              else if(d["key"] === "mean")
-                return d3.select(this).style("stroke", mean_color);
-              return d3.select(this).style("stroke", curve_color)
-                .style("stroke-width", 1);
+              dehighlight(selector_from_string(d["key"]));
             })
             .on("click", function(d) {
               select(selector_from_string(d["key"]), countries, country_means);
