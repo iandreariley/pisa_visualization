@@ -26,9 +26,10 @@
       .text-box {
         border-style: solid;
         border-width: 1px;
-        height: 20px;
+        height: 18px;
         width: 80px;
         display: inline-block;
+        vertical-align: top;
       }
 
       .label {
@@ -42,6 +43,10 @@
       .info-field {
         border: 1px solid red;
         height: 20px;
+      }
+
+      .info-text {
+        padding: 0px;
       }
 
       .country {
@@ -320,18 +325,38 @@
         // Toggle selection of clicked element.
         country_curve.classed(selectedClass, !alreadySelected);
         // Make actual changes to appearance. Refactor this to class selection one day.
-        d3.selectAll(".info").remove();
+        d3.selectAll(".info-text").remove();
         if(!alreadySelected) {
-          var info_panel = d3.select(".info_panel");
-          info_panel.append("mark").text("Country: ").classed("info", true).append("p").text(country);
-          info_panel.append("p")
-                    .text("Mean: " + country_curve[0][0]["__data__"]["values"][0]["values"]["mean"].toFixed(2))
-                    .classed("info", true);
-          info_panel.append("p")
-                    .text("Range: " + (maximum(country_curve[0][0]["__data__"]["values"],
-                      "y") - minimum(country_curve[0][0]["__data__"]["values"], "y")).toFixed(2))
-                    .classed("info", true);
+          var bins = country_curve[0][0]["__data__"]["values"];
+          var values = bins[0]["values"];
+          var avg_scr = values["mean"].toFixed(2);
+          var avg_wlth = values["wealth"].toFixed(2);
+          var scr_rng = (maximum(bins, "y") - minimum(bins, "y")).toFixed(2);
+          add_info_value("info-country", country);
+          add_info_value("info-mean", avg_scr);
+          add_info_value("info-range", scr_rng);
+          add_info_value("info-wealth", avg_wlth);
+          // info_panel.append("mark").text("Country: ").classed("info", true).append("p").text(country);
+          // info_panel.append("p")
+          //           .text("Mean: " + country_curve[0][0]["__data__"]["values"][0]["values"]["mean"].toFixed(2))
+          //           .classed("info", true);
+          // info_panel.append("p")
+          //           .text("Range: " + (maximum(country_curve[0][0]["__data__"]["values"],
+          //             "y") - minimum(country_curve[0][0]["__data__"]["values"], "y")).toFixed(2))
+          //           .classed("info", true);
         }
+      }
+
+      function add_info_value(field_class, value_text) {
+        selector_string = ".info-field." + field_class + " .value";
+        return d3.select(selector_string).append("text").text(value_text)
+          .classed("info-text", true);
+      }
+
+      function create_info_label(field_class, label_text) {
+        return d3.select(".info-field." + field_class + " .label")
+          .append("strong")
+          .text(label_text);
       }
 
       // Removes all curves from the svg element. Used to change between slides
@@ -417,7 +442,7 @@
       }
 
       function add_info_field(info_panel_selector, field_class) {
-        var field = append_div(info_panel_selector, "info-field");
+        var field = append_div(info_panel_selector, "info-field " + field_class);
         append_div(field, "text-box label");
         append_div(field, "text-box value");
         return field;
