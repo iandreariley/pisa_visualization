@@ -23,6 +23,27 @@
         stroke: #000;
       }
 
+      .text-box {
+        border-style: solid;
+        border-width: 1px;
+        height: 20px;
+        width: 80px;
+        display: inline-block;
+      }
+
+      .label {
+        border-color: blue;
+      }
+
+      .value {
+        border-color: green;
+      }
+
+      .info-field {
+        border: 1px solid red;
+        height: 20px;
+      }
+
       .country {
         fill: none;
         stroke: grey;
@@ -302,13 +323,13 @@
         d3.selectAll(".info").remove();
         if(!alreadySelected) {
           var info_panel = d3.select(".info_panel");
-          info_panel.append("strong").text("Country: ").classed("info", true).append("p").text(country);
+          info_panel.append("mark").text("Country: ").classed("info", true).append("p").text(country);
           info_panel.append("p")
-                    .text("Mean: " + country_curve[0][0]["__data__"]["values"][0]["values"]["mean"])
+                    .text("Mean: " + country_curve[0][0]["__data__"]["values"][0]["values"]["mean"].toFixed(2))
                     .classed("info", true);
           info_panel.append("p")
                     .text("Range: " + (maximum(country_curve[0][0]["__data__"]["values"],
-                      "y") - minimum(country_curve[0][0]["__data__"]["values"], "y")))
+                      "y") - minimum(country_curve[0][0]["__data__"]["values"], "y")).toFixed(2))
                     .classed("info", true);
         }
       }
@@ -395,6 +416,18 @@
           .text(text_body);
       }
 
+      function add_info_field(info_panel_selector, field_class) {
+        var field = append_div(info_panel_selector, "info-field");
+        append_div(field, "text-box label");
+        append_div(field, "text-box value");
+        return field;
+      }
+
+      function append_div(selector, div_class) {
+        return selector.append("div")
+          .classed(div_class, true);
+      }
+
       /*                          *
        *                          *
        *    MAIN DRAW FUNCTION    *
@@ -423,7 +456,53 @@
           .style("position", "absolute")
           .style("top", top_margin + "px")
           .style("left", width + left_margin - 250 + "px")
-          .classed("info_panel", true);
+          .classed("info-panel", true);
+
+        add_info_field(info_panel, "info-country");
+        add_info_field(info_panel, "info-mean");
+        add_info_field(info_panel, "info-range")
+        add_info_field(info_panel, "info-wealth");
+
+        // var top = info_panel.append("div")
+        //   .style("border-color", "red")
+        //   .style("border-style", "solid")
+        //   .style("border-width", "1px")
+        //   .style("height", "20px");
+
+        // top.append("div")
+        //   .style("border-color", "blue")
+        //   .style("border-style", "solid")
+        //   .style("border-width", "1px")
+        //   .style("height", "20px")
+        //   .style("width", "80px")
+        //   .style("display", "inline-block");
+
+        // top.append("div")
+        //   .style("border-color", "green")
+        //   .style("border-style", "solid")
+        //   .style("border-width", "1px")
+        //   .style("height", "20px")
+        //   .style("width", "80px")
+        //   .style("display", "inline-block");
+
+
+        // info_panel.append("div")
+        //   .style("border-color", "red")
+        //   .style("border-style", "solid")
+        //   .style("border-width", "1px")
+        //   .style("height", "20px");
+
+        // info_panel.append("div")
+        //   .style("border-color", "red")
+        //   .style("border-style", "solid")
+        //   .style("border-width", "1px")
+        //   .style("height", "20px");
+
+        // info_panel.append("div")
+        //   .style("border-color", "red")
+        //   .style("border-style", "solid")
+        //   .style("border-width", "1px")
+        //   .style("height", "20px");
 
         // Mean test score by country
         var country_means = d3.nest()
@@ -444,7 +523,8 @@
               "country" : leaves[0]["country"],
               "x" : leaves[0]["wealth"],
               "y" : leaves[0]["math_score"],
-              "mean" : leaves[0]["country_mean"]
+              "mean" : leaves[0]["country_mean"],
+              "wealth" : leaves[0]["average_wealth"]
             };
           })
           .entries(data);
@@ -820,6 +900,7 @@
           d["math_score"] = +d["math_score"];
           d["wealth"] = +d["wealth"];
           d["country_mean"] = +d["country_mean"];
+          d["average_wealth"] = +d["average_wealth"];
           return d;
       }, draw);
   };
