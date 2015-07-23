@@ -40,7 +40,10 @@
       accounts for the fact that the amount of income that constitutes \
       \"wealth\" may differ between nations. The PISA index is based on a \
       student's access to certain amenities, like his/her own place to study, \
-      a DVD player, etc.",
+      a DVD player, etc. The curve below represents the average math \
+      score by wealth of all participating countries, weighted by country \
+      population. Each score has a 95% confidence interval of at most \xB120 \
+      and represents at least half of the population studied by PISA.",
       text_three  = "The difference between the lowest scoring wealth bracket \
       and the highest scoring is about 140 points, which PISA estimates \
       represents about three years of schooling (41 points = 1 year).",
@@ -59,7 +62,8 @@
       text_six = "Below are the wealth-score curves for all of the economies \
       that participated in the 2012 PISA assessment. Mouse over lines to view \
       the name and mean score of an economy, or select countries by name in \
-      the drop menu on the right.";
+      the drop menu on the right. All average scores have a 95% confidence interval \
+      of at most \xB120 points.";
 
       // Titles for each "slide" in the visualization.
       var title_one = "The PISA 2012 Dataset",
@@ -618,9 +622,9 @@
               china_arr_len = 0.3 * (china_max - china_min),
               offset = 5;
 
-          draw_span(us_min, us_max, us_x, us_arr_len, offset, us_color);
+          draw_span(us_min, us_max, us_x, us_arr_len, offset, "grey");
           draw_span(china_min, china_max, china_x, china_arr_len, offset,
-            china_color);
+            "grey");
 
           // Add text explaining difference in terms of years of schooling
           add_text(svg, wealth_scale(-5.5), score_scale((china_max + china_min) / 2),
