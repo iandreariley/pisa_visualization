@@ -6,6 +6,10 @@
     <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
     
     <style>
+      :root {
+        --highlight-color: brown;
+        --select-color: brown;
+      }
       circle.dimple-series-1 {
         fill: red;
       }
@@ -16,9 +20,9 @@
 
       .info-panel {
         margin-top: 100px;
-        width: 300px;
+        width: 350px;
         height: 600px;
-        border: 1px solid red;
+        border: none;
         position: absolute;
         top: 50px;
         left: 950px;
@@ -34,30 +38,28 @@
       }
 
       .text-box {
-        border-style: solid;
-        border-width: 1px;
+        border: none;
         height: 18px;
         display: inline-block;
         vertical-align: top;
+        color: darkslategrey;
       }
 
       .label {
-        border-color: blue;
         width: 120px;
       }
 
       .value {
-        border-color: green;
-        width: 170px;
-      }
-
-      .info-field {
-        border: 1px solid red;
-        height: 20px;
+        width: 220px;
       }
 
       .info-text {
-        padding: 0px;
+        padding-left: 5px;
+      }
+
+      .info-field {
+        border: none;
+        height: 20px;
       }
 
       .country {
@@ -68,18 +70,18 @@
 
       .country.highlighted {
         fill: none;
-        stroke: red;
+        stroke: brown;
         stroke-width: 3;
       }
 
       .country.selected {
         fill: none;
-        stroke: yellow;
+        stroke: brown;
         stroke-width: 3;
       }
 
       .country.selected.highlighted {
-        .country.highlighted;
+        stroke: brown;
       }
 
       .mean {
@@ -90,19 +92,19 @@
 
       .mean.highlighted {
         fill: none;
-        stroke: red;
+        stroke: brown;
         stroke-width: 3;
       }
 
       .mean.selected.highlighted {
         fill: none;
-        stroke: red;
+        stroke: brown;
         stroke-width: 3;
       }
 
       .mean.selected {
         fill: none;
-        stroke: yellow;
+        stroke: brown;
         stroke-width: 3;
       }
 
@@ -384,7 +386,7 @@
               return line_func(d["values"]); })
             .attr("id", function(d) { return selector_from_string(d["key"]); })
             .attr("class", function(d) {
-              if(d["key"] !== "mean")
+              if(d["key"] !== "Mean")
                 return "country";
               return "mean";
             })
@@ -509,9 +511,10 @@
           })
           .entries(data);
 
+
         // Get mean test score weighted by country population from csv data.
         var mean_score = data.filter(function(d) {
-          return d["country"] == "mean";
+          return d["country"] == "Mean";
         })[0]["country_mean"];
 
         // Bind data to path elements and chart.
@@ -649,7 +652,7 @@
           // as well as any text annotation or lines
           // Draw selected cureves (mean) to remaining paths
           clear_annotations(svg);
-          var mean = filter_by_key(countries, ["mean"]);
+          var mean = filter_by_key(countries, ["Mean"]);
           trim_curves(svg, []);
           draw_curves(curves, mean, line, false);
         };
@@ -658,7 +661,7 @@
 
           update_text(title_three, text_three);
 
-          var mean = filter_by_key(countries, ["mean"]);
+          var mean = filter_by_key(countries, ["Mean"]);
           clear_annotations(svg);
           trim_curves(svg, []);
           draw_curves(curves, mean, line, false);
@@ -678,7 +681,7 @@
 
           update_text(title_four, text_four);
 
-          var curves_to_draw = filter_by_key(countries, ["mean", us, china]);
+          var curves_to_draw = filter_by_key(countries, ["Mean", us, china]);
 
           // remove previous highlight lines and change text
           clear_annotations(svg);
@@ -708,7 +711,7 @@
 
           update_text(title_five, text_five);
 
-          var curves_to_draw = filter_by_key(countries, ["mean", us, china]);
+          var curves_to_draw = filter_by_key(countries, ["Mean", us, china]);
 
           // remove previous highlight lines and change text
           d3.selectAll(".info-text").remove();
