@@ -2,125 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
-    
-    <style>
-      :root {
-        --highlight-color: brown;
-        --select-color: brown;
-      }
-      circle.dimple-series-1 {
-        fill: red;
-      }
-
-      .tooltip {
-        visibility: visible;
-      }
-
-      .info-panel {
-        margin-top: 100px;
-        width: 350px;
-        height: 600px;
-        border: none;
-        position: absolute;
-        top: 50px;
-        left: 950px;
-      }
-
-      .bold {
-        font-weight: 
-      }
-
-      .axis line, .axis path {
-        fill: none;
-        stroke: #000;
-      }
-
-      .text-box {
-        border: none;
-        height: 18px;
-        display: inline-block;
-        vertical-align: top;
-        color: darkslategrey;
-      }
-
-      .label {
-        width: 120px;
-      }
-
-      .value {
-        width: 220px;
-      }
-
-      .info-text {
-        padding-left: 5px;
-      }
-
-      .info-field {
-        border: none;
-        height: 20px;
-      }
-
-      .country {
-        fill: none;
-        stroke: grey;
-        stroke-width: 1;
-      }
-
-      .country.highlighted {
-        fill: none;
-        stroke: darkred;
-        stroke-width: 3;
-      }
-
-      .country.selected {
-        fill: none;
-        stroke: brown;
-        stroke-width: 3;
-      }
-
-      .country.selected.highlighted {
-        stroke: darkred;
-      }
-
-      .mean {
-        fill: none;
-        stroke: darkslategrey;
-        stroke-width: 3;
-      }
-
-      .mean.highlighted {
-        fill: none;
-        stroke: darkred;
-        stroke-width: 3;
-      }
-
-      .mean.selected.highlighted {
-        fill: none;
-        stroke: darkred;
-        stroke-width: 3;
-      }
-
-      .mean.selected {
-        fill: none;
-        stroke: brown;
-        stroke-width: 3;
-      }
-
-      #United-States-of-America.country.special {
-        fill: none;
-        stroke: blue;
-        stroke-width: 2;
-      }
-
-      #China-Shanghai.country.special {
-        fill: none;
-        stroke: gold;
-        stroke-width: 2;
-      }
-}
-    </style>
 
     <script type="text/javascript">
 
@@ -184,23 +68,6 @@
           title_four = "Comparing Two Economies",
           title_five = "Equitability Within an Economy",
           title_six = "Exploring Wealth and Education";
-
-      // Adds a stylized div button to the DOM and then returns a handle to it.
-      // It does not attach an eventListener in the process.
-      // Currently used to add the "Previous" and "Next" buttons to the page.
-      function add_button(parent, text) {
-        return parent.append("div")
-          .style("display", "table-cell")
-          .style("border-radius", "5px")
-          .style("vertical-align", "middle")
-          .style("text-align", "center")
-          .style("background", text_color)
-          .style("color", "white")
-          .style("border-color", "white")
-          .style("border-color", "white")
-          .style("border", "solid 1px")
-          .text(text);
-      }
 
       // Attaches a horizontal d3 axis to the DOM.
       // Takes a d3 scale object.
@@ -320,6 +187,7 @@
       // De-highlights all previously highlighted country curves, and
       // highlights the curve with the passed-in country name. A highlight
       // increases the stroke of the curve and changes it's color.
+      // Taken from http://stackoverflow.com/questions/3989324
       function highlight(country) {
         d3.select("#" + country).classed("highlighted", true);
       };
@@ -328,6 +196,23 @@
         d3.select("#" + country).classed("highlighted", false);
       }
 
+      // Grabs first select element and attempts to find an option therein whose text
+      // matches the text provided. If it succeeds, it sets that option as the selected
+      // option. Returns true if it succeeds, false otherwise.
+      // Assumes there is a single select element in the DOM.
+      function set_dropdown_option(target) {
+        var dropdown = document.getElementsByTagName("SELECT")[0];
+        for(var i = 0; i < dropdown.options.length; i++)
+          if(dropdown.options[i].text === target) {
+            dropdown.selectedIndex = i;
+            return true;
+          }
+        return false;
+      }
+
+      // Highlights a curve and displays information for a country that is selected by
+      // the user and deselects all other curves, or simply toggles selection if the user
+      // selects the same country multiple times. 
       function select(country) {
         var selectedClass = "selected";
         // Determine whether this class is already selected
@@ -350,6 +235,7 @@
           add_info_value("info-mean", avg_scr);
           add_info_value("info-range", scr_rng);
           add_info_value("info-wealth", avg_wlth);
+          set_dropdown_option(country_name);
         }
       }
 
@@ -445,10 +331,11 @@
       function update_text(text_title, text_body) {
         d3.select(".header h2")
           .text(text_title);
-        d3.select(".text_box")
+        d3.select(".header-text")
           .text(text_body);
       }
 
+      // Adds a field div to the info panel element.
       function add_info_field(info_panel_selector, field_class) {
         var field = append_div(info_panel_selector, "info-field " + field_class);
         append_div(field, "text-box label");
@@ -456,15 +343,14 @@
         return field;
       }
 
+      // Appends a div with the supplied class to the given selector.
       function append_div(selector, div_class) {
         return selector.append("div")
           .classed(div_class, true);
       }
 
       /*                          *
-       *                          *
        *    MAIN DRAW FUNCTION    *
-       *                          *
        *                          */
       function draw(data) {
         "use strict";
@@ -674,7 +560,7 @@
               text_y = score_scale((max_score + min_score)/2);
           draw_span(min_score, max_score, x, arrow_length, offset);
           add_text(svg, wealth_scale(0), text_y,
-            "70 points = almost 3 years of schooling");
+            "70 points = almost 3 years of schooling", text_color);
         };
 
         function stage_three() {
@@ -704,7 +590,7 @@
           add_text(svg, wealth_scale(2.1), score_scale(500),
             "USA")
           add_text(svg, wealth_scale(-5.9), score_scale(547),
-            "130 points = 3 years schooling", curve_color, "mean_text");
+            "130 points = 3 years schooling", text_color, "mean_text");
         };
 
         function stage_four() {
@@ -834,53 +720,23 @@
   var header_margin = 10
 
   // Header will contain text and titles for each "slide."
-  var header = d3.select("body")
-    .append("div")
-    .attr("class", "header")
-    .style("margin-left", left_margin + "px")
-    .style("width", width - left_margin + "px")
-    .style("height", "75px")
-    .style("display", "block")
+  var header = append_div(d3.select("body"), "header");
 
   // Add title div to header that will contain title for each slide.
-  var title = header.append("h2")
-    .style("padding-left", header_margin + "px")
-    .style("font-family", font)
-    .style("color", text_color)
-    .text(title_one);
+  var title = header.append("h2").text(title_one);
 
   // Add text box to header div to contain slide text.
-  var text_box = header.append("div")
-    .attr("class", "text_box")
-    .style("padding-left", header_margin + "px")
-    .style("width", width - left_margin - 200 +"px")
-    .style("height", "50px")
-    .style("word-wrap", "break-word")
-    .style("font-family", font)
-    .style("float", "left")
-    .style("color", text_color)
-    .text(text_one);
+  var text_box = append_div(header, "header-text").text(text_one);
         
   // Create navigation button panel
-  var button_panel = header.append("div")
-    .attr("class", "button")
-    .style("display", "table")
-    .style("width", "150px")
-    .style("height", "25px")
-    .style("float", "right");
+  var button_panel = append_div(header, "button-panel");
 
   // Add next and pervious buttons to the button panel.
-  var prev_button = add_button(button_panel, "PREV");
-
-  var next_button = add_button(button_panel, "NEXT");
+  var prev_button = append_div(button_panel, "button").text("PREV");
+  var next_button = append_div(button_panel, "button").text("NEXT");
 
   // Append a div where we will add the svg element that is the chart body.
-  var chart = d3.select("body")
-  .append("div")
-  .attr("class", chart_class)
-  .attr("width", width)
-  .attr("height", height)
-  .style("display", "block");
+  var chart = append_div(d3.select("body"), "chart");
 
   // Load data.
   process("pisa_by_country_and_wealth_filtered.tsv");

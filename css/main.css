@@ -1,0 +1,157 @@
+
+      circle.dimple-series-1 {
+        fill: red;
+      }
+
+      .header {
+        margin-left: 75px;
+        width: 1050px;
+        height: 75px;
+        display: block;
+      }
+
+      h2 {
+        padding-left: 10px;
+        font-family: Helvetica;
+        color: darkslategrey;
+      }
+
+      .header-text {
+        padding-left: 10px;
+        width: 850px;
+        height: 50px;
+        word-wrap: break-word;
+        font-family: Helvetica;
+        float: left;
+        color: darkslategrey;
+      }
+
+      .button-panel {
+        display: table;
+        width: 150px;
+        height: 25px;
+        float: right;
+      }
+
+      .button {
+        display: table-cell;
+        border-radius: 5px;
+        vertical-align: middle;
+        text-align: center;
+        background: darkslategrey;
+        color: white;
+        border: 1px solid white;
+      }
+
+      .chart {
+        width: 1125;
+        height: 650;
+        display: block;
+      }
+
+      .tooltip {
+        visibility: visible;
+      }
+
+      .info-panel {
+        margin-top: 100px;
+        width: 350px;
+        height: 600px;
+        border: none;
+        position: absolute;
+        top: 50px;
+        left: 950px;
+      }
+
+      .bold {
+        font-weight: 
+      }
+
+      .axis line, .axis path {
+        fill: none;
+        stroke: #000;
+      }
+
+      .text-box {
+        border: none;
+        height: 18px;
+        display: inline-block;
+        vertical-align: top;
+        color: darkslategrey;
+      }
+
+      .label {
+        width: 120px;
+      }
+
+      .value {
+        width: 220px;
+      }
+
+      .info-text {
+        padding-left: 5px;
+      }
+
+      .info-field {
+        border: none;
+        height: 20px;
+      }
+
+      .country {
+        fill: none;
+        stroke: grey;
+        stroke-width: 1;
+      }
+
+      .country.highlighted {
+        fill: none;
+        stroke: darkred;
+        stroke-width: 3;
+      }
+
+      .country.selected {
+        fill: none;
+        stroke: brown;
+        stroke-width: 3;
+      }
+
+      .country.selected.highlighted {
+        stroke: darkred;
+      }
+
+      .mean {
+        fill: none;
+        stroke: darkslategrey;
+        stroke-width: 3;
+      }
+
+      .mean.highlighted {
+        fill: none;
+        stroke: darkred;
+        stroke-width: 3;
+      }
+
+      .mean.selected.highlighted {
+        fill: none;
+        stroke: darkred;
+        stroke-width: 3;
+      }
+
+      .mean.selected {
+        fill: none;
+        stroke: brown;
+        stroke-width: 3;
+      }
+
+      #United-States-of-America.country.special {
+        fill: none;
+        stroke: blue;
+        stroke-width: 2;
+      }
+
+      #China-Shanghai.country.special {
+        fill: none;
+        stroke: gold;
+        stroke-width: 2;
+      }
+}
