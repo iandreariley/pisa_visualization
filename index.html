@@ -340,10 +340,11 @@
         if(!alreadySelected) {
           var bins = country_curve[0][0]["__data__"]["values"];
           var values = bins[0]["values"];
+          var country_name = values["country"];
           var avg_scr = values["mean"].toFixed(2);
           var avg_wlth = values["wealth"].toFixed(2);
           var scr_rng = (maximum(bins, "y") - minimum(bins, "y")).toFixed(2);
-          add_info_value("info-country", country);
+          add_info_value("info-country", country_name);
           add_info_value("info-mean", avg_scr);
           add_info_value("info-range", scr_rng);
           add_info_value("info-wealth", avg_wlth);
@@ -749,10 +750,10 @@
           trim_curves(svg, []);
 
           // Add labels for information fields.
-          add_info_label("info-country", "Country");
-          add_info_label("info-mean", "Average Score");
-          add_info_label("info-range", "Score Range");
-          add_info_label("info-wealth", "Average Wealth");
+          add_info_label("info-country", "Country:");
+          add_info_label("info-mean", "Average Score:");
+          add_info_label("info-range", "Score Range:");
+          add_info_label("info-wealth", "Average Wealth:");
 
           // Draw all country curves and add event handlers.
           var country_curves = draw_curves(curves, countries, line)
