@@ -14,6 +14,16 @@
         visibility: visible;
       }
 
+      .info-panel {
+        margin-top: 100px;
+        width: 180px;
+        height: 600px;
+        border: 1px solid red;
+        position: absolute;
+        top: 50px;
+        left: 950px;
+      }
+
       .bold {
         font-weight: 
       }
@@ -336,27 +346,21 @@
           add_info_value("info-mean", avg_scr);
           add_info_value("info-range", scr_rng);
           add_info_value("info-wealth", avg_wlth);
-          // info_panel.append("mark").text("Country: ").classed("info", true).append("p").text(country);
-          // info_panel.append("p")
-          //           .text("Mean: " + country_curve[0][0]["__data__"]["values"][0]["values"]["mean"].toFixed(2))
-          //           .classed("info", true);
-          // info_panel.append("p")
-          //           .text("Range: " + (maximum(country_curve[0][0]["__data__"]["values"],
-          //             "y") - minimum(country_curve[0][0]["__data__"]["values"], "y")).toFixed(2))
-          //           .classed("info", true);
         }
       }
 
+      // Adds value_text to a .value text-box inside an info-field with class field_class.
       function add_info_value(field_class, value_text) {
         selector_string = ".info-field." + field_class + " .value";
         return d3.select(selector_string).append("text").text(value_text)
           .classed("info-text", true);
       }
 
-      function create_info_label(field_class, label_text) {
-        return d3.select(".info-field." + field_class + " .label")
-          .append("strong")
-          .text(label_text);
+      // Adds label_text to a .lable text-box inside an info-field with class field_class.
+      function add_info_label(field_class, label_text) {
+        var selector_string = ".info-field." + field_class + " .label";
+        return d3.select(selector_string).append("strong").text(label_text)
+          .classed("info-label", true);
       }
 
       // Removes all curves from the svg element. Used to change between slides
@@ -470,64 +474,13 @@
             .attr("class", chart_class);
 
         // Add info panel to the right of the svg element.
-        var info_panel = d3.select("div.chart")
-          .append("div")
-          .style("margin-top", 2*top_margin + "px")
-          .style("width", "180px")
-          .style("height", height - top_margin + "px")
-          .style("border-color", "red")
-          .style("border-style", "solid")
-          .style("border-width", "1px")
-          .style("position", "absolute")
-          .style("top", top_margin + "px")
-          .style("left", width + left_margin - 250 + "px")
-          .classed("info-panel", true);
+        var info_panel = append_div(d3.select("div.chart"), 'info-panel');
 
+        // Attach field divs to info_panel.
         add_info_field(info_panel, "info-country");
         add_info_field(info_panel, "info-mean");
         add_info_field(info_panel, "info-range")
         add_info_field(info_panel, "info-wealth");
-
-        // var top = info_panel.append("div")
-        //   .style("border-color", "red")
-        //   .style("border-style", "solid")
-        //   .style("border-width", "1px")
-        //   .style("height", "20px");
-
-        // top.append("div")
-        //   .style("border-color", "blue")
-        //   .style("border-style", "solid")
-        //   .style("border-width", "1px")
-        //   .style("height", "20px")
-        //   .style("width", "80px")
-        //   .style("display", "inline-block");
-
-        // top.append("div")
-        //   .style("border-color", "green")
-        //   .style("border-style", "solid")
-        //   .style("border-width", "1px")
-        //   .style("height", "20px")
-        //   .style("width", "80px")
-        //   .style("display", "inline-block");
-
-
-        // info_panel.append("div")
-        //   .style("border-color", "red")
-        //   .style("border-style", "solid")
-        //   .style("border-width", "1px")
-        //   .style("height", "20px");
-
-        // info_panel.append("div")
-        //   .style("border-color", "red")
-        //   .style("border-style", "solid")
-        //   .style("border-width", "1px")
-        //   .style("height", "20px");
-
-        // info_panel.append("div")
-        //   .style("border-color", "red")
-        //   .style("border-style", "solid")
-        //   .style("border-width", "1px")
-        //   .style("height", "20px");
 
         // Mean test score by country
         var country_means = d3.nest()
@@ -756,6 +709,8 @@
           var curves_to_draw = filter_by_key(countries, ["mean", us, china]);
 
           // remove previous highlight lines and change text
+          d3.selectAll(".info-text").remove();
+          d3.selectAll(".info-label").remove();
           d3.select("select").remove();
           clear_annotations(svg);
           trim_curves(svg, []);
@@ -785,10 +740,18 @@
 
         function stage_five() {
 
+          // Add text for this slide.
           update_text(title_six, text_six);
 
+          // Remove irrelevant annotations and curves.
           clear_annotations(svg);
           trim_curves(svg, []);
+
+          // Add labels for information fields.
+          add_info_label("info-country", "Country");
+          add_info_label("info-mean", "Average Score");
+          add_info_label("info-range", "Score Range");
+          add_info_label("info-wealth", "Average Wealth");
 
           // Draw all country curves and add event handlers.
           var country_curves = draw_curves(curves, countries, line)
