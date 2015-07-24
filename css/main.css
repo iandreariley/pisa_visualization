@@ -154,4 +154,9 @@
         stroke: gold;
         stroke-width: 2;
       }
+
+      select {
+        float: right;
+        margin-top: 3px;
+      }
 }

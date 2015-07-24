@@ -457,14 +457,14 @@
           .attr("transform", "rotate(-90)")
           .text("PISA Math Score");
 
-        // make an arrow marker
-        // Attach to parent svg element so it isn't deleted by
-        // chart clearing functions.
-        // lifted wholesale from Mozilla Developer Nework
+        // Make an arrow marker and attach the definition to parent svg element so that
+        // it isn't cleared by chart clearing functions.
+        // Lifted wholesale from Mozilla Developer Nework
         var m_width = 5,
             m_height = m_width,
             ref_x = 1,
             ref_y = 5;
+
         d3.select("svg").append("defs")
           .append("marker")
           .attr("id", "triangle")
@@ -479,7 +479,7 @@
           .style("fill", text_color)
           .attr("d", "M 0 0 L 10 5 L 0 10 z");
 
-        // Curve-drawing function
+        // Function for drawing curves to the graph from data points.
         var line = d3.svg.line()
           .x(function(d) {
             return wealth_scale(d["values"]["x"]);
@@ -497,6 +497,8 @@
         // Path selection for adding/removing country curves to chart
         var curves = svg.selectAll("path");
 
+        // Draws two horizontal lines at min_score and max_score y values. Draws arrows
+        // and optional text to label the span.
         function draw_span(min_score, max_score, x, arr_length,
           arr_offset, hi_color, lo_color) {
 
@@ -526,11 +528,12 @@
 
         }
 
+        // FIRST SLIDE.
         function stage_one() {
           update_text(title_two, text_two);
 
           // Remove any unecessary curves from chart (all but one)
-          // as well as any text annotation or lines
+          // as well as any text annotation or lines.
           // Draw selected cureves (mean) to remaining paths
           clear_annotations(svg);
           var mean = filter_by_key(countries, ["Mean"]);
@@ -538,13 +541,19 @@
           draw_curves(curves, mean, line, false);
         };
 
+        // SECOND SLIDE.
         function stage_two() {
 
           update_text(title_three, text_three);
 
+          // Grab data to draw.
           var mean = filter_by_key(countries, ["Mean"]);
+
+          // Clear chart.
           clear_annotations(svg);
           trim_curves(svg, []);
+
+          // Draw curves
           draw_curves(curves, mean, line, false);
 
           var max_score = maximum(mean[0]["values"], "y"),
@@ -553,20 +562,26 @@
               arrow_length = .3 * (max_score - min_score),
               x = .9,
               text_y = score_scale((max_score + min_score)/2);
+
+          // Draw horizontal lines at range endpoints.
           draw_span(min_score, max_score, x, arrow_length, offset);
           add_text(svg, wealth_scale(0), text_y,
             "70 points = almost 3 years of schooling", text_color);
         };
 
+        // THIRD SLIDE.
         function stage_three() {
 
           update_text(title_four, text_four);
 
+          // Grab data for Mean, USA and China-Shanghai.
           var curves_to_draw = filter_by_key(countries, ["Mean", us, china]);
 
           // remove previous highlight lines and change text
           clear_annotations(svg);
           trim_curves(svg, []);
+
+          // Draw the selected data to the chart.
           draw_curves(curves, curves_to_draw, line, true);
 
           var china_score = get_country_mean(country_means, china),
@@ -576,6 +591,7 @@
               x = -5,
               text_y = score_scale((china_score + us_score)/2);
 
+          // Draw horizontal lines for mean US score and mean China-Shanghai score.
           draw_span(us_score, china_score, x, arrow_length, offset,
             china_color, us_color);
 
@@ -588,16 +604,18 @@
             "130 points = 3 years schooling", text_color, "mean_text");
         };
 
+        // FOURTH SLIDE.
         function stage_four() {
 
           update_text(title_five, text_five);
 
           var curves_to_draw = filter_by_key(countries, ["Mean", us, china]);
 
-          // remove previous highlight lines and change text
+          // Remove elements from Slide 5, if we're going backwards.
           d3.selectAll(".info-text").remove();
           d3.selectAll(".info-label").remove();
           d3.select("select").remove();
+          // Remove previous highlight lines, if we're going forwards.
           clear_annotations(svg);
           trim_curves(svg, []);
           draw_curves(curves, curves_to_draw, line, true);
@@ -613,17 +631,20 @@
               china_arr_len = 0.3 * (china_max - china_min),
               offset = 5;
 
+          // Draw horizontal lines highlighting the range of scores in Shanghai and the 
+          // US.
           draw_span(us_min, us_max, us_x, us_arr_len, offset, "grey");
           draw_span(china_min, china_max, china_x, china_arr_len, offset,
             "grey");
 
-          // Add text explaining difference in terms of years of schooling
+          // Add text explaining difference in terms of years of schooling.
           add_text(svg, wealth_scale(-5.5), score_scale((china_max + china_min) / 2),
             "123 points = 3 years", text_color, "span");
           add_text(svg, wealth_scale(-5.9), score_scale((us_max + us_min) / 2),
             "82 points = 2 years", text_color, "span");
         };
 
+        // FIFTH SLIDE.
         function stage_five() {
 
           // Add text for this slide.
@@ -658,10 +679,7 @@
             });
 
           // Add a drop menu for user to select countries from.
-          var country_selector = header.append("select")
-            .style("float", "right")
-            .style("margin-top", "3px")
-            .on("change", selector)
+          var country_selector = header.append("select").on("change", selector);
 
           // Sort countries variable and bind data to each option of the drop menu
           var options = country_selector.selectAll("option")
@@ -673,11 +691,14 @@
               return 0;
             }));
 
+          // Add an option to the selector for each country.
           options.enter()
             .append("option")
             .attr("value", function(d) { return d["key"]; })
             .text(function(d) { return d["key"]; });
 
+          // When user selects from the drop menu, highlight the curve and provide country
+          // information.
           function selector() {
             var index = country_selector.property("selectedIndex");
             var selected_country = options[0][index]["__data__"]["key"];
