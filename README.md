@@ -256,6 +256,18 @@ suitable weights? There is no single correct answer here, and I think addressing
 beyond the scope of this project, but I encourage you to think about possible solutions
 and implement one if you can.
 
+>You’ve done a great job of implementing a ‘martini-glass’ narrative in this visualisation!
+I note that the dotted lines for USA and Shanghai (China) have different meanings on
+consecutive views of the visualisation: first mean, then maximum and minimum. You
+could distinguish these by making the lines more visually different or by adding labels.
+I like the fact that there is a drop-down menu to highlight lines, as well as the mouseover.
+This makes the final view easier to use.
+To make the final graphic more interactively usable, you should consider ways to make
+the information for each individual country easier to see. For example, it might be useful
+to display information for a chosen country somewhere in the main screen rather than on
+a tooltip. You could also consider allowing highlighting of a country via clicking, as well as
+or instead of a mouseover.
+
 The following are emails I recieved back from friends who took a look at the
 project, which I shared on [my website][ http://iandreariley.com/pisa.html].
 
@@ -428,7 +440,9 @@ finding the two-tailed t-critical value for 95% confidence at n degrees of freed
 for sample-size n, and multiplying that by the standard error of the sample.
 To keep the page loading time short, I did this work in R and exported the massaged 
 data to a .tsv file that is loaded by the d3 code, rather than having d3 do the work
-on the entire dataset in response to a get request.
+on the entire dataset in response to a get request. Rather than including error bars
+or other indications of that threshold, I decided to simply state it in the text. I
+felt that error bars would make the graphic too cluttered and unreadable.
 
 ###### Weighting the Cumulative Mean
 The second point made by the Udacity reviewer is that, by calculating the cumulative
@@ -448,6 +462,13 @@ that the datapoints at least represented a big chunk of the population that was
 sampled, so I decided that if the cumulative population of all the countries
 representing a given wealth bin was at least 50% of the total population sampled
 by PISA, I would include that wealth bin in the mean line, otherwise, I excluded it.
+
+###### Improving the Interactivity
+The review also points out that it would be nice to display more information about
+a country than is provided in the tool tip, and to allow users to select countries.
+I improved the interactive features at the end by allowing users to select lines
+by clicking them, as well as by using the drop-down menu. I also included a side
+panel that displays more information about the country.
 
 ### Troubles
 
