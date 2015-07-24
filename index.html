@@ -107,12 +107,12 @@
         return str.replace(/ /g, "-").replace(/\(|\)/g, "");
       }
 
-      // Returns the maximum value of the given key.
+      // Returns the maximum value of the given key in the array represented by data.
       function maximum(data, key) {
         return d3.max(data, function(d) { return d["values"][key]; });
       }
 
-      // Returns the minimum value of the given key.
+      // Returns the minimum value of the given key in the array represented by data.
       function minimum(data, key) {
         return d3.min(data, function(d) { return d["values"][key]; });
       }
@@ -139,7 +139,6 @@
 
       // filter function from
       // http://stackoverflow.com/questions/7378228/
-      // check-if-value-is-in-array-with-javascript
       function filter_by_key(data, keys) {
         return data.filter(function(d) {
           return keys.indexOf(d["key"]) > -1;
@@ -188,14 +187,12 @@
           return result;
       };
 
-      // De-highlights all previously highlighted country curves, and
-      // highlights the curve with the passed-in country name. A highlight
-      // increases the stroke of the curve and changes it's color.
-      // Taken from http://stackoverflow.com/questions/3989324
+      // Highlights the curve with the passed-in country name.
       function highlight(country) {
         d3.select("#" + country).classed("highlighted", true);
       };
 
+      // Removes highlighting from the country with the passed-in country name.
       function dehighlight(country) {
         d3.select("#" + country).classed("highlighted", false);
       }
@@ -226,7 +223,7 @@
           .classed(selectedClass, false);
         // Toggle selection of clicked element.
         country_curve.classed(selectedClass, !alreadySelected);
-        // Make actual changes to appearance. Refactor this to class selection one day.
+        // Make actual changes to appearance.
         d3.selectAll(".info-text").remove();
         if(!alreadySelected) {
           var bins = country_curve[0][0]["__data__"]["values"];
@@ -250,7 +247,7 @@
           .classed("info-text", true);
       }
 
-      // Adds label_text to a .lable text-box inside an info-field with class field_class.
+      // Adds label_text to a label text-box inside an info-field with class field_class.
       function add_info_label(field_class, label_text) {
         var selector_string = ".info-field." + field_class + " .label";
         return d3.select(selector_string).append("strong").text(label_text)
@@ -307,12 +304,6 @@
           return line.style("stroke-dasharray", "10,10");
         else
           return line;
-      };
-
-      // Compares the value of two data leaves. Note: The '+' casts the var to
-      // a number.
-      function comp_leaves(a,b) {
-          return +a - +b;
       };
 
       // Returns the mean score of leaves.
@@ -389,7 +380,7 @@
         var countries = d3.nest()
           .key(function(d) {return d["country"];})
           .key(function(d) {return +d["wealth"];})
-          .sortKeys(comp_leaves)
+          .sortKeys(function(a, b) { return a - b; })
           .rollup(function(leaves) {
             return {
               "country" : leaves[0]["country"],
@@ -447,7 +438,7 @@
           .attr("transform", "translate(" + left_margin + ",0)")
           .call(score_axis);
 
-        //Draw labels to graph
+        // Draw labels to graph.
         d3.select("svg")
           .append("text")
           .attr("class", "x label")
