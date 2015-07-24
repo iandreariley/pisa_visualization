@@ -267,7 +267,7 @@ a tooltip. You could also consider allowing highlighting of a country via clicki
 or instead of a mouseover.
 
 The following are emails I recieved back from friends who took a look at the
-project, which I shared on [my website][ http://iandreariley.com/pisa.html].
+project, which I shared on [my website](http://iandreariley.com/pisa.html).
 
 #### Stephanie
 
@@ -448,6 +448,10 @@ data to a .tsv file that is loaded by the d3 code, rather than having d3 do the 
 on the entire dataset in response to a get request. Rather than including error bars
 or other indications of that threshold, I decided to simply state it in the text. I
 felt that error bars would make the graphic too cluttered and unreadable.
+
+The R code I used to calculate the confidence interval and generally massage the
+data can be found in the file [data_massage.R](https://github.com/iandreariley/pisa_visualization/blob/filtered/data_massage.R)
+in the project repo.
 
 ###### Weighting the Cumulative Mean
 The second point made by the Udacity reviewer is that, by calculating the cumulative
