@@ -4,16 +4,16 @@
 ## Use
 
 The most recent version of the project can be downloaded in its entirety here:
-https://github.com/iandreariley/pisa_visualization
+https://github.com/iandreariley/pisa_visualization/tree/filtered/
 
 To run it locally, put both the pisa_by_wealth.tsv and index.html files in the same
 directory, and use 'python -m SimpleHTTPServer' to get a server running in that
 directory. Open a browser and type localhost:8000 in the url field, and the
 visualization should start.
 
-To see the visualization online go [here][old] for
-the old version, and [here][new] for the
-new version.
+To see the visualization online go [here][old] for the first version, [here][new] for the
+second version. The most current version is not yet available on the internet.
+
 [old]:http://www.iandreariley.com/pisa.html
 [new]:http://www.iandreariley.com/pisa_updated.html
 ## Process
