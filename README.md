@@ -431,6 +431,23 @@ data to a .tsv file that is loaded by the d3 code, rather than having d3 do the 
 on the entire dataset in response to a get request.
 
 ###### Weighting the Cumulative Mean
+The second point made by the Udacity reviewer is that, by calculating the cumulative
+mean of math scores, I had unwittingly weighted countries by their PISA sample size
+which, as he points out, is an arbitrary and unhelpful weight. I decided to remedy
+this by weighting the scores of each country in each wealth bin by the population
+of that country. Given that the visualization is largely about understanding global
+population trends, I think that population is a fitting weight. However, this raised
+another issues in creating the curve for the cumulative mean: How many, or which
+countries should be represented in calculating data points for the mean?
+
+For example, while we may have datapoints that are within the 40 point confidence
+threshold, is it safe to calculate the mean if the only contributing country is
+Latvia (population ~ 2 million)? I found this question hard to answer. Ultimately,
+I decided that I would again base the decision on population: I wanted to make sure
+that the datapoints at least represented a big chunk of the population that was
+sampled, so I decided that if the cumulative population of all the countries
+representing a given wealth bin was at least 50% of the total population sampled
+by PISA, I would include that wealth bin in the mean line, otherwise, I excluded it.
 
 ### Troubles
 
