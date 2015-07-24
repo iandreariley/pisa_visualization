@@ -201,7 +201,23 @@ tooltips and mouse-over highlighting to allow quick exploration of the data, as 
 as a selection feature for closer inspection of specific groups. I wanted the open
 end of my "martini glass" to be a similarly interactive chart.
 
+Creating the stem of the "martini glass" as a series of slides projected on the chart
+seemed like an obvious choice. I liked the similar approach used in the d3 class'
+example using world cup data. Initially I worked with timed slides, although I didn't
+like the way it pressured the user to take everything in so quickly, so I incorporated
+buttons that allowed the user to move backwards and forwards through the slides.
 
+Per the recommendations of the class, I used a grey-scale and mostly unsaturated
+colors to make the visualization easier to look at. In order to make the slides
+color-blind friendly, I used blue and gold for highlighting China(Shaghai) and
+the United States on a slide that compared the two.For highlighting the final slide,
+which allows the user to select a country, the highlight and select colors are
+dark-red and brown respectively, which I find easier on the eyes than the bright
+red I used initially.
+
+For the open end of the "martini glass" I designed a chart much like the one
+used for the joblessness visualization by the New York Times.However, initially, I
+used only a mouseover tooltip to display data.
 
 [a]:http://www.nytimes.com/interactive/2009/11/06/business/economy/unemployment-lines.html
 
@@ -322,10 +338,10 @@ A couple questions: I'm guessing some countries didn't have scores for wealth be
 -5, thats why in the final graphic so many didn't have data plotted below -5,
 correct?  Or is it that Ireland is balling out of control and no one is poor there?
 This made me wonder how every country had data plotted up to the maximum wealth of 3.
-I though most would "max out" before that.
+I though most would "max out" before that.  
 
 Or maybe I misunderstand this whole thing?  In which case, I assure you, it is my
-fault not yours.
+fault not yours.  
 
 Also why is it that nearly every country saw a math score dip between wealth at 2 and
 3?  My best guess is that Jordanian actors, singers and dancers are wealthy but not
