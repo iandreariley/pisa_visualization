@@ -34,6 +34,7 @@
       }
 
       .button {
+        cursor: pointer;
         display: table-cell;
         border-radius: 5px;
         vertical-align: middle;
@@ -98,6 +99,7 @@
       }
 
       .country {
+        cursor: pointer;
         fill: none;
         stroke: grey;
         stroke-width: 1;
@@ -120,6 +122,7 @@
       }
 
       .mean {
+        cursor: pointer;
         fill: none;
         stroke: darkslategrey;
         stroke-width: 3;
