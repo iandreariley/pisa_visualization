@@ -261,27 +261,26 @@ project, which I shared on [my website][ http://iandreariley.com/pisa.html].
 
 #### Stephanie
 
-This is so cool!  I loved the graph at the end.  The only thing I noticed is that it
+>This is so cool!  I loved the graph at the end.  The only thing I noticed is that it
 seems that the "Florida, USA" link does not work.  But that could have been my
 computer.  Way to go.
 
 #### Cole
 
-1. I understood the graphics.
-
-2. Only thing I saw is that on the first page "Half a millions" should be "Half a
-million."  I think?
+> 1. I understood the graphics.
+> 2. Only thing I saw is that on the first page "Half a millions" should be "Half a
+> million."  I think?
 
 #### Julia
 
-Nice!
+>Nice!
 
-My first couple questions were actually answered by following images.  I really like
+>My first couple questions were actually answered by following images.  I really like
 the horizontal lines and definition of the range between scores.  That was my main
 initial burning question because it was hard to see where the line fell on the
 y-axis.
 
-To formally answer your questions:
+>To formally answer your questions:
 Is there anything you don't understand about the graphic?
 No
 What was your main takeaway from the visualization?
@@ -298,22 +297,22 @@ Great work!  Thanks for sharing.  Go you!
 
 #### Julia 2
 
-Oh yeah, so is the overall average (the bold line) just averaging Vietnam and
+>Oh yeah, so is the overall average (the bold line) just averaging Vietnam and
 Malaysia for the below -5 wealth?  I didn't pick up on that the first time.  Depends
 on what you're going for, but yeah I might remove the below -5 groups like you say.  
 
-I just noticed something else.  The overall average (bold line) - are we given the
+>I just noticed something else.  The overall average (bold line) - are we given the
 numerical average?  On the last 'page', when hovering over each country's line, you
 get the numerical average, but I don't know if the number is better or worse than the
 overall average (numerically).
 
-Seriously all I've been doing all day long for days is looking at data and yours is
+>Seriously all I've been doing all day long for days is looking at data and yours is
 really high-end.  If all the data I've been staring at looked that good and was that
 user-friendly my life would be so much easier right now.  High-five.
 
 #### Dad
 
-Looks good. I'm a big fan of the data presentations of "the upshot" at the New York
+>Looks good. I'm a big fan of the data presentations of "the upshot" at the New York
 Times online version, and this is very like -- really indistinguishable from what
 they do. That said, some of the lines on the last page didn't light up when using
 the drop down menu -- Massachusetts, Connecticut, USA, and Perm? Not sure if they
@@ -321,7 +320,7 @@ were highlighted by the cursor.
 
 #### Mom
 
-Wow! Really great. 
+>Wow! Really great. 
 My only suggestion is that you make a way to go back - at least on the last page to
 get back to the start. 
 Dad adds that the locations that didn't light up seemed all to be subsidiary places
@@ -331,7 +330,7 @@ Good work, mister data wrangler!
 
 #### Mom 2
 
-Just noticed an anomaly this AM when my computer was still displaying the last of
+>Just noticed an anomaly this AM when my computer was still displaying the last of
 your charts: when I pointed my cursor at the left-most part of the line representing
 average PISA score (because I couldn't recall what it represented), a little box came
 up saying it was Shanghai's scores . . . 
@@ -339,64 +338,64 @@ Over and out
 
 #### Arian
 
-Is there anything you don't understand about the graphic?
+>Is there anything you don't understand about the graphic?
 
-No you killed it!
+>No you killed it!
 
-What was your main takeaway from the visualization?
+>What was your main takeaway from the visualization?
 
-Even if you're smart in Singapore, you're hella poor. Also it indirectly showed the wealth disparity between nations. So many of the countries that participated in the assessment didn't even go past -5 wealth. (I see you Ireland/UK) (and poor Malaysia) (but is that also due to scarcity of the amenities mentioned earlier?)
+>Even if you're smart in Singapore, you're hella poor. Also it indirectly showed the wealth disparity between nations. So many of the countries that participated in the assessment didn't even go past -5 wealth. (I see you Ireland/UK) (and poor Malaysia) (but is that also due to scarcity of the amenities mentioned earlier?)
 
-Are there any spelling or usage errors or inconsistencies?
+>Are there any spelling or usage errors or inconsistencies?
 
-In Equitability Within an Economy, it says "the disparity between the USA's lowest
+>In Equitability Within an Economy, it says "the disparity between the USA's lowest
 scoring and hightest scoring brackets is 100 points" 
 
-Also Connecticut, Florida, and Massachusetts are listed in the Countries drop down
+>Also Connecticut, Florida, and Massachusetts are listed in the Countries drop down
 menu. 
 
-Hope this was helpful, great work dude! Loved the mouse over/drop down menu page, fascinating!
+>Hope this was helpful, great work dude! Loved the mouse over/drop down menu page, fascinating!
 
 #### Arian 2
 
-Sorry I should've been more specific, it was after a long day!
+>Sorry I should've been more specific, it was after a long day!
 
-In " Equitability Within an Economy" 'Hightest' should be 'highest' I'm guessing.
+>In " Equitability Within an Economy" 'Hightest' should be 'highest' I'm guessing.
 
 #### Michael
 
-Ok, seriously and honestly, everything made sense and was clear.
+>Ok, seriously and honestly, everything made sense and was clear.
 
-A couple questions: I'm guessing some countries didn't have scores for wealth below
+>A couple questions: I'm guessing some countries didn't have scores for wealth below
 -5, thats why in the final graphic so many didn't have data plotted below -5,
 correct?  Or is it that Ireland is balling out of control and no one is poor there?
 This made me wonder how every country had data plotted up to the maximum wealth of 3.
 I though most would "max out" before that.  
 
-Or maybe I misunderstand this whole thing?  In which case, I assure you, it is my
+>Or maybe I misunderstand this whole thing?  In which case, I assure you, it is my
 fault not yours.  
 
-Also why is it that nearly every country saw a math score dip between wealth at 2 and
+>Also why is it that nearly every country saw a math score dip between wealth at 2 and
 3?  My best guess is that Jordanian actors, singers and dancers are wealthy but not
 really educated.
 
 #### Daniel
 
-Question on the PISA wealth index:  since it a scale that most probably aren't
+>Question on the PISA wealth index:  since it a scale that most probably aren't
 familiar with, would it be appropriate to put it in some context? Like 0 = average,
 1 = top 50%, 2 = top 25% etc etc? Why are there so many more wealth brackets below
 zero than above–based on percentage of population? There are way more poor people
 than rich?
 
-Wealthy Jordanians are the worst at math.
+>Wealthy Jordanians are the worst at math.
 
-That dip in the highest wealth brackets is fascinating. 
+>That dip in the highest wealth brackets is fascinating. 
 
-No spelling or usage errors that I saw.
+>No spelling or usage errors that I saw.
 
 #### Alexandra
 
-When my cursor hovers above the "next" button it doesn't change to a hand to indicate
+>When my cursor hovers above the "next" button it doesn't change to a hand to indicate
 that it's a button to click on. It turns into, like the cursor for a word doc.
 Can you not go backwards on the slides?
 The comparing two economies says: "130 points = 3 years of schooling", but the slide
@@ -404,6 +403,7 @@ before had a > instead of a =.
 
 ### Reiteration
 
+#### First Iteration: Emails
 The big takeaways from the emails were the need for a "back" button and that the
 state (Mass, Conn. and FLA) didn't light up when they were selected from the drop
 menu, which I hadn't noticed. It turns out this was a regex problem: In the
@@ -414,6 +414,9 @@ The back button took some doing, but it really cleaned my code up (by necessity)
 made the display a lot more user friendly. There's a natural desire to go back and
 look at previous information once you've done some exploration of the data on your
 own.
+
+#### Second Iteration: Udacity Review
+
 
 ### Troubles
 
