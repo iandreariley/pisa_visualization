@@ -16,10 +16,6 @@ the old version, and [here][new] for the
 new version.
 [old]:http://www.iandreariley.com/pisa.html
 [new]:http://www.iandreariley.com/pisa_updated.html
-
-Also, if you're interested in the exploratory data analysis I did for this project,
-a link to those charts can be found [here][eda].
-[eda]:http://www.iandreariley.pisaEDA.html
 ## Process
 
 The Pisa dataset is a large one. I noticed that it used a column for each question
