@@ -416,7 +416,21 @@ look at previous information once you've done some exploration of the data on yo
 own.
 
 #### Second Iteration: Udacity Review
+###### Ironing out possible false trends in the data.
+The Udacity reviewer makes a good point that some of the wealth-bin averages are
+drawn from samples that are too small. To remedy this, I first decided on a
+threshold to define a "large enough" sample. Specifically, I wanted to be 
+relatively certain that the average math score for a given wealth-bin was within
+a year's worth of schooling. As mentioned elsewhere, a year of schooling is
+approximately 40 points on the math test. Therefore, I removed datapoints that had
+a 95% confidence interval greater than +-20 points. I calculated this value by
+finding the two-tailed t-critical value for 95% confidence at n degrees of freedom
+for sample-size n, and multiplying that by the standard error of the sample.
+To keep the page loading time short, I did this work in R and exported the massaged 
+data to a .tsv file that is loaded by the d3 code, rather than having d3 do the work
+on the entire dataset in response to a get request.
 
+###### Weighting the Cumulative Mean
 
 ### Troubles
 
