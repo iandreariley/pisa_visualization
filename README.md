@@ -175,15 +175,35 @@ The region variable I kept because I may have decided to use it later.
 
 ### Visualization ideas
 
-After looking at various plots in R, what strikes me most is the relationship
+After looking at various plots in R, what struck me most is the relationship
 between wealth/escs and math_score. Plotting wealth against math score and
-facetting by country shows that some countries have relatiively equal opportunity
-for students with less family wealth and students with more, while other countries
-have dramatic differences in scores between their richer and poorer students.
+facetting by country shows that some countries have relatively equal opportunity
+across the wealth spectrum, while other countries have dramatic differences in scores
+between their richer and poorer students.
 
 However, countries across the board show a generally positive correlation between
 the escs index and math score, suggesting that perhaps even the countries that
 seem to have equal opportunity are not as equal and they first appear.
+
+Ultimately, I decided to examine the relationship between the wealth index and math
+score. 
+
+### Design
+
+My initial thoughts for design came from two main sources. First, I knew I wanted to
+make a "martini glass" style presentation, because I felt there was a story to tell
+with the data, but I also wanted to allow the use the opportunity to explore the data
+on their own. As an audience member, I always like being able to experience data
+visualizations on my own terms. Second, I was inspired by the New York Times
+visualization, [The Jobless Rate for People Like You][a]. I thought it was an engaging
+and effective way to allow users to explore data on their own. I liked it's use of
+tooltips and mouse-over highlighting to allow quick exploration of the data, as well
+as a selection feature for closer inspection of specific groups. I wanted the open
+end of my "martini glass" to be a similarly interactive chart.
+
+
+
+[a]:http://www.nytimes.com/interactive/2009/11/06/business/economy/unemployment-lines.html
 
 ### Feedback
 
@@ -302,10 +322,10 @@ A couple questions: I'm guessing some countries didn't have scores for wealth be
 -5, thats why in the final graphic so many didn't have data plotted below -5,
 correct?  Or is it that Ireland is balling out of control and no one is poor there?
 This made me wonder how every country had data plotted up to the maximum wealth of 3.
-I though most would "max out" before that.  
+I though most would "max out" before that.
 
 Or maybe I misunderstand this whole thing?  In which case, I assure you, it is my
-fault not yours.  
+fault not yours.
 
 Also why is it that nearly every country saw a math score dip between wealth at 2 and
 3?  My best guess is that Jordanian actors, singers and dancers are wealthy but not
