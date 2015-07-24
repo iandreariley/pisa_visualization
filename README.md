@@ -425,6 +425,13 @@ made the display a lot more user friendly. There's a natural desire to go back a
 look at previous information once you've done some exploration of the data on your
 own.
 
+I think Daniel makes a good point in his email that a more intuitive scaling would be
+ideal for the wealth value. However, I found this wasn't as straightforward as I
+first thought it might be because the wealth index actually has a normal distribution
+which means that percentiles aren't distributed at regular intervals along the
+x-axis. I thought presenting two scales would be more confusing and cluttered than
+a single, linear scale. So I decided not to add it.
+
 #### Second Iteration: Udacity Review
 ###### Ironing out possible false trends in the data.
 The Udacity reviewer makes a good point that some of the wealth-bin averages are
@@ -471,7 +478,9 @@ panel that displays more information about the country.
 Also in this iteration I updated the CSS classes of clickable elements so that the
 mouse pointer indicates (with the pointer value) that an element is clickable.
 This is in response to Alexandra's email, and I feel sort of silly for not having
-done it sooner; it was an easy fix.
+done it sooner; it was an easy fix. I also changed the selection function so that
+it updates the selectedIndex of the dropdown menu to reflect the current curve per
+Julia's email.
 
 ### Troubles
 
