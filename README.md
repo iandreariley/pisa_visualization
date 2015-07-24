@@ -6,10 +6,12 @@
 The most recent version of the project can be downloaded in its entirety here:
 https://github.com/iandreariley/pisa_visualization/tree/filtered/
 
-To run it locally, put both the pisa_by_wealth.tsv and index.html files in the same
-directory, and use 'python -m SimpleHTTPServer' to get a server running in that
-directory. Open a browser and type localhost:8000 in the url field, and the
-visualization should start.
+To run it locally, put both the pisa_by_country_and_wealth_filtered.tsv and index.html
+files in the same directory. In that same directory, create a new sub-diretory called
+"css", and place the main.css file inside it.
+Use 'python -m SimpleHTTPServer' to get a server running in the root directory (the one
+with index.html in it). Open a browser and type localhost:8000 in the url field,
+and the visualization should start.
 
 To see the visualization online go [here][old] for the first version, [here][new] for the
 second version. The most current version is not yet available on the internet.
