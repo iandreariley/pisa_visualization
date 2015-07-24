@@ -39,6 +39,39 @@ Each score seems to be comprised of 5 'Plausible Values', according to the datas
 and the accompanying dictionary (e.g. 'PVMAT1' stands for 'Plausible value 1 in
 mathematics')
 
+### Design
+
+My initial thoughts for design came from two main sources. First, I knew I wanted to
+make a "martini glass" style presentation, because I felt there was a story to tell
+with the data, but I also wanted to allow the use the opportunity to explore the data
+on their own. As an audience member, I always like being able to experience data
+visualizations on my own terms. Second, I was inspired by the New York Times
+visualization, [The Jobless Rate for People Like You][a]. I thought it was an engaging
+and effective way to allow users to explore data on their own. I liked it's use of
+tooltips and mouse-over highlighting to allow quick exploration of the data, as well
+as a selection feature for closer inspection of specific groups. I wanted the open
+end of my "martini glass" to be a similarly interactive chart.
+
+Creating the stem of the "martini glass" as a series of slides projected on the chart
+seemed like an obvious choice. I liked the similar approach used in the d3 class'
+example using world cup data. Initially I worked with timed slides, although I didn't
+like the way it pressured the user to take everything in so quickly, so I incorporated
+buttons that allowed the user to move backwards and forwards through the slides.
+
+Per the recommendations of the class, I used a grey-scale and mostly unsaturated
+colors to make the visualization easier to look at. In order to make the slides
+color-blind friendly, I used blue and gold for highlighting China(Shaghai) and
+the United States on a slide that compared the two.For highlighting the final slide,
+which allows the user to select a country, the highlight and select colors are
+dark-red and brown respectively, which I find easier on the eyes than the bright
+red I used initially.
+
+For the open end of the "martini glass" I designed a chart much like the one
+used for the joblessness visualization by the New York Times.However, initially, I
+used only a mouseover tooltip to display data.
+
+[a]:http://www.nytimes.com/interactive/2009/11/06/business/economy/unemployment-lines.html
+
 ### Choosing Variables
 
 As mentioned above there are hundreds of variables in the PISA dataset. My interest
@@ -188,38 +221,6 @@ seem to have equal opportunity are not as equal and they first appear.
 Ultimately, I decided to examine the relationship between the wealth index and math
 score. 
 
-### Design
-
-My initial thoughts for design came from two main sources. First, I knew I wanted to
-make a "martini glass" style presentation, because I felt there was a story to tell
-with the data, but I also wanted to allow the use the opportunity to explore the data
-on their own. As an audience member, I always like being able to experience data
-visualizations on my own terms. Second, I was inspired by the New York Times
-visualization, [The Jobless Rate for People Like You][a]. I thought it was an engaging
-and effective way to allow users to explore data on their own. I liked it's use of
-tooltips and mouse-over highlighting to allow quick exploration of the data, as well
-as a selection feature for closer inspection of specific groups. I wanted the open
-end of my "martini glass" to be a similarly interactive chart.
-
-Creating the stem of the "martini glass" as a series of slides projected on the chart
-seemed like an obvious choice. I liked the similar approach used in the d3 class'
-example using world cup data. Initially I worked with timed slides, although I didn't
-like the way it pressured the user to take everything in so quickly, so I incorporated
-buttons that allowed the user to move backwards and forwards through the slides.
-
-Per the recommendations of the class, I used a grey-scale and mostly unsaturated
-colors to make the visualization easier to look at. In order to make the slides
-color-blind friendly, I used blue and gold for highlighting China(Shaghai) and
-the United States on a slide that compared the two.For highlighting the final slide,
-which allows the user to select a country, the highlight and select colors are
-dark-red and brown respectively, which I find easier on the eyes than the bright
-red I used initially.
-
-For the open end of the "martini glass" I designed a chart much like the one
-used for the joblessness visualization by the New York Times.However, initially, I
-used only a mouseover tooltip to display data.
-
-[a]:http://www.nytimes.com/interactive/2009/11/06/business/economy/unemployment-lines.html
 
 ### Feedback
 
