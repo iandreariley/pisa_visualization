@@ -219,13 +219,14 @@
         // Determine whether this class is already selected
         var country_curve = d3.select("#" + country);
         var alreadySelected = country_curve.classed(selectedClass);
-        d3.selectAll(".selected")
-          .classed(selectedClass, false);
-        // Toggle selection of clicked element.
-        country_curve.classed(selectedClass, !alreadySelected);
-        // Make actual changes to appearance.
-        d3.selectAll(".info-text").remove();
         if(!alreadySelected) {
+          // Deselect previously selected line.
+          d3.selectAll(".selected")
+            .classed(selectedClass, false);
+          // Select class
+          country_curve.classed(selectedClass, true);
+          // Make actual changes to appearance.
+          d3.selectAll(".info-text").remove();
           var bins = country_curve[0][0]["__data__"]["values"];
           var values = bins[0]["values"];
           // Extract country information from line data.
@@ -241,7 +242,11 @@
           // Set the drop down option to selected country in case this was selected by
           // mouse-click.
           set_dropdown_option(country_name);
+        } else if(country !== "Mean") {
+          // Default to mean if country is "deselected."
+          select("Mean");
         }
+          // If "Deselecting" mean, then do nothing.
       }
 
       // Adds value_text to a .value text-box inside an info-field with class field_class.
@@ -723,6 +728,7 @@
             .attr("value", function(d) { return d["key"]; })
             .text(function(d) { return d["key"]; });
 
+          // Initialize slide with mean line selected.
           select("Mean");
 
           // When user selects from the drop menu, highlight the curve and provide country
