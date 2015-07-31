@@ -3,6 +3,14 @@
         fill: red;
       }
 
+      .vis {
+        visibility: visible;
+      }
+
+      .invis {
+        visibility: hidden;
+      }
+
       .header {
         margin-left: 75px;
         width: 1050px;
