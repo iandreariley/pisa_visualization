@@ -25,6 +25,7 @@
           mean_color = "darkslategrey",
           font_size = 12,
           font_weight = 300;
+          points_per_year = 41;
 
       // Displayed texts for each "slide" in the visualization
       var text_one = "The following data were taken from the 2012 Programme \
@@ -211,6 +212,10 @@
         return false;
       }
 
+      function points_to_years(points) {
+        return (points / points_per_year).toFixed(1);
+      }
+
       // Highlights a curve and displays information for a country that is selected by
       // the user and deselects all other curves, or simply toggles selection if the user
       // selects the same country multiple times. 
@@ -234,10 +239,11 @@
           var avg_scr = values["mean"].toFixed(2);
           var avg_wlth = values["wealth"].toFixed(2);
           var scr_rng = (maximum(bins, "y") - minimum(bins, "y")).toFixed(2);
+          var rng_str = scr_rng + " (" + points_to_years(scr_rng) + " years)";
           // Display country information in info panel.
           add_info_value("info-country", country_name);
           add_info_value("info-mean", avg_scr);
-          add_info_value("info-range", scr_rng);
+          add_info_value("info-range", rng_str);
           add_info_value("info-wealth", avg_wlth);
           // Set the drop down option to selected country in case this was selected by
           // mouse-click.
