@@ -12,7 +12,7 @@
       var left_margin = 75,
           top_margin = 50,
           width = 1200 - left_margin,
-          height = 700 - top_margin,
+          height = 550 - top_margin,
           chart_class = "chart",
           font = "Helvetica",
           mean_width = 3,
@@ -56,9 +56,9 @@
       counterpart in Shanghai.",
       text_five = "However, the data also suggest that United States \
       education is more equitable. The difference between the USA's lowest \
-      scoring and highest scoring brackets is 100 points, or about two and a \
-      half years of schooling. In Shanghai that difference is 180 points, or \
-      more than 4 years by PISA estimations.",
+      scoring and highest scoring brackets is 100 points, or about two years \
+      of schooling. In Shanghai that difference is 180 points, or \
+      about 3 years by PISA estimations.",
       text_six = "Below are the wealth-score curves for all of the economies \
       that participated in the 2012 PISA assessment. Mouse over lines to view \
       the name and mean score of an economy, or select countries by name in \
@@ -348,6 +348,16 @@
           .classed(div_class, true);
       }
 
+      // Hide a DOM element.
+      function hide_element(selector) {
+        return selector.classed("vis", false).classed("invis", true);
+      }
+
+      // Show a DOM element.
+      function show_element(selector) {
+        return selector.classed("invis", false).classed("vis", true);
+      }
+
       /*                          *
        *    MAIN DRAW FUNCTION    *
        *                          */
@@ -419,7 +429,7 @@
 
         // Create x and y scales mapping values to pixels
         var max_y = 650,
-            min_y = 0;
+            min_y = 200;
         var wealth_scale = make_scale(left_margin, width - 200, wealth_extent);
         var score_scale = d3.scale.linear()
           .range([height, top_margin])
@@ -536,6 +546,9 @@
         function stage_one() {
           update_text(title_two, text_two);
 
+          // Hide "Prev" button in case we're returning from slide 2.
+          hide_element(prev_button);
+
           // Remove any unecessary curves from chart (all but one)
           // as well as any text annotation or lines.
           // Draw selected cureves (mean) to remaining paths
@@ -547,8 +560,10 @@
 
         // SECOND SLIDE.
         function stage_two() {
-
           update_text(title_three, text_three);
+
+          // Make "previous" button available, since there are now slides to go back to.
+          show_element(prev_button);
 
           // Grab data to draw.
           var mean = filter_by_key(countries, ["Mean"]);
@@ -575,8 +590,10 @@
 
         // THIRD SLIDE.
         function stage_three() {
-
           update_text(title_four, text_four);
+
+          //Make "Next" button visible in case we're returning from slide 5.
+          next_button.classed("vis", true)
 
           // Grab data for Mean, USA and China-Shanghai.
           var curves_to_draw = filter_by_key(countries, ["Mean", us, china]);
@@ -610,8 +627,10 @@
 
         // FOURTH SLIDE.
         function stage_four() {
-
           update_text(title_five, text_five);
+
+          // Hide "Next" button since there are no slides following this one.
+          show_element(next_button);
 
           var curves_to_draw = filter_by_key(countries, ["Mean", us, china]);
 
@@ -650,9 +669,10 @@
 
         // FIFTH SLIDE.
         function stage_five() {
-
-          // Add text for this slide.
           update_text(title_six, text_six);
+
+          // Hide "Next" button since there are no slides after this one.
+          hide_element(next_button);
 
           // Remove irrelevant annotations and curves.
           clear_annotations(svg);
@@ -747,7 +767,8 @@
   var title = header.append("h2").text(title_one);
   var text_box = append_div(header, "header-text").text(text_one);
   var button_panel = append_div(header, "button-panel");
-  var prev_button = append_div(button_panel, "button").text("PREV");
+  var prev_button = append_div(button_panel, "button").text("PREV")
+    .classed("invis", true);
   var next_button = append_div(button_panel, "button").text("NEXT");
   var chart = append_div(d3.select("body"), "chart");
 
