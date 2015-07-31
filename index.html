@@ -723,6 +723,8 @@
             .attr("value", function(d) { return d["key"]; })
             .text(function(d) { return d["key"]; });
 
+          select("Mean");
+
           // When user selects from the drop menu, highlight the curve and provide country
           // information.
           function selector() {
