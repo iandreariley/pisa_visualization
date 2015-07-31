@@ -433,7 +433,7 @@ x-axis. I thought presenting two scales would be more confusing and cluttered th
 a single, linear scale. So I decided not to add it.
 
 #### Second Iteration: Udacity Review
-###### Ironing out possible false trends in the data.
+###### Ironing Out Possible False Trends in the Visualization
 The Udacity reviewer makes a good point that some of the wealth-bin averages are
 drawn from samples that are too small. To remedy this, I first decided on a
 threshold to define a "large enough" sample. Specifically, I wanted to be 
@@ -485,6 +485,36 @@ This is in response to Alexandra's email, and I feel sort of silly for not havin
 done it sooner; it was an easy fix. I also changed the selection function so that
 it updates the selectedIndex of the dropdown menu to reflect the current curve per
 Julia's email.
+
+#### Third Iteration:
+###### Display Changes
+The Udacity reviewer pointed out a couple of ways to make the display more user
+friendly:
+* The page now hides the "Previous" and "Next" buttons when they become
+irrelevant. For example, the last slide no longer shows a "Next" button because
+there is no following slide. This was a good point as it can confuse the reader.
+* The display is now shorter. I have a large screen at home, and I had created
+the display so that it filled my screen entirely. Obviously, this means the
+display was too large for smaller screens. It should now fit onto most screens.
+
+In the midst of making these changes, I noticed a few display issues of my own
+and made the following updates accordingly:
+* Some of the text quoted numbers that did not correspond to the chart, which
+had the correct data. The text has been changed to reflect what is on the chart.
+* The default behavior of the final chart is different. Previously, when a user
+used the mouse to "deselect" a currently selected line in the last slide, the
+info panel was cleared and the line deselected, but the country name remained in
+the dropdown menu. I didn't like the incongruity, nor the fact that the chart
+was left devoid of information. The final slide now defaults to the mean line if
+no other line is selected. The final slide also loads with the mean line
+selected.
+* The "range" field of the info panel now has a parenthetical statement that
+translates the score range into years of schooling as well as displaying the raw
+range of scores.
+
+###### Code Format
+Per the reviewer's recommendation, I've moved the javascript out of index.html
+and into a js folder, and reference them from index.html.
 
 ### Troubles
 
